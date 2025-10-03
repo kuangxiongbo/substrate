@@ -17,6 +17,7 @@ import {
   BellOutlined,
   AppstoreOutlined,
   BgColorsOutlined,
+  SkinOutlined,
 } from '@ant-design/icons';
 import { useLayout } from '../../contexts/LayoutContext';
 import { useAuthStore } from '../../stores/authStore';
@@ -161,7 +162,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
               {/* 快速设置按钮 */}
               <Button
                 type="text"
-                icon={<BgColorsOutlined />}
+                icon={<SkinOutlined />}
                 onClick={() => setQuickSettingsVisible(true)}
                 className="settings-toggle-btn"
                 title="快速设置"

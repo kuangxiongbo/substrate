@@ -16,6 +16,7 @@ import {
   MenuOutlined,
   AppstoreOutlined,
   BgColorsOutlined,
+  SkinOutlined,
 } from '@ant-design/icons';
 import { useLayout } from '../../contexts/LayoutContext';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -143,7 +144,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
               {/* 快速设置按钮 */}
               <Button
                 type="text"
-                icon={<BgColorsOutlined />}
+                icon={<SkinOutlined />}
                 onClick={() => setQuickSettingsVisible(true)}
                 className="settings-toggle-btn"
                 title="快速设置"
