@@ -32,11 +32,15 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
 
   const handleThemeChange = (themeName: string) => {
     console.log('QuickSettingsPanel: handleThemeChange called with:', themeName);
+    
+    // 立即设置主题，无延迟
     setTheme(themeName);
+    
     if (previewMode) {
       setPreviewMode(false);
     }
-    console.log('QuickSettingsPanel: handleThemeChange completed');
+    
+    console.log('QuickSettingsPanel: handleThemeChange completed immediately');
   };
 
   const handleLayoutChange = (layoutType: 'sidebar' | 'top') => {
@@ -46,15 +50,16 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
   const handlePreview = (type: 'theme' | 'layout', value: string) => {
     setPreviewMode(true);
     if (type === 'theme') {
+      // 立即应用预览主题
       setTheme(value);
     } else {
       setLayout({ ...layout, type: value as 'sidebar' | 'top' });
     }
     
-    // 3秒后恢复
+    // 2秒后恢复 - 缩短预览时间
     setTimeout(() => {
       setPreviewMode(false);
-    }, 3000);
+    }, 2000);
   };
 
   const getThemeIcon = (themeName: string) => {
@@ -262,4 +267,5 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
 };
 
 export default QuickSettingsPanel;
+
 

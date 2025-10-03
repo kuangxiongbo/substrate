@@ -122,24 +122,30 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         // 确保主题类名正确应用到DOM
         console.log(`Applying theme: ${theme.meta.id} (${theme.meta.displayName})`);
         
-        // 强制重新渲染背景色 - 确保样式立即生效
-        setTimeout(() => {
-          const root = document.documentElement;
-          const body = document.body;
-          
-          // 强制应用主题类名
-          root.classList.remove('light-theme', 'dark-theme');
-          root.classList.add(`${theme.meta.id}-theme`);
-          
-          body.classList.remove('light-theme', 'dark-theme');
-          body.classList.add(`${theme.meta.id}-theme`);
-          
-          // 强制样式重新计算
-          body.style.backgroundColor = theme.token.colorBgLayout || 
-            (theme.meta.id === 'dark' ? '#141414' : '#f5f5f5');
-          
-          console.log(`Force applied theme background: ${theme.token.colorBgLayout}`);
-        }, 10);
+        // 立即应用主题类名和背景色 - 同步执行，无延迟
+        const root = document.documentElement;
+        const body = document.body;
+        
+        // 立即移除旧主题类名
+        root.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme');
+        body.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme');
+        
+        // 立即添加新主题类名
+        const themeClass = `${theme.meta.id}-theme`;
+        root.classList.add(themeClass);
+        body.classList.add(themeClass);
+        
+        // 立即设置背景色
+        const backgroundColor = theme.token.colorBgLayout || 
+          (theme.meta.id === 'dark' ? '#141414' : '#f5f5f5');
+        
+        body.style.backgroundColor = backgroundColor;
+        root.style.backgroundColor = backgroundColor;
+        
+        // 强制样式重新计算
+        body.offsetHeight; // 触发重排
+        
+        console.log(`Immediately applied theme: ${themeClass} with background: ${backgroundColor}`);
         
         // 保存到本地存储
         localStorage.setItem(THEME_STORAGE_KEYS.SELECTED_THEME, themeName);

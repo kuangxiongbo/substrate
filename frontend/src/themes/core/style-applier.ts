@@ -34,9 +34,29 @@ export class StyleApplier {
    * 应用主题样式到DOM
    */
   apply(): void {
+    // 先应用主题类名，确保立即生效
+    this.applyThemeClass();
+    
+    // 然后生成并注入CSS
     const css = this.generateCSS();
     this.injectCSS(css);
-    this.applyThemeClass();
+    
+    // 立即强制样式重新计算
+    this.forceStyleRecalculation();
+  }
+  
+  /**
+   * 强制样式重新计算
+   */
+  private forceStyleRecalculation(): void {
+    // 触发重排和重绘
+    const root = document.documentElement;
+    const body = document.body;
+    
+    if (root && body) {
+      root.offsetHeight;
+      body.offsetHeight;
+    }
   }
 
   /**
@@ -101,22 +121,36 @@ export class StyleApplier {
    */
   private applyThemeClass(): void {
     const targetElement = document.querySelector(this.options.targetSelector!);
+    const rootElement = document.documentElement;
+    const bodyElement = document.body;
+    
+    const themeClass = `${this.theme.meta.id}-theme`;
+    
+    // 立即移除所有旧主题类
+    const allThemeClasses = ['light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme'];
+    
+    // 应用到目标元素
     if (targetElement) {
-      // 移除其他主题类
-      targetElement.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme');
-      
-      // 添加当前主题类
-      const themeClass = `${this.theme.meta.id}-theme`;
+      allThemeClasses.forEach(cls => targetElement.classList.remove(cls));
       targetElement.classList.add(themeClass);
-      
-      // 同时添加到html元素，确保全局覆盖
-      document.documentElement.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme');
-      document.documentElement.classList.add(themeClass);
-      
-      console.log(`Applied theme class: ${themeClass} to ${this.options.targetSelector}`);
-    } else {
-      console.warn(`Target element not found: ${this.options.targetSelector}`);
     }
+    
+    // 应用到根元素
+    allThemeClasses.forEach(cls => rootElement.classList.remove(cls));
+    rootElement.classList.add(themeClass);
+    
+    // 应用到body元素
+    allThemeClasses.forEach(cls => bodyElement.classList.remove(cls));
+    bodyElement.classList.add(themeClass);
+    
+    // 立即设置内联样式确保背景色立即生效
+    const backgroundColor = this.theme.token.colorBgLayout || 
+      (this.theme.meta.id === 'dark' ? '#141414' : '#f5f5f5');
+    
+    rootElement.style.backgroundColor = backgroundColor;
+    bodyElement.style.backgroundColor = backgroundColor;
+    
+    console.log(`Immediately applied theme class: ${themeClass} with background: ${backgroundColor}`);
   }
 
   /**
@@ -223,5 +257,6 @@ export class GlobalStyleManager {
 export function getGlobalStyleManager(): GlobalStyleManager {
   return GlobalStyleManager.getInstance();
 }
+
 
 
