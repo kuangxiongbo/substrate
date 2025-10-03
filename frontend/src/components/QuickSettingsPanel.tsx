@@ -12,6 +12,7 @@ import {
   MenuOutlined,
   SettingOutlined,
   EyeOutlined,
+  SkinOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLayout } from '../contexts/LayoutContext';
@@ -81,7 +82,7 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
     <Drawer
       title={
         <Space>
-          <SettingOutlined />
+          <SkinOutlined />
           <span>切换皮肤</span>
         </Space>
       }
@@ -261,3 +262,4 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
 };
 
 export default QuickSettingsPanel;
+
