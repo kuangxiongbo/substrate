@@ -2,7 +2,7 @@
  * 快速设置面板组件
  * 提供主题和布局的快速切换功能
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Drawer, Card, Space, Typography, Button, Divider, Tooltip, Switch } from 'antd';
 import {
   BgColorsOutlined,
@@ -29,6 +29,29 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
   const { currentTheme, setTheme, availableThemes, isDarkMode, toggleTheme } = useTheme();
   const { layout, setLayout, toggleLayout } = useLayout();
   const [previewMode, setPreviewMode] = useState(false);
+  const [shouldAutoClose, setShouldAutoClose] = useState(false);
+  const [autoCloseReason, setAutoCloseReason] = useState<string>('');
+
+  // 自动关闭效果
+  useEffect(() => {
+    if (shouldAutoClose && visible) {
+      console.log(`QuickSettingsPanel: Auto-closing panel due to: ${autoCloseReason}`);
+      
+      // 预览模式需要更长时间
+      const delay = autoCloseReason === 'preview-mode' ? 1500 : 100;
+      
+      const timer = setTimeout(() => {
+        if (autoCloseReason === 'preview-mode') {
+          setPreviewMode(false);
+        }
+        onClose();
+        setShouldAutoClose(false);
+        setAutoCloseReason('');
+      }, delay);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [shouldAutoClose, visible, onClose, autoCloseReason]);
 
   const handleThemeChange = (themeName: string) => {
     console.log('QuickSettingsPanel: handleThemeChange called with:', themeName);
@@ -40,10 +63,9 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
       setPreviewMode(false);
     }
     
-    // 应用主题后自动关闭弹窗
-    setTimeout(() => {
-      onClose();
-    }, 100);
+    // 设置自动关闭
+    setAutoCloseReason('theme-change');
+    setShouldAutoClose(true);
     
     console.log('QuickSettingsPanel: handleThemeChange completed immediately');
   };
@@ -58,10 +80,9 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
       setPreviewMode(false);
     }
     
-    // 应用布局后自动关闭弹窗
-    setTimeout(() => {
-      onClose();
-    }, 100);
+    // 设置自动关闭
+    setAutoCloseReason('layout-change');
+    setShouldAutoClose(true);
     
     console.log('QuickSettingsPanel: handleLayoutChange completed immediately');
   };
@@ -77,11 +98,9 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
       setLayout({ ...layout, type: value as 'sidebar' | 'top' });
     }
     
-    // 1.5秒后恢复并关闭弹窗 - 缩短预览时间
-    setTimeout(() => {
-      setPreviewMode(false);
-      onClose();
-    }, 1500);
+    // 设置预览模式自动关闭
+    setAutoCloseReason('preview-mode');
+    setShouldAutoClose(true);
     
     console.log('QuickSettingsPanel: handlePreview completed, will auto-close in 1.5s');
   };
@@ -181,10 +200,9 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
                   checked={isDarkMode}
                   onChange={(checked) => {
                     toggleTheme();
-                    // 快速切换后自动关闭弹窗
-                    setTimeout(() => {
-                      onClose();
-                    }, 100);
+                    // 设置快速切换自动关闭
+                    setAutoCloseReason('quick-switch');
+                    setShouldAutoClose(true);
                   }}
                   checkedChildren={<MoonOutlined />}
                   unCheckedChildren={<SunOutlined />}
@@ -297,5 +315,6 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
 };
 
 export default QuickSettingsPanel;
+
 
 
