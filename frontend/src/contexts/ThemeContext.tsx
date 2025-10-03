@@ -119,6 +119,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
           minify: false
         });
         
+        // 确保主题类名正确应用到DOM
+        console.log(`Applying theme: ${theme.meta.id} (${theme.meta.displayName})`);
+        
         // 保存到本地存储
         localStorage.setItem(THEME_STORAGE_KEYS.SELECTED_THEME, themeName);
         console.log('Theme set successfully:', themeName);

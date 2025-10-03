@@ -103,10 +103,19 @@ export class StyleApplier {
     const targetElement = document.querySelector(this.options.targetSelector!);
     if (targetElement) {
       // 移除其他主题类
-      targetElement.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme');
+      targetElement.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme');
       
       // 添加当前主题类
-      targetElement.classList.add(`${this.theme.meta.id}-theme`);
+      const themeClass = `${this.theme.meta.id}-theme`;
+      targetElement.classList.add(themeClass);
+      
+      // 同时添加到html元素，确保全局覆盖
+      document.documentElement.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme');
+      document.documentElement.classList.add(themeClass);
+      
+      console.log(`Applied theme class: ${themeClass} to ${this.options.targetSelector}`);
+    } else {
+      console.warn(`Target element not found: ${this.options.targetSelector}`);
     }
   }
 
@@ -118,6 +127,9 @@ export class StyleApplier {
     if (targetElement) {
       targetElement.classList.remove(`${this.theme.meta.id}-theme`);
     }
+    
+    // 同时从html元素移除
+    document.documentElement.classList.remove(`${this.theme.meta.id}-theme`);
   }
 
   /**
