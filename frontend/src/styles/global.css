@@ -222,32 +222,7 @@ input, textarea, select {
   background-color: #1f1f1f !important;
 }
 
-/* 深色主题文本颜色优化 */
-.dark-theme .ant-typography {
-  color: #ffffff !important;
-}
-
-.dark-theme .ant-typography h1,
-.dark-theme .ant-typography h2,
-.dark-theme .ant-typography h3,
-.dark-theme .ant-typography h4,
-.dark-theme .ant-typography h5,
-.dark-theme .ant-typography h6 {
-  color: #ffffff !important;
-}
-
-.dark-theme .ant-typography p {
-  color: rgba(255, 255, 255, 0.85) !important;
-}
-
-.dark-theme .ant-typography strong {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-}
-
-.dark-theme .ant-typography.text-secondary {
-  color: rgba(255, 255, 255, 0.65) !important;
-}
+/* Ant Design 组件样式由主题包控制，此处不重复定义 */
 
 /* 确保主题切换时背景色立即生效 */
 body {

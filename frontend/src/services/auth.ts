@@ -85,8 +85,8 @@ export const authApi = {
     request.post('/v1/auth/register', data),
 
   // 用户登出
-  logout: (): Promise<{ message: string }> =>
-    request.post('/v1/auth/logout'),
+  logout: (refreshToken: string): Promise<{ message: string }> =>
+    request.post('/v1/auth/logout', { refresh_token: refreshToken }),
 
   // 刷新token
   refreshToken: (refreshToken: string): Promise<RefreshTokenResponse> =>
@@ -134,5 +134,6 @@ export const healthApi = {
   check: (): Promise<{ status: string; timestamp: string }> =>
     request.get('/health'),
 };
+
 
 

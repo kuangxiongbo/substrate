@@ -137,7 +137,10 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true });
         
         try {
-          await authApi.logout();
+          const refreshToken = get().refreshTokenValue;
+          if (refreshToken) {
+            await authApi.logout(refreshToken);
+          }
         } catch (error) {
           // 即使API调用失败也要清除本地状态
           console.error('Logout API error:', error);

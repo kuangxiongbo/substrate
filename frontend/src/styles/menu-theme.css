@@ -685,6 +685,59 @@
   color: #096dd9 !important;
 }
 
+/* Typography 组件样式 */
+.dark-theme .ant-typography {
+  color: #ffffff !important;
+}
+
+.dark-theme .ant-typography h1,
+.dark-theme .ant-typography h2,
+.dark-theme .ant-typography h3,
+.dark-theme .ant-typography h4,
+.dark-theme .ant-typography h5,
+.dark-theme .ant-typography h6 {
+  color: #ffffff !important;
+}
+
+.dark-theme .ant-typography p {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.dark-theme .ant-typography strong {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.dark-theme .ant-typography.text-secondary {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.light-theme .ant-typography {
+  color: #262626 !important;
+}
+
+.light-theme .ant-typography h1,
+.light-theme .ant-typography h2,
+.light-theme .ant-typography h3,
+.light-theme .ant-typography h4,
+.light-theme .ant-typography h5,
+.light-theme .ant-typography h6 {
+  color: #262626 !important;
+}
+
+.light-theme .ant-typography p {
+  color: #595959 !important;
+}
+
+.light-theme .ant-typography strong {
+  color: #262626 !important;
+  font-weight: 600 !important;
+}
+
+.light-theme .ant-typography.text-secondary {
+  color: #8c8c8c !important;
+}
+
 /* 小尺寸按钮样式 */
 .ant-btn-sm {
   font-size: 12px;
