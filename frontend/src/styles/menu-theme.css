@@ -366,7 +366,7 @@
   color: white !important;
 }
 
-/* 头部布局样式 - 由主题包控制具体样式 */
+/* 统一头部布局样式 - 适用于左侧和顶部菜单布局 */
 .main-header,
 .top-header {
   display: flex;
@@ -374,14 +374,24 @@
   justify-content: space-between;
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
 .header-left {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .header-right {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .header-center {
@@ -389,6 +399,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 
 /* 头部按钮样式 - 由主题包控制颜色 */
@@ -757,6 +768,14 @@
   color: #f8fafc !important;
 }
 
+/* 浅色主题头部样式 */
+.light-theme .main-header,
+.light-theme .top-header {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.dark-theme .main-header,
 .dark-theme .top-header {
   background-color: #1a1a2e !important;
   border-bottom: 1px solid #334155 !important;

@@ -142,16 +142,21 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
       
       <Layout className={`main-layout ${currentTheme?.meta.id || 'light'}-theme`}>
         <Header className={`main-header ${currentTheme?.meta.id || 'light'}-theme`}>
-          <div className="header-left">
-            <Button
-              type="text"
-              icon={isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={toggleCollapse}
-              className="collapse-btn"
-            />
-          </div>
-          
-          <div className="header-right">
+          <div className="header-content">
+            <div className="header-left">
+              <Button
+                type="text"
+                icon={isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={toggleCollapse}
+                className="collapse-btn"
+              />
+            </div>
+            
+            <div className="header-center">
+              {/* 左侧布局的中间区域为空，保持结构一致 */}
+            </div>
+            
+            <div className="header-right">
             <Space>
               {/* 快速设置按钮 */}
               <Button
@@ -195,6 +200,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                 </div>
               </Dropdown>
             </Space>
+            </div>
           </div>
         </Header>
         
@@ -213,6 +219,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
 };
 
 export default SidebarLayout;
+
 
 
 
