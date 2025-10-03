@@ -119,6 +119,11 @@ const darkTheme: ThemePackageConfig = {
     controlHeightLG: 40,
     controlHeightSM: 24,
     
+    // 全局样式控制 - 确保深色主题的文字可见性
+    colorBgContainerDisabled: '#1a1a1a',
+    colorTextDisabled: '#595959',
+    colorBgMask: 'rgba(0, 0, 0, 0.65)',
+    
     // 顶部菜单专用间距配置 - 统一所有菜单项间距
     topMenuHeight: 64,
     topMenuItemMargin: 12, // 增加间距，确保菜单项之间有足够空间

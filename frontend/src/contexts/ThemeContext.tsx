@@ -71,28 +71,35 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         const themes = getAllThemes();
         setAvailableThemes(themes);
         
-        // 从本地存储获取保存的主题
-        const savedThemeName = localStorage.getItem(THEME_STORAGE_KEYS.SELECTED_THEME);
+        let themeToSet;
         
-        if (savedThemeName) {
-          // 查找保存的主题
-          const savedTheme = getTheme(savedThemeName);
-          if (savedTheme) {
-            setCurrentTheme(savedTheme);
-          } else {
-            // 如果保存的主题不存在，使用默认主题
-            const defaultTheme = getTheme('light') || themes[0];
-            setCurrentTheme(defaultTheme);
+        if (isAuthenticated && user) {
+          // 登录状态：获取用户特定的主题偏好
+          const userThemeKey = `${THEME_STORAGE_KEYS.USER_THEME_PREFIX}${user.id}`;
+          const userThemeName = localStorage.getItem(userThemeKey);
+          
+          if (userThemeName) {
+            const userTheme = getTheme(userThemeName);
+            if (userTheme) {
+              themeToSet = userTheme;
+            }
+          }
+          
+          // 如果用户没有设置主题偏好，使用浅色主题作为默认
+          if (!themeToSet) {
+            themeToSet = getTheme('light') || themes[0];
+            // 保存用户的默认主题偏好
+            localStorage.setItem(userThemeKey, 'light');
           }
         } else {
-          // 检查系统主题偏好
-          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          const initialTheme = prefersDark ? getTheme('dark') : getTheme('light');
-          setCurrentTheme(initialTheme || themes[0]);
+          // 未登录状态：使用浅色主题作为系统默认
+          themeToSet = getTheme('light') || themes[0];
         }
+        
+        setCurrentTheme(themeToSet);
       } catch (error) {
         console.error('Failed to initialize theme:', error);
-        // 使用默认主题
+        // 使用默认浅色主题
         const defaultTheme = getTheme('light');
         if (defaultTheme) {
           setCurrentTheme(defaultTheme);
@@ -103,7 +110,29 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     };
 
     initializeTheme();
-  }, []);
+  }, [isAuthenticated, user]);
+
+  // 监听用户登录状态变化，应用用户主题偏好
+  useEffect(() => {
+    if (isAuthenticated && user && !isLoading) {
+      // 用户登录后，立即应用其主题偏好
+      const userThemeKey = `${THEME_STORAGE_KEYS.USER_THEME_PREFIX}${user.id}`;
+      const userThemeName = localStorage.getItem(userThemeKey);
+      
+      if (userThemeName && userThemeName !== currentTheme?.meta.id) {
+        console.log('Applying user theme preference:', userThemeName);
+        setTheme(userThemeName);
+      } else if (!userThemeName) {
+        // 如果用户没有主题偏好，设置默认浅色主题
+        console.log('Setting default light theme for new user');
+        setTheme('light');
+      }
+    } else if (!isAuthenticated && !isLoading) {
+      // 用户登出后，切换到系统默认浅色主题
+      console.log('User logged out, switching to default light theme');
+      setTheme('light');
+    }
+  }, [isAuthenticated, user, isLoading, currentTheme, setTheme]);
 
   // 设置主题 - 简化版本，只更换样式类名
   const setTheme = useCallback((themeName: string) => {
@@ -126,8 +155,18 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         root.classList.add(themeClass);
         body.classList.add(themeClass);
         
-        // 保存到本地存储
-        localStorage.setItem(THEME_STORAGE_KEYS.SELECTED_THEME, themeName);
+        // 保存主题偏好
+        if (isAuthenticated && user) {
+          // 登录用户：保存到用户特定的存储键
+          const userThemeKey = `${THEME_STORAGE_KEYS.USER_THEME_PREFIX}${user.id}`;
+          localStorage.setItem(userThemeKey, themeName);
+          console.log('User theme preference saved:', themeName);
+        } else {
+          // 未登录用户：保存到通用存储键（临时）
+          localStorage.setItem(THEME_STORAGE_KEYS.SELECTED_THEME, themeName);
+          console.log('Temporary theme saved:', themeName);
+        }
+        
         console.log('Theme switched to:', themeName);
       } else {
         console.error('Theme not found:', themeName);
@@ -135,7 +174,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Failed to set theme:', error);
     }
-  }, []);
+  }, [isAuthenticated, user]);
 
   // 切换主题（在浅色和深色之间切换）
   const toggleTheme = useCallback(() => {
