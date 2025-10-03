@@ -112,28 +112,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     initializeTheme();
   }, [isAuthenticated, user]);
 
-  // 监听用户登录状态变化，应用用户主题偏好
-  useEffect(() => {
-    if (isAuthenticated && user && !isLoading) {
-      // 用户登录后，立即应用其主题偏好
-      const userThemeKey = `${THEME_STORAGE_KEYS.USER_THEME_PREFIX}${user.id}`;
-      const userThemeName = localStorage.getItem(userThemeKey);
-      
-      if (userThemeName && userThemeName !== currentTheme?.meta.id) {
-        console.log('Applying user theme preference:', userThemeName);
-        setTheme(userThemeName);
-      } else if (!userThemeName) {
-        // 如果用户没有主题偏好，设置默认浅色主题
-        console.log('Setting default light theme for new user');
-        setTheme('light');
-      }
-    } else if (!isAuthenticated && !isLoading) {
-      // 用户登出后，切换到系统默认浅色主题
-      console.log('User logged out, switching to default light theme');
-      setTheme('light');
-    }
-  }, [isAuthenticated, user, isLoading, currentTheme, setTheme]);
-
   // 设置主题 - 简化版本，只更换样式类名
   const setTheme = useCallback((themeName: string) => {
     try {
@@ -175,6 +153,28 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       console.error('Failed to set theme:', error);
     }
   }, [isAuthenticated, user]);
+
+  // 监听用户登录状态变化，应用用户主题偏好
+  useEffect(() => {
+    if (isAuthenticated && user && !isLoading) {
+      // 用户登录后，立即应用其主题偏好
+      const userThemeKey = `${THEME_STORAGE_KEYS.USER_THEME_PREFIX}${user.id}`;
+      const userThemeName = localStorage.getItem(userThemeKey);
+      
+      if (userThemeName && userThemeName !== currentTheme?.meta.id) {
+        console.log('Applying user theme preference:', userThemeName);
+        setTheme(userThemeName);
+      } else if (!userThemeName) {
+        // 如果用户没有主题偏好，设置默认浅色主题
+        console.log('Setting default light theme for new user');
+        setTheme('light');
+      }
+    } else if (!isAuthenticated && !isLoading) {
+      // 用户登出后，切换到系统默认浅色主题
+      console.log('User logged out, switching to default light theme');
+      setTheme('light');
+    }
+  }, [isAuthenticated, user, isLoading, currentTheme, setTheme]);
 
   // 切换主题（在浅色和深色之间切换）
   const toggleTheme = useCallback(() => {
