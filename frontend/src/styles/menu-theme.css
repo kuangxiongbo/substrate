@@ -160,11 +160,15 @@
   margin-inline: 0 !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
   /* 重置所有可能的默认内边距 */
   padding: 0 !important;
   padding-inline: 0 !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
   /* 重置边框和背景 */
   border: none !important;
   background: transparent !important;
@@ -182,6 +186,22 @@
   justify-content: center !important;
   /* 重置圆角 */
   border-radius: 4px !important;
+  /* 重置垂直对齐 */
+  vertical-align: top !important;
+}
+
+/* 特别针对子菜单标题进行额外重置 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title {
+  /* 确保子菜单标题没有任何额外的样式 */
+  position: relative !important;
+  z-index: auto !important;
+  /* 重置所有可能的子菜单特定样式 */
+  outline: none !important;
+  box-shadow: none !important;
+  /* 确保文本对齐方式一致 */
+  text-align: center !important;
+  /* 重置可能的transform */
+  transform: none !important;
 }
 
 /* 应用主题包配置的间距 */
@@ -203,6 +223,36 @@
   margin-right: var(--top-menu-item-margin, 12px) !important;
   padding-left: var(--top-menu-item-padding, 20px) !important;
   padding-right: var(--top-menu-item-padding, 20px) !important;
+}
+
+/* 强制移除子菜单标题的额外padding和内边距 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title {
+  /* 确保子菜单标题与普通菜单项有完全相同的padding */
+  padding-left: var(--top-menu-item-padding, 20px) !important;
+  padding-right: var(--top-menu-item-padding, 20px) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-inline: 0 !important;
+  /* 确保子菜单标题与普通菜单项有完全相同的margin */
+  margin-left: var(--top-menu-item-margin, 12px) !important;
+  margin-right: var(--top-menu-item-margin, 12px) !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-inline: 0 !important;
+}
+
+/* 强制移除子菜单容器的额外padding */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 确保子菜单内容区域不影响主菜单项间距 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-popup,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-placement-bottomLeft,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-placement-bottomRight {
+  /* 子菜单弹出层不影响主菜单项间距 */
+  margin-top: 0 !important;
 }
 
 /* 侧边栏头部样式 */
