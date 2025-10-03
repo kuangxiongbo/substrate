@@ -16,6 +16,7 @@ import {
   FileTextOutlined,
   BellOutlined,
   AppstoreOutlined,
+  BgColorsOutlined,
 } from '@ant-design/icons';
 import { useLayout } from '../../contexts/LayoutContext';
 import { useAuthStore } from '../../stores/authStore';
@@ -40,12 +41,6 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   // 菜单项配置
   const menuItems = [
     {
-      key: 'dashboard',
-      icon: <DashboardOutlined />,
-      label: '概览',
-      path: '/overview',
-    },
-    {
       key: 'users',
       icon: <TeamOutlined />,
       label: '用户管理',
@@ -59,7 +54,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
     },
     {
       key: 'settings',
-      icon: <SettingOutlined />,
+      icon: <BgColorsOutlined />,
       label: '系统设置',
       children: [
         {

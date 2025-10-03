@@ -5,6 +5,7 @@ import { useAuthStore } from './stores/authStore';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import OverviewPage from './pages/OverviewPage';
+import UserManagementPage from './pages/UserManagementPage';
 import SystemSettingsPage from './pages/SystemSettingsPage';
 import BasicConfigPage from './pages/settings/BasicConfigPage';
 import AdminManagementPage from './pages/settings/AdminManagementPage';
@@ -114,6 +115,16 @@ const App: React.FC = () => {
           }
         />
         <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <LayoutWrapper>
+                <UserManagementPage />
+              </LayoutWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/system-settings"
           element={
             <ProtectedRoute>
@@ -207,11 +218,11 @@ const App: React.FC = () => {
                  }
                />
         
-        {/* Dashboard 路由 - 重定向到概览页面 */}
-        <Route path="/dashboard" element={<Navigate to="/overview" replace />} />
+        {/* Dashboard 路由 - 重定向到用户管理页面 */}
+        <Route path="/dashboard" element={<Navigate to="/users" replace />} />
         
         {/* 默认重定向 */}
-        <Route path="/" element={<Navigate to="/overview" replace />} />
+        <Route path="/" element={<Navigate to="/users" replace />} />
         
         {/* 404页面 */}
         <Route path="*" element={<NotFound />} />
