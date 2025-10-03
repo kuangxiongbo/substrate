@@ -82,7 +82,7 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
       title={
         <Space>
           <SettingOutlined />
-          <span>快速设置</span>
+          <span>切换皮肤</span>
         </Space>
       }
       placement="right"
