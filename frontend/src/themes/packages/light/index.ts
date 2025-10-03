@@ -119,9 +119,9 @@ const lightTheme: ThemePackageConfig = {
     controlHeightLG: 40,
     controlHeightSM: 24,
     
-    // 顶部菜单专用间距配置
+    // 顶部菜单专用间距配置 - 统一所有菜单项间距
     topMenuHeight: 64,
-    topMenuItemMargin: 4,
+    topMenuItemMargin: 8, // 增加间距，确保菜单项之间有足够空间
     topMenuItemPadding: 16,
     topMenuContainerPadding: 0,
     topMenuContainerMargin: 0,

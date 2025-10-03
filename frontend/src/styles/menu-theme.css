@@ -147,11 +147,24 @@
 /* 顶部菜单间距统一配置 - 基于主题包 */
 .menu-theme-unified.ant-menu-horizontal .ant-menu-item,
 .menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title {
-  /* 使用主题包中的配置，而不是硬编码 */
+  /* 使用主题包中的配置，确保所有菜单项间距一致 */
   margin: 0 var(--top-menu-item-margin, 4px) !important;
   padding: 0 var(--top-menu-item-padding, 16px) !important;
   height: var(--top-menu-height, 64px) !important;
   line-height: var(--top-menu-height, 64px) !important;
+  border-radius: 4px !important;
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+/* 确保第一个和最后一个菜单项没有额外的外边距 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item:first-child,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu:first-child > .ant-menu-submenu-title {
+  margin-left: 0 !important;
+}
+
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item:last-child,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu:last-child > .ant-menu-submenu-title {
+  margin-right: 0 !important;
 }
 
 /* 侧边栏头部样式 */

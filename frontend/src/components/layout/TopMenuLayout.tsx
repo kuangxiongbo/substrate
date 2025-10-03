@@ -146,13 +146,6 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
               
               <Button
                 type="text"
-                icon={<MenuOutlined />}
-                onClick={toggleLayout}
-                className="layout-switch-btn"
-                title="切换到侧边栏布局"
-              />
-              <Button
-                type="text"
                 icon={<BellOutlined />}
                 className="notification-btn"
               />
