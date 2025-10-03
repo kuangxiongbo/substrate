@@ -54,14 +54,8 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
       path: '/users',
     },
     {
-      key: 'theme-demo',
-      icon: <AppstoreOutlined />,
-      label: '主题演示',
-      path: '/theme-demo',
-    },
-    {
       key: 'settings',
-      icon: <BgColorsOutlined />,
+      icon: <SettingOutlined />,
       label: '系统设置',
       children: [
         {
