@@ -309,3 +309,5 @@ export class ThemePackageRegistryImpl implements ThemePackageRegistry {
 
 // 创建默认注册表实例
 export const themePackageRegistry = new ThemePackageRegistryImpl();
+
+

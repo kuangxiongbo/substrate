@@ -460,3 +460,4 @@ class SecurityService:
             "email_requests_24h": email_requests_24h,
             "security_level": self.get_security_level().value
         }
+

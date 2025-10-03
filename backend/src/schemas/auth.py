@@ -211,3 +211,5 @@ class ValidationError(BaseModel):
 # Note: LoginResponse.user uses dict instead of UserResponse
 # to avoid circular import issues with Pydantic
 
+
+

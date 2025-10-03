@@ -223,3 +223,5 @@ export class GlobalStyleManager {
 export function getGlobalStyleManager(): GlobalStyleManager {
   return GlobalStyleManager.getInstance();
 }
+
+

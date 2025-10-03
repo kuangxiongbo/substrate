@@ -184,3 +184,4 @@ async def cleanup_expired_captchas():
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"清理验证码失败: {str(e)}"
         )
+

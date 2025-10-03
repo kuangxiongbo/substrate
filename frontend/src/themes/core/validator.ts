@@ -292,3 +292,5 @@ export class ThemePackageValidatorImpl implements ThemePackageValidator {
 
 // 创建默认验证器实例
 export const themePackageValidator = new ThemePackageValidatorImpl();
+
+

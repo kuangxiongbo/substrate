@@ -173,3 +173,5 @@ export class ThemePackageAutoDiscovery {
 
 // 导出单例实例
 export const themePackageAutoDiscovery = ThemePackageAutoDiscovery.getInstance();
+
+

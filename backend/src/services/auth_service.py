@@ -481,3 +481,5 @@ class AuthService:
         """
         return self.password_service.get_password_strength(password)
 
+
+

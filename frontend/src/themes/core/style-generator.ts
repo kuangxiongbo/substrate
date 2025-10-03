@@ -204,6 +204,27 @@ export class StyleGenerator {
   background-color: ${token.layoutContentBackgroundColor || token.colorBgLayout};
   padding: ${token.layoutContentPadding || 16}px;
   margin: ${token.layoutContentMargin || 0}px;
+}
+
+/* 全局背景色控制 */
+body {
+  background-color: ${token.colorBgLayout} !important;
+  color: ${token.colorText} !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+html {
+  background-color: ${token.colorBgLayout} !important;
+  transition: background-color 0.3s ease !important;
+}
+
+/* 确保所有容器都有正确的背景色 */
+.ant-layout {
+  background-color: ${token.colorBgLayout} !important;
+}
+
+.ant-layout-content {
+  background-color: ${token.colorBgBase} !important;
 }`);
 
     return styles.join('\n');

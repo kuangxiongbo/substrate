@@ -28,42 +28,73 @@ body {
   font-size: 14px;
   line-height: 1.5715;
   color: #262626;
-  background-color: #f5f5f5;
+  /* 背景色由主题包控制，不在此处硬编码 */
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 滚动条样式 */
+/* 滚动条样式 - 由主题包控制 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-::-webkit-scrollbar-track {
+/* 浅色主题滚动条 */
+.light-theme ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb {
+.light-theme ::-webkit-scrollbar-thumb {
   background: #c1c1c1;
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.light-theme ::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
 
-/* 链接样式 */
-a {
+/* 深色主题滚动条 */
+.dark-theme ::-webkit-scrollbar-track {
+  background: #1f1f1f;
+  border-radius: 3px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: #434343;
+  border-radius: 3px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: #595959;
+}
+
+/* 链接样式 - 由主题包控制 */
+.light-theme a {
   color: #1890ff;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
-a:hover {
+.light-theme a:hover {
   color: #40a9ff;
 }
 
-a:active {
+.light-theme a:active {
+  color: #096dd9;
+}
+
+.dark-theme a {
+  color: #177ddc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.dark-theme a:hover {
+  color: #40a9ff;
+}
+
+.dark-theme a:active {
   color: #096dd9;
 }
 
@@ -137,4 +168,36 @@ input, textarea, select {
   height: 100%;
 }
 
+/* ===== 主题背景色控制 ===== */
+
+/* 浅色主题背景 */
+.light-theme body {
+  background-color: #f5f5f5 !important;
+  color: #262626 !important;
+}
+
+.light-theme html {
+  background-color: #f5f5f5 !important;
+}
+
+/* 深色主题背景 */
+.dark-theme body {
+  background-color: #141414 !important;
+  color: #ffffff !important;
+}
+
+.dark-theme html {
+  background-color: #141414 !important;
+}
+
+/* 确保主题切换时背景色立即生效 */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+html {
+  transition: background-color 0.3s ease !important;
+}
+
 /* 工具类已移至主题包控制 */
+

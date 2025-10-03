@@ -239,3 +239,5 @@ class User(Base):
         """检查是否为超级管理员"""
         return self.has_role('super_admin')
 
+
+
