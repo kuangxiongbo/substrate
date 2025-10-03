@@ -366,9 +366,33 @@
   color: white !important;
 }
 
-/* 头部右侧样式 */
+/* 统一头部样式 - 适用于左侧和顶部菜单布局 */
+.main-header,
+.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 16px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
 .header-right {
   display: flex;
+  align-items: center;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
@@ -419,6 +443,29 @@
   border: none;
 }
 
+/* 折叠按钮样式 - 统一头部按钮样式 */
+.collapse-btn {
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  background: transparent;
+  border: none;
+}
+
+.light-theme .collapse-btn {
+  color: #1f1f1f !important;
+}
+
+.light-theme .collapse-btn:hover {
+  background: #f5f5f5 !important;
+  color: #1890ff !important;
+}
+
 .light-theme .notification-btn {
   color: #1f1f1f !important;
 }
@@ -437,7 +484,16 @@
   color: #ffffff !important;
 }
 
-/* 用户信息样式 */
+.dark-theme .collapse-btn {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.dark-theme .collapse-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* 统一用户信息样式 - 适用于两种布局 */
 .user-info {
   display: flex;
   align-items: center;
@@ -445,17 +501,55 @@
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  background-color: transparent;
+  border: none;
 }
 
+.user-info:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.user-avatar {
+  flex-shrink: 0;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.user-role {
+  font-size: 12px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* 浅色主题用户信息样式 */
 .light-theme .user-info {
   color: #1f1f1f;
 }
 
 .light-theme .user-info:hover {
-  background: #f5f5f5;
-  color: #1890ff;
+  background-color: rgba(0, 0, 0, 0.04);
 }
+
+.light-theme .user-name {
+  color: #1f1f1f;
+}
+
+.light-theme .user-role {
+  color: #595959;
+}
+
 
 .dark-theme .user-info {
   color: rgba(255, 255, 255, 0.85);
@@ -738,33 +832,36 @@
 
 /* 深色主题用户信息区域 */
 .dark-theme .user-info {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .dark-theme .user-info:hover {
-  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .dark-theme .user-name {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 .dark-theme .user-role {
-  color: rgba(255, 255, 255, 0.65) !important;
+  color: rgba(255, 255, 255, 0.65);
 }
 
-/* 深色主题按钮样式 */
+/* 深色主题按钮样式 - 统一头部按钮 */
 .dark-theme .settings-toggle-btn,
-.dark-theme .notification-btn {
-  color: rgba(255, 255, 255, 0.85) !important;
-  background-color: transparent !important;
-  border: none !important;
+.dark-theme .notification-btn,
+.dark-theme .collapse-btn {
+  color: rgba(255, 255, 255, 0.85);
+  background-color: transparent;
+  border: none;
 }
 
 .dark-theme .settings-toggle-btn:hover,
-.dark-theme .notification-btn:hover {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.1) !important;
+.dark-theme .notification-btn:hover,
+.dark-theme .collapse-btn:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Typography 组件样式 */
