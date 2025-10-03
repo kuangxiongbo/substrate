@@ -106,7 +106,7 @@ export const antdTheme: ThemeConfig = {
       itemBorderRadius: 8,
       itemHeight: 44,
       itemPaddingInline: 20,
-      itemMarginInline: 8,
+      // itemMarginInline: 8, // 注释掉，由CSS变量控制
       itemSelectedBg: '#1890ff',
       itemSelectedColor: '#ffffff',
       itemHoverBg: 'rgba(24, 144, 255, 0.1)',
