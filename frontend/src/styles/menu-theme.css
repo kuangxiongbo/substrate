@@ -826,8 +826,28 @@
   border-bottom: 1px solid #1f1f1f !important;
 }
 
+/* 深色主题布局样式 */
+.dark-theme .sidebar-layout,
 .dark-theme .top-menu-layout {
   background-color: #141414 !important;
+}
+
+.dark-theme .main-layout,
+.dark-theme .main-content,
+.dark-theme .top-content {
+  background-color: #1f1f1f !important;
+}
+
+/* 浅色主题布局样式 */
+.light-theme .sidebar-layout,
+.light-theme .top-menu-layout {
+  background-color: #ffffff !important;
+}
+
+.light-theme .main-layout,
+.light-theme .main-content,
+.light-theme .top-content {
+  background-color: #f5f5f5 !important;
 }
 
 /* 深色主题用户信息区域 */

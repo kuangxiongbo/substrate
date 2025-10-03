@@ -179,7 +179,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
         </div>
       </Header>
       
-      <Content className="top-content">
+      <Content className={`top-content ${currentTheme?.meta.id || 'light'}-theme`}>
         {children}
       </Content>
       
@@ -193,6 +193,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
 };
 
 export default TopMenuLayout;
+
 
 
 

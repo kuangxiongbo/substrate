@@ -112,7 +112,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   ];
 
   return (
-    <Layout className="sidebar-layout">
+    <Layout className={`sidebar-layout ${currentTheme?.meta.id || 'light'}-theme`}>
       <Sider
         trigger={null}
         collapsible
@@ -140,8 +140,8 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         />
       </Sider>
       
-      <Layout className="main-layout">
-        <Header className="main-header">
+      <Layout className={`main-layout ${currentTheme?.meta.id || 'light'}-theme`}>
+        <Header className={`main-header ${currentTheme?.meta.id || 'light'}-theme`}>
           <div className="header-left">
             <Button
               type="text"
@@ -198,7 +198,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
           </div>
         </Header>
         
-        <Content className="main-content">
+        <Content className={`main-content ${currentTheme?.meta.id || 'light'}-theme`}>
           {children}
         </Content>
       </Layout>
@@ -213,6 +213,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
 };
 
 export default SidebarLayout;
+
 
 
 
