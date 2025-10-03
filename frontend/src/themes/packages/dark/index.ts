@@ -26,57 +26,57 @@ const darkTheme: ThemePackageConfig = {
   menuVariant: 'dark',
   algorithm: theme.darkAlgorithm,
   token: {
-    // 主色调 - 深色模式下的柔和色彩
-    colorPrimary: '#177ddc',
-    colorSuccess: '#49aa19',
-    colorWarning: '#d89614',
-    colorError: '#dc4446',
-    colorInfo: '#13a8a8',
+    // 主色调 - 现代深色主题配色
+    colorPrimary: '#6366f1', // 现代紫色，更柔和
+    colorSuccess: '#10b981', // 翠绿色，更醒目
+    colorWarning: '#f59e0b', // 琥珀色，更温暖
+    colorError: '#ef4444', // 红色，更鲜明
+    colorInfo: '#06b6d4', // 青色，更清新
     
-    // 背景色 - 深色背景层次
-    colorBgBase: '#141414',
-    colorBgContainer: '#1f1f1f',
-    colorBgElevated: '#262626',
-    colorBgLayout: '#141414', // 改为更明显的深色背景
-    colorBgSpotlight: 'rgba(0, 0, 0, 0.85)',
-    colorBgMask: 'rgba(0, 0, 0, 0.45)',
+    // 背景色 - 深色背景层次优化
+    colorBgBase: '#0f0f23', // 更深的背景色
+    colorBgContainer: '#1a1a2e', // 容器背景
+    colorBgElevated: '#16213e', // 悬浮背景
+    colorBgLayout: '#0f0f23', // 布局背景
+    colorBgSpotlight: 'rgba(15, 15, 35, 0.95)', // 聚光灯背景
+    colorBgMask: 'rgba(0, 0, 0, 0.65)', // 遮罩背景
     
-    // 文字色 - 优化对比度的浅色文字层次
-    colorText: '#ffffff', // 主文本保持纯白
-    colorTextSecondary: '#d9d9d9', // 提高次要文本对比度
-    colorTextTertiary: '#a6a6a6', // 三级文本保持可读性
-    colorTextQuaternary: '#737373', // 四级文本
-    colorTextDisabled: '#a6a6a6', // 禁用文本保持可读性
-    colorTextHeading: '#ffffff', // 标题文本保持纯白
-    colorTextDescription: '#d9d9d9', // 描述文本提高对比度
-    colorTextPlaceholder: '#a6a6a6', // 占位符文本提高对比度
+    // 文字色 - 现代化文字层次
+    colorText: '#f8fafc', // 主文本，更柔和的白
+    colorTextSecondary: '#cbd5e1', // 次要文本，更清晰
+    colorTextTertiary: '#94a3b8', // 三级文本，更易读
+    colorTextQuaternary: '#64748b', // 四级文本
+    colorTextDisabled: '#64748b', // 禁用文本
+    colorTextHeading: '#f1f5f9', // 标题文本
+    colorTextDescription: '#cbd5e1', // 描述文本
+    colorTextPlaceholder: '#64748b', // 占位符文本
     
-    // 边框色 - 深色边框
-    colorBorder: '#434343',
-    colorBorderSecondary: '#303030',
-    colorSplit: '#303030',
+    // 边框色 - 现代化边框
+    colorBorder: '#334155', // 主边框
+    colorBorderSecondary: '#475569', // 次要边框
+    colorSplit: '#334155', // 分割线
     
-    // 填充色 - 深色填充
-    colorFill: '#262626',
-    colorFillSecondary: '#1f1f1f',
-    colorFillTertiary: '#141414',
-    colorFillQuaternary: '#0f0f0f',
+    // 填充色 - 现代化填充
+    colorFill: '#1e293b', // 主填充
+    colorFillSecondary: '#334155', // 次要填充
+    colorFillTertiary: '#475569', // 三级填充
+    colorFillQuaternary: '#64748b', // 四级填充
     
-    // 链接色 - 深色模式链接
-    colorLink: '#177ddc',
-    colorLinkHover: '#3c9be8',
-    colorLinkActive: '#0958d9',
+    // 链接色 - 现代深色模式链接
+    colorLink: '#6366f1', // 主色链接
+    colorLinkHover: '#818cf8', // 悬停链接
+    colorLinkActive: '#4f46e5', // 激活链接
     
-    // 圆角 - 保持现代圆角
-    borderRadius: 6,
-    borderRadiusLG: 8,
-    borderRadiusSM: 4,
-    borderRadiusXS: 2,
+    // 圆角 - 现代化圆角设计
+    borderRadius: 8,
+    borderRadiusLG: 12,
+    borderRadiusSM: 6,
+    borderRadiusXS: 4,
     
-    // 阴影 - 深色模式阴影
-    boxShadow: '0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
-    boxShadowSecondary: '0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
-    boxShadowTertiary: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+    // 阴影 - 现代化深色阴影
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15)',
+    boxShadowSecondary: '0 4px 12px -2px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
+    boxShadowTertiary: '0 2px 8px -1px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.1)',
     
     // 字体 - 现代字体栈
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -303,42 +303,42 @@ const darkTheme: ThemePackageConfig = {
     zIndexCustom5: 1400,
   },
   components: {
-    // 布局组件 - 深色布局
+    // 布局组件 - 现代深色布局
     Layout: {
-      bodyBg: '#000000',
-      headerBg: '#1f1f1f',
-      headerColor: '#ffffff',
+      bodyBg: '#0f0f23',
+      headerBg: '#1a1a2e',
+      headerColor: '#f8fafc',
       headerHeight: 64,
-      siderBg: '#001529',
-      siderColor: 'rgba(255, 255, 255, 0.85)',
-      triggerBg: '#002140',
-      triggerColor: '#ffffff',
+      siderBg: '#0f0f23',
+      siderColor: '#cbd5e1',
+      triggerBg: '#16213e',
+      triggerColor: '#f8fafc',
     },
     
-    // 菜单组件 - 优化对比度的深色侧边栏
+    // 菜单组件 - 现代深色侧边栏
     Menu: {
       itemBg: 'transparent',
-      itemSelectedBg: '#177ddc',
-      itemHoverBg: 'rgba(23, 125, 220, 0.15)', // 提高悬停背景对比度
-      itemColor: 'rgba(255, 255, 255, 0.95)', // 提高菜单项文本对比度
+      itemSelectedBg: '#6366f1', // 现代紫色选中背景
+      itemHoverBg: 'rgba(99, 102, 241, 0.1)', // 柔和悬停背景
+      itemColor: '#cbd5e1', // 现代文字颜色
       itemSelectedColor: '#ffffff',
-      itemHoverColor: '#ffffff',
-      itemActiveBg: 'rgba(23, 125, 220, 0.25)', // 提高激活背景对比度
+      itemHoverColor: '#f8fafc',
+      itemActiveBg: 'rgba(99, 102, 241, 0.2)', // 激活背景
       itemActiveColor: '#ffffff',
-      itemDisabledColor: 'rgba(255, 255, 255, 0.4)', // 提高禁用文本对比度
+      itemDisabledColor: '#64748b', // 禁用文本
       subMenuItemBg: 'transparent',
-      groupTitleColor: 'rgba(255, 255, 255, 0.6)', // 提高分组标题对比度
+      groupTitleColor: '#94a3b8', // 分组标题
       iconSize: 14,
       collapsedIconSize: 16,
       collapsedWidth: 80,
-      // 图标颜色控制
-      itemIconColor: 'rgba(255, 255, 255, 0.85)', // 默认图标颜色
-      itemIconColorHover: '#ffffff', // 悬停图标颜色
+      // 图标颜色控制 - 现代化配色
+      itemIconColor: '#94a3b8', // 默认图标颜色
+      itemIconColorHover: '#cbd5e1', // 悬停图标颜色
       itemIconColorSelected: '#ffffff', // 选中图标颜色
-      submenuIconColor: 'rgba(255, 255, 255, 0.85)', // 子菜单图标颜色
-      submenuIconColorHover: '#ffffff', // 子菜单悬停图标颜色
-      submenuArrowColor: 'rgba(255, 255, 255, 0.85)', // 子菜单箭头颜色
-      submenuArrowColorHover: '#ffffff', // 子菜单悬停箭头颜色
+      submenuIconColor: '#94a3b8', // 子菜单图标颜色
+      submenuIconColorHover: '#cbd5e1', // 子菜单悬停图标颜色
+      submenuArrowColor: '#94a3b8', // 子菜单箭头颜色
+      submenuArrowColorHover: '#cbd5e1', // 子菜单悬停箭头颜色
       // 边框和下划线控制
       itemBorderBottom: 'none', // 移除底部边框
       itemSelectedBorderBottom: 'none', // 移除选中项底部边框
@@ -346,26 +346,26 @@ const darkTheme: ThemePackageConfig = {
       horizontalItemSelectedBorderBottom: 'none', // 移除选中水平菜单底部边框
     },
     
-    // 按钮组件 - 深色按钮设计
+    // 按钮组件 - 现代深色按钮设计
     Button: {
-      primaryColor: '#177ddc',
-      defaultBg: '#1f1f1f',
-      defaultColor: '#ffffff',
-      defaultBorderColor: '#434343',
-      defaultHoverBg: '#262626',
-      defaultHoverColor: '#177ddc',
-      defaultHoverBorderColor: '#177ddc',
-      defaultActiveBg: '#0f1419',
-      defaultActiveColor: '#3c9be8',
-      defaultActiveBorderColor: '#3c9be8',
-      textHoverBg: 'rgba(255, 255, 255, 0.06)',
-      textHoverColor: '#177ddc',
-      dangerColor: '#dc4446',
-      dangerBg: '#1f1f1f',
-      dangerBorderColor: '#dc4446',
-      dangerHoverColor: '#ff7875',
+      primaryColor: '#6366f1',
+      defaultBg: '#1e293b',
+      defaultColor: '#f8fafc',
+      defaultBorderColor: '#334155',
+      defaultHoverBg: '#334155',
+      defaultHoverColor: '#6366f1',
+      defaultHoverBorderColor: '#6366f1',
+      defaultActiveBg: '#475569',
+      defaultActiveColor: '#818cf8',
+      defaultActiveBorderColor: '#818cf8',
+      textHoverBg: 'rgba(99, 102, 241, 0.1)',
+      textHoverColor: '#6366f1',
+      dangerColor: '#ef4444',
+      dangerBg: '#1e293b',
+      dangerBorderColor: '#ef4444',
+      dangerHoverColor: '#f87171',
       dangerHoverBg: '#2a1215',
-      dangerHoverBorderColor: '#ff7875',
+      dangerHoverBorderColor: '#f87171',
       borderRadius: 6,
       controlHeight: 32,
       controlHeightLG: 40,
@@ -381,16 +381,16 @@ const darkTheme: ThemePackageConfig = {
       shadow: '0 2px 0 rgba(0, 0, 0, 0.02)',
     },
     
-    // 卡片组件 - 深色卡片设计
+    // 卡片组件 - 现代深色卡片设计
     Card: {
-      headerBg: '#262626',
-      headerColor: '#ffffff',
-      bodyBg: '#1f1f1f',
-      bodyColor: '#ffffff',
-      borderColor: '#303030',
-      borderRadius: 8,
-      boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
-      boxShadowTertiary: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+      headerBg: '#16213e',
+      headerColor: '#f8fafc',
+      bodyBg: '#1a1a2e',
+      bodyColor: '#f8fafc',
+      borderColor: '#334155',
+      borderRadius: 12,
+      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15)',
+      boxShadowTertiary: '0 4px 12px -2px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
       paddingLG: 24,
       paddingSM: 16,
       paddingXS: 12,
