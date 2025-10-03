@@ -204,7 +204,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
           </div>
         </Header>
         
-        <Content className={`main-content ${currentTheme?.meta.id || 'light'}-theme`}>
+        <Content className={`main-content ${currentTheme?.meta.id || 'light'}-theme`} style={{ minHeight: 'calc(100vh - 64px)' }}>
           {children}
         </Content>
       </Layout>
