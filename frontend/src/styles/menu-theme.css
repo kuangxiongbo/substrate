@@ -225,7 +225,7 @@
   padding-right: var(--top-menu-item-padding, 20px) !important;
 }
 
-/* 强制移除子菜单标题的额外padding和内边距 */
+/* 强制移除子菜单标题的额外padding和内边距，确保与普通菜单项完全一致 */
 .menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title {
   /* 确保子菜单标题与普通菜单项有完全相同的padding */
   padding-left: var(--top-menu-item-padding, 20px) !important;
@@ -239,20 +239,80 @@
   margin-top: 0 !important;
   margin-bottom: 0 !important;
   margin-inline: 0 !important;
+  /* 确保高度和行高与普通菜单项一致 */
+  height: var(--top-menu-height, 64px) !important;
+  line-height: var(--top-menu-height, 64px) !important;
+  /* 确保显示方式与普通菜单项一致 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* 确保字体样式与普通菜单项一致 */
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  /* 确保圆角与普通菜单项一致 */
+  border-radius: 4px !important;
+  /* 确保垂直对齐与普通菜单项一致 */
+  vertical-align: top !important;
 }
 
-/* 强制移除子菜单容器的额外padding */
+/* 强制移除子菜单容器的额外padding，确保与普通菜单项容器一致 */
 .menu-theme-unified.ant-menu-horizontal .ant-menu-submenu {
   padding: 0 !important;
   margin: 0 !important;
+  /* 确保子菜单容器不产生额外的间距 */
+  border: none !important;
+  background: transparent !important;
+  /* 确保子菜单容器的高度与普通菜单项一致 */
+  height: var(--top-menu-height, 64px) !important;
+  line-height: var(--top-menu-height, 64px) !important;
+  /* 确保子菜单容器的显示方式 */
+  display: inline-block !important;
+  vertical-align: top !important;
 }
 
-/* 确保子菜单内容区域不影响主菜单项间距 */
+/* 确保子菜单内容区域不影响主菜单项间距，保持完全一致 */
 .menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-popup,
 .menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-placement-bottomLeft,
 .menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-placement-bottomRight {
   /* 子菜单弹出层不影响主菜单项间距 */
   margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
+  /* 确保弹出层不产生额外的偏移 */
+  padding: 0 !important;
+  /* 确保弹出层不影响主菜单项的布局 */
+  position: absolute !important;
+  z-index: 1050 !important;
+}
+
+/* 最终确保所有菜单项完全一致 - 统一所有状态的间距 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item:hover,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item:active,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item:focus,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item-selected,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title:hover,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title:active,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title:focus,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  /* 所有状态都使用完全相同的间距配置 */
+  margin-left: var(--top-menu-item-margin, 12px) !important;
+  margin-right: var(--top-menu-item-margin, 12px) !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-left: var(--top-menu-item-padding, 20px) !important;
+  padding-right: var(--top-menu-item-padding, 20px) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  height: var(--top-menu-height, 64px) !important;
+  line-height: var(--top-menu-height, 64px) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: top !important;
+  border-radius: 4px !important;
 }
 
 /* 侧边栏头部样式 */
