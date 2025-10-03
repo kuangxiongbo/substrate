@@ -1,0 +1,47 @@
+# Spec-Kit Project Rules
+
+This project uses Spec-Kit for spec-driven development.
+
+## Available Custom Commands
+
+The following slash commands are available in `.cursor/commands/`:
+
+- `/constitution` - Create or update project constitution and principles
+- `/specify` - Create feature specifications from natural language
+- `/clarify` - Ask structured questions to clarify ambiguous requirements
+- `/plan` - Create implementation plan from specifications
+- `/tasks` - Generate actionable tasks from the plan
+- `/analyze` - Cross-artifact consistency and alignment report
+- `/implement` - Execute implementation with TDD approach
+
+## Workflow
+
+1. `/constitution` - Define project principles (optional, one-time setup)
+2. `/specify` - Describe the feature you want to build
+3. `/clarify` - (Optional) Clarify any ambiguities
+4. `/plan` - Generate implementation plan
+5. `/tasks` - Break down into specific tasks
+6. `/analyze` - (Optional) Verify consistency
+7. `/implement` - Generate code with tests
+
+## Important Notes
+
+- All commands follow Test-Driven Development (TDD)
+- Each feature creates a new Git branch automatically
+- Specifications are stored in `.specify/memory/`
+- Templates are in `.specify/templates/`
+- Scripts are in `.specify/scripts/`
+
+## Command Details
+
+When a user types a slash command (e.g., `/constitution`, `/specify`), you should:
+1. Read the corresponding command file from `.cursor/commands/{command}.md`
+2. Follow the instructions in that file exactly
+3. Use the scripts and templates as directed
+4. Replace `$ARGUMENTS` with the user's input after the command
+
+For example:
+- User types: `/specify 创建登录功能`
+- You should read `.cursor/commands/specify.md` and replace `$ARGUMENTS` with "创建登录功能"
+
+

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spec-Kit Demo - Nuxt 3 项目预览</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- 头部 -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-semibold text-gray-900">Spec-Kit Demo</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-500">Nuxt 3 版本预览</span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            运行中
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div class="px-4 py-6 sm:px-0">
+                <div class="border-4 border-dashed border-gray-200 rounded-lg p-8">
+                    <div class="text-center fade-in">
+                        <h1 class="text-3xl font-bold text-gray-900 mb-4">
+                            🎉 Nuxt 3 项目创建成功！
+                        </h1>
+                        <p class="text-lg text-gray-600 mb-6">
+                            这是一个使用 Nuxt 3 构建的前端项目预览
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                            <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">✅ 项目结构</h3>
+                                <p class="text-gray-600">已创建完整的 Nuxt 3 项目结构</p>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">🚀 快速启动</h3>
+                                <p class="text-gray-600">避免了复杂的依赖安装问题</p>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">📦 渐进式迁移</h3>
+                                <p class="text-gray-600">可以逐步添加功能和依赖</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h2 class="text-xl font-semibold text-gray-900 mb-4">项目结构：</h2>
+                            <div class="bg-gray-100 rounded-lg p-4 text-left max-w-md mx-auto">
+                                <pre class="text-sm text-gray-700">frontend-nuxt/
+├── app.vue          # 应用入口
+├── nuxt.config.ts   # Nuxt 配置
+├── package.json     # 依赖管理
+├── layouts/         # 布局组件
+│   └── default.vue
+├── pages/           # 页面组件
+│   └── index.vue
+├── components/      # 可复用组件
+├── composables/     # 组合式函数
+├── stores/          # 状态管理
+└── assets/          # 静态资源
+    └── css/
+        └── main.css</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h2 class="text-xl font-semibold text-gray-900 mb-4">下一步计划：</h2>
+                            <ul class="text-left max-w-md mx-auto space-y-2">
+                                <li class="flex items-center">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    创建基础项目结构
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-yellow-500 mr-2">⏳</span>
+                                    安装核心依赖
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-gray-400 mr-2">○</span>
+                                    迁移认证系统
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-gray-400 mr-2">○</span>
+                                    迁移页面组件
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-gray-400 mr-2">○</span>
+                                    配置状态管理
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                            <h3 class="text-lg font-semibold text-blue-900 mb-2">🎯 当前状态</h3>
+                            <p class="text-blue-700">
+                                项目结构已创建完成，正在等待 npm 依赖安装完成。
+                                一旦安装完成，就可以运行 <code class="bg-blue-100 px-2 py-1 rounded">npm run dev</code> 启动开发服务器。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,261 @@
+/**
+ * 顶部菜单布局样式
+ * 基于Spec-Kit方法重构的顶部菜单布局样式
+ */
+
+.top-menu-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.top-header {
+  background: #001529;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  height: 64px;
+  line-height: 64px;
+}
+
+/* 浅色主题下的顶部头部 */
+.top-header.light-theme {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 深色主题下的顶部头部 */
+.top-header.dark-theme {
+  background: #001529;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* 浅色主题下的Logo文字 */
+.top-header.light-theme .logo-text {
+  color: #1f1f1f;
+}
+
+/* 深色主题下的Logo文字 */
+.top-header.dark-theme .logo-text {
+  color: white;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin: 0 24px;
+}
+
+.top-menu {
+  background: transparent;
+  border-bottom: none;
+  line-height: 64px;
+  min-width: 0;
+}
+
+/* 顶部菜单样式已移至 menu-theme.css */
+
+.top-menu .ant-menu-item {
+  height: 64px;
+  line-height: 64px;
+  margin: 0 8px;
+  padding: 0 16px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.3s;
+}
+
+.top-menu .ant-menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+}
+
+.top-menu .ant-menu-item-selected {
+  background: #1890ff;
+  color: #ffffff !important;
+}
+
+.top-menu .ant-menu-item-selected .ant-menu-item-icon {
+  color: #ffffff !important;
+}
+
+.top-menu .ant-menu-item:hover .ant-menu-item-icon {
+  color: #ffffff !important;
+}
+
+/* 浅色主题下的顶部菜单样式已移至 menu-theme.css */
+
+.top-menu .ant-menu-submenu-title {
+  height: 64px;
+  line-height: 64px;
+  margin: 0 8px;
+  padding: 0 16px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.3s;
+}
+
+.top-menu .ant-menu-submenu-title:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+}
+
+.top-menu .ant-menu-submenu-title:hover .ant-menu-submenu-arrow {
+  color: #ffffff !important;
+}
+
+.top-menu .ant-menu-submenu-title:hover .ant-menu-item-icon {
+  color: #ffffff !important;
+}
+
+/* 浅色主题下的顶部子菜单样式已移至 menu-theme.css */
+
+/* 头部右侧样式已移至 menu-theme.css */
+
+.top-content {
+  background: #f0f2f5;
+  margin: 24px;
+  padding: 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  min-height: calc(100vh - 112px);
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .header-content {
+    padding: 0 16px;
+  }
+  
+  .header-center {
+    margin: 0 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 12px;
+  }
+  
+  .header-center {
+    display: none;
+  }
+  
+  .top-content {
+    margin: 16px;
+    padding: 16px;
+    min-height: calc(100vh - 80px);
+  }
+  
+  .user-details {
+    display: none;
+  }
+  
+  .logo-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 0 8px;
+  }
+  
+  .top-content {
+    margin: 8px;
+    padding: 12px;
+    min-height: calc(100vh - 64px);
+  }
+}
+
+/* 菜单项溢出处理 */
+.top-menu {
+  overflow: hidden;
+}
+
+.top-menu .ant-menu-item,
+.top-menu .ant-menu-submenu-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 下拉菜单样式 */
+.ant-dropdown-menu {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ant-dropdown-menu-item {
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin: 2px 4px;
+}
+
+.ant-dropdown-menu-item:hover {
+  background: #f5f5f5;
+}
+
+/* 滚动条样式 */
+.top-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.top-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.top-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.top-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 动画效果 */
+.top-menu .ant-menu-item,
+.top-menu .ant-menu-submenu-title {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.user-info {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.notification-btn {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}

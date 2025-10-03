@@ -1,0 +1,309 @@
+/**
+ * AdminLayout组件样式
+ * 基于主题变量的组件样式，移除所有内嵌样式
+ */
+
+/* ===== 主布局容器 ===== */
+.admin-layout {
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+/* ===== 侧边栏样式 ===== */
+.admin-sider {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  border-right: 1px solid var(--color-border);
+}
+
+.admin-sider .ant-layout-sider-trigger {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.admin-sider .ant-layout-sider-trigger:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+/* ===== Logo区域样式 ===== */
+.admin-logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text);
+}
+
+.admin-logo-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.admin-logo-avatar {
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-logo-text {
+  margin: 0;
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+}
+
+/* ===== 菜单样式 ===== */
+.admin-menu {
+  border: none;
+  background-color: transparent;
+  padding: var(--spacing-sm) 0;
+}
+
+.admin-menu .ant-menu-item {
+  border-radius: var(--border-radius-md);
+  margin: 2px var(--spacing-sm);
+  transition: all var(--transition-fast);
+}
+
+.admin-menu .ant-menu-item:hover {
+  background-color: var(--color-primary);
+  color: #ffffff !important;
+}
+
+.admin-menu .ant-menu-item-selected {
+  background-color: var(--color-primary);
+  color: #ffffff !important;
+}
+
+.admin-menu .ant-menu-item-selected .ant-menu-item-icon {
+  color: #ffffff !important;
+}
+
+.admin-menu .ant-menu-item:hover .ant-menu-item-icon {
+  color: #ffffff !important;
+}
+
+.admin-menu .ant-menu-submenu-title {
+  border-radius: var(--border-radius-md);
+  margin: 2px var(--spacing-sm);
+  transition: all var(--transition-fast);
+}
+
+.admin-menu .ant-menu-submenu-title:hover {
+  background-color: var(--color-primary);
+  color: #ffffff !important;
+}
+
+.admin-menu .ant-menu-submenu-title:hover .ant-menu-submenu-arrow {
+  color: #ffffff !important;
+}
+
+.admin-menu .ant-menu-submenu-title:hover .ant-menu-item-icon {
+  color: #ffffff !important;
+}
+
+/* ===== 顶部导航样式 ===== */
+.admin-header {
+  background: linear-gradient(90deg, var(--color-background) 0%, var(--color-surface) 100%);
+  box-shadow: var(--shadow-sm);
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(8px);
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* ===== 菜单切换按钮 ===== */
+.admin-menu-toggle {
+  font-size: var(--font-size-lg);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+}
+
+.admin-menu-toggle:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+/* ===== 移动端菜单按钮 ===== */
+.mobile-menu-btn {
+  display: none !important;
+  font-size: var(--font-size-lg);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+}
+
+.mobile-menu-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+/* ===== 快速设置按钮 ===== */
+.admin-settings-toggle {
+  font-size: var(--font-size-lg);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+  margin-right: var(--spacing-xs);
+}
+
+.admin-settings-toggle:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+/* ===== 通知按钮 ===== */
+.admin-notification-btn {
+  font-size: var(--font-size-lg);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+}
+
+.admin-notification-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+/* ===== 用户信息区域 ===== */
+.admin-user-info {
+  cursor: pointer;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+  background-color: rgba(24, 144, 255, 0.05);
+  border: 1px solid rgba(24, 144, 255, 0.1);
+}
+
+.admin-user-info:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+.admin-user-avatar {
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.admin-user-email {
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-semibold);
+}
+
+.admin-user-role {
+  border-radius: var(--border-radius-sm);
+  font-weight: var(--font-weight-medium);
+  margin-top: 2px;
+  font-size: 11px;
+}
+
+/* ===== 主内容区域 ===== */
+.admin-content {
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface) 100%);
+  min-height: calc(100vh - 64px);
+  position: relative;
+  overflow: auto;
+}
+
+.admin-content-inner {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ===== 移动端抽屉样式 ===== */
+.admin-mobile-drawer .ant-drawer-content {
+  border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
+}
+
+.admin-mobile-drawer .ant-drawer-body {
+  padding: 0;
+}
+
+.admin-mobile-menu {
+  border: none;
+  background-color: transparent;
+}
+
+/* ===== 动画效果 ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 1024px) {
+  .mobile-menu-btn {
+    display: block !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .admin-content {
+    padding: var(--spacing-md);
+  }
+  
+  .admin-user-details {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .admin-content {
+    padding: var(--spacing-sm);
+  }
+  
+  .admin-header-right {
+    gap: var(--spacing-sm);
+  }
+}

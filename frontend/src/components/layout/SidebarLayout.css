@@ -1,0 +1,280 @@
+/**
+ * 侧边栏布局样式
+ * 基于Spec-Kit方法重构的侧边栏布局样式
+ */
+
+.sidebar-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  background: #001529;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+/* 浅色主题下的侧边栏 */
+.sidebar.light-theme {
+  background: #ffffff;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 深色主题下的侧边栏 */
+.sidebar.dark-theme {
+  background: #001529;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #1f1f1f;
+  padding: 0 16px;
+}
+
+/* 浅色主题下的侧边栏头部 */
+.sidebar.light-theme .sidebar-header {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 深色主题下的侧边栏头部 */
+.sidebar.dark-theme .sidebar-header {
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: #1890ff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* 浅色主题下的Logo图标 */
+.sidebar.light-theme .logo-icon {
+  background: #1890ff;
+  color: white;
+}
+
+/* 深色主题下的Logo图标 */
+.sidebar.dark-theme .logo-icon {
+  background: #1890ff;
+  color: white;
+}
+
+.logo-text {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* 浅色主题下的Logo文字 */
+.sidebar.light-theme .logo-text {
+  color: #1f1f1f;
+}
+
+/* 深色主题下的Logo文字 */
+.sidebar.dark-theme .logo-text {
+  color: white;
+}
+
+/* 浅色主题下的侧边栏头部 */
+.sidebar.light-theme .sidebar-header {
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 深色主题下的侧边栏头部 */
+.sidebar.dark-theme .sidebar-header {
+  background: #001529;
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.sidebar-menu {
+  border-right: none;
+  background: transparent;
+}
+
+.sidebar-menu .ant-menu-item {
+  margin: 4px 8px;
+  border-radius: 6px;
+  height: 40px;
+  line-height: 40px;
+}
+
+/* 深色主题下的菜单样式已移至 menu-theme.css */
+
+/* 浅色主题下的菜单样式已移至 menu-theme.css */
+
+.sidebar-menu .ant-menu-submenu-title {
+  margin: 4px 8px;
+  border-radius: 6px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.main-layout {
+  background: #f0f2f5;
+}
+
+.main-header {
+  background: white;
+  padding: 0 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 99;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.collapse-btn {
+  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1f1f1f !important;
+  border: none;
+  background: transparent;
+}
+
+.collapse-btn:hover {
+  color: #1890ff !important;
+  background: rgba(24, 144, 255, 0.1);
+}
+
+/* 布局切换按钮 */
+.layout-switch-btn {
+  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1f1f1f !important;
+  border: none;
+  background: transparent;
+  margin-left: 8px;
+}
+
+.layout-switch-btn:hover {
+  color: #1890ff !important;
+  background: rgba(24, 144, 255, 0.1);
+}
+
+/* 头部右侧样式已移至 menu-theme.css */
+
+.main-content {
+  margin: 24px;
+  padding: 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  min-height: calc(100vh - 112px);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+  }
+  
+  .main-layout {
+    margin-left: 0;
+  }
+  
+  .main-header {
+    padding: 0 16px;
+  }
+  
+  .main-content {
+    margin: 16px;
+    padding: 16px;
+    min-height: calc(100vh - 80px);
+  }
+  
+  .user-details {
+    display: none;
+  }
+}
+
+/* 折叠状态下的样式 */
+.sidebar-layout .ant-layout-sider-collapsed .logo-text {
+  display: none;
+}
+
+.sidebar-layout .ant-layout-sider-collapsed .user-details {
+  display: none;
+}
+
+/* 动画效果 */
+.sidebar-layout .ant-layout-sider {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.sidebar-layout .ant-layout-sider-collapsed {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* 滚动条样式 */
+.sidebar-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.main-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
