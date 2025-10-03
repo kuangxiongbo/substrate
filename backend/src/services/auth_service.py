@@ -124,7 +124,7 @@ class AuthService:
                 result=EventResult.FAILURE,
                 ip_address=ip_address,
                 user_agent=user_agent,
-                failure_reason="Email not found"
+                details="Email not found"
             )
             return False, None, generic_error
         

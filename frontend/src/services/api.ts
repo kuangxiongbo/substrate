@@ -10,7 +10,7 @@ interface ApiError {
 
 // 创建axios实例
 const api: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ api.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refresh_token');
         if (refreshToken) {
-          const response = await axios.post('/api/v1/auth/refresh', {
+          const response = await api.post('/v1/auth/refresh', {
             refresh_token: refreshToken,
           });
 
@@ -118,3 +118,4 @@ export const getRefreshToken = (): string | null => {
 };
 
 export default api;
+

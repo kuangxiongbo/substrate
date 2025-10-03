@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.database import engine, Base
-from src.models import Role, Permission, SystemConfig
+from src.models import *
 
 def create_tables():
     """创建新的数据库表"""

@@ -80,8 +80,8 @@ const LoginPage: React.FC = () => {
 
   const handleAdminLogin = () => {
     form.setFieldsValue({
-      email: 'superadmin@system.com',
-      password: 'SuperSecure2024!',
+      email: 'admin@system.com',
+      password: 'Admin123!',
     });
   };
 

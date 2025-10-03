@@ -45,7 +45,7 @@ class Settings(BaseSettings):
     SMTP_TLS: bool = False
     
     # Security
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000"]
+    CORS_ORIGINS: List[str] = ["*"]
     RATE_LIMIT_PER_MINUTE: int = 5
     ACCOUNT_LOCKOUT_DURATION_MINUTES: int = 30
     MAX_FAILED_LOGIN_ATTEMPTS: int = 5
