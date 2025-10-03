@@ -41,6 +41,12 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   // 菜单项配置
   const menuItems = [
     {
+      key: 'overview',
+      icon: <DashboardOutlined />,
+      label: '概览',
+      path: '/overview',
+    },
+    {
       key: 'users',
       icon: <TeamOutlined />,
       label: '用户管理',
@@ -142,21 +148,12 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
       <Layout className="main-layout">
         <Header className="main-header">
           <div className="header-left">
-            <Space>
-              <Button
-                type="text"
-                icon={isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                onClick={toggleCollapse}
-                className="collapse-btn"
-              />
-              <Button
-                type="text"
-                icon={<AppstoreOutlined />}
-                onClick={toggleLayout}
-                className="layout-switch-btn"
-                title="切换到顶部菜单布局"
-              />
-            </Space>
+            <Button
+              type="text"
+              icon={isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={toggleCollapse}
+              className="collapse-btn"
+            />
           </div>
           
           <div className="header-right">

@@ -218,11 +218,11 @@ const App: React.FC = () => {
                  }
                />
         
-        {/* Dashboard 路由 - 重定向到用户管理页面 */}
-        <Route path="/dashboard" element={<Navigate to="/users" replace />} />
+        {/* Dashboard 路由 - 重定向到概览页面 */}
+        <Route path="/dashboard" element={<Navigate to="/overview" replace />} />
         
         {/* 默认重定向 */}
-        <Route path="/" element={<Navigate to="/users" replace />} />
+        <Route path="/" element={<Navigate to="/overview" replace />} />
         
         {/* 404页面 */}
         <Route path="*" element={<NotFound />} />

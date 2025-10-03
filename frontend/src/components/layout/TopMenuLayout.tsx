@@ -40,6 +40,12 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
   // 菜单项配置
   const menuItems = [
     {
+      key: 'overview',
+      icon: <DashboardOutlined />,
+      label: '概览',
+      path: '/overview',
+    },
+    {
       key: 'users',
       icon: <TeamOutlined />,
       label: '用户管理',
