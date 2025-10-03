@@ -110,8 +110,8 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
     },
   ];
 
-  // 根据当前主题确定菜单主题
-  const menuTheme = currentTheme?.meta.id === 'light' ? 'light' : 'dark';
+  // 根据当前主题确定菜单主题 - 使用主题包中的menuVariant配置
+  const menuTheme = currentTheme?.menuVariant || 'light';
   
   return (
     <Layout className={`top-menu-layout ${currentTheme?.meta.id || 'light'}-theme`}>

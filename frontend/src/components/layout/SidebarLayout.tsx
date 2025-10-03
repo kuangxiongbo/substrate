@@ -119,7 +119,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         collapsed={isCollapsed}
         width={layout.width || 240}
         collapsedWidth={80}
-        className={`sidebar ${currentTheme?.meta.id === 'dark' ? 'dark-theme' : 'light-theme'}`}
+        className={`sidebar ${currentTheme?.meta.id || 'light'}-theme`}
       >
         <div className="sidebar-header">
           <div className="logo">
@@ -132,7 +132,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         </div>
         
         <Menu
-          theme={currentTheme?.meta.id === 'dark' ? 'dark' : 'light'}
+          theme={currentTheme?.menuVariant || 'light'}
           mode="inline"
           defaultSelectedKeys={['overview']}
           items={menuItems}
