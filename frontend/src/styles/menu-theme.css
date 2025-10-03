@@ -31,15 +31,7 @@
   content: none !important;
 }
 
-/* 选中状态特殊处理 */
-.menu-theme-unified .ant-menu-item-selected,
-.menu-theme-unified .ant-menu-submenu-selected > .ant-menu-submenu-title {
-  border-bottom: none !important;
-  border-bottom-color: transparent !important;
-  /* 确保选中状态的菜单项间距与其他项一致 */
-  margin: 0 var(--top-menu-item-margin, 8px) !important;
-  margin-inline: 0 !important;
-}
+/* 选中状态特殊处理已移至下方，使用更强制性的重置 */
 
 /* 浅色主题菜单样式 */
 .light-theme .menu-theme-unified .ant-menu-item {
@@ -147,21 +139,71 @@
   color: #ffffff !important;
 }
 
-/* 顶部菜单间距统一配置 - 基于主题包 */
-.menu-theme-unified.ant-menu-horizontal .ant-menu-item,
-.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title {
-  /* 使用主题包中的配置，确保所有菜单项间距一致 */
-  margin: 0 var(--top-menu-item-margin, 8px) !important;
-  padding: 0 var(--top-menu-item-padding, 16px) !important;
-  height: var(--top-menu-height, 64px) !important;
+/* 旧的顶部菜单样式已移至下方，使用更强制性的重置 */
+
+/* 强制重置Ant Design水平菜单的默认样式 */
+.menu-theme-unified.ant-menu-horizontal {
+  /* 重置容器样式 */
+  border-bottom: none !important;
+  background: transparent !important;
   line-height: var(--top-menu-height, 64px) !important;
-  border-radius: 4px !important;
-  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
-  /* 重置Ant Design默认的margin-inline */
-  margin-inline: 0 !important;
+  /* 确保容器内边距为0 */
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* 移除首尾菜单项的特殊样式，完全由主题包控制间距 */
+/* 强制重置所有菜单项的默认状态 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title {
+  /* 重置所有可能的默认边距 */
+  margin: 0 !important;
+  margin-inline: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  /* 重置所有可能的默认内边距 */
+  padding: 0 !important;
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  /* 重置边框和背景 */
+  border: none !important;
+  background: transparent !important;
+  /* 重置高度和行高 */
+  height: var(--top-menu-height, 64px) !important;
+  line-height: var(--top-menu-height, 64px) !important;
+  /* 重置字体样式 */
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  /* 重置过渡效果 */
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
+  /* 重置显示方式 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* 重置圆角 */
+  border-radius: 4px !important;
+}
+
+/* 应用主题包配置的间距 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title {
+  /* 应用主题包配置的边距 */
+  margin-left: var(--top-menu-item-margin, 12px) !important;
+  margin-right: var(--top-menu-item-margin, 12px) !important;
+  /* 应用主题包配置的内边距 */
+  padding-left: var(--top-menu-item-padding, 20px) !important;
+  padding-right: var(--top-menu-item-padding, 20px) !important;
+}
+
+/* 确保选中状态也应用相同的间距 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item-selected,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  /* 选中状态使用相同的间距配置 */
+  margin-left: var(--top-menu-item-margin, 12px) !important;
+  margin-right: var(--top-menu-item-margin, 12px) !important;
+  padding-left: var(--top-menu-item-padding, 20px) !important;
+  padding-right: var(--top-menu-item-padding, 20px) !important;
+}
 
 /* 侧边栏头部样式 */
 .sidebar-header {

@@ -121,8 +121,8 @@ const darkTheme: ThemePackageConfig = {
     
     // 顶部菜单专用间距配置 - 统一所有菜单项间距
     topMenuHeight: 64,
-    topMenuItemMargin: 8, // 增加间距，确保菜单项之间有足够空间
-    topMenuItemPadding: 16,
+    topMenuItemMargin: 12, // 增加间距，确保菜单项之间有足够空间
+    topMenuItemPadding: 20, // 增加内边距，确保内容有足够空间
     topMenuContainerPadding: 0,
     topMenuContainerMargin: 0,
     
@@ -868,3 +868,4 @@ const darkTheme: ThemePackageConfig = {
 };
 
 export default darkTheme;
+
