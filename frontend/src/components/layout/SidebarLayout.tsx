@@ -182,9 +182,13 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                   />
                   {!isCollapsed && (
                     <div className="user-details">
-                      <Text className="user-name">{user?.name || '用户'}</Text>
+                      <Text className="user-name">
+                        {user?.name || user?.email?.split('@')[0] || '用户'}
+                      </Text>
                       <Text className="user-role" type="secondary">
-                        {user?.role || 'user'}
+                        {user?.role || 
+                         (user?.email?.includes('admin') ? '管理员' : '用户') ||
+                         'user'}
                       </Text>
                     </div>
                   )}
@@ -209,5 +213,6 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
 };
 
 export default SidebarLayout;
+
 
 

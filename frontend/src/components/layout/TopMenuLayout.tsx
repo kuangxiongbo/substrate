@@ -163,9 +163,13 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
                     className="user-avatar"
                   />
                   <div className="user-details">
-                    <Text className="user-name">{user?.name || '用户'}</Text>
+                    <Text className="user-name">
+                      {user?.name || user?.email?.split('@')[0] || '用户'}
+                    </Text>
                     <Text className="user-role" type="secondary">
-                      {user?.role || 'user'}
+                      {user?.role || 
+                       (user?.email?.includes('admin') ? '管理员' : '用户') ||
+                       'user'}
                     </Text>
                   </div>
                 </div>
@@ -189,5 +193,6 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
 };
 
 export default TopMenuLayout;
+
 
 

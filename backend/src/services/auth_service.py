@@ -183,7 +183,20 @@ class AuthService:
             "user": {
                 "id": str(user.id),
                 "email": user.email,
-                "account_status": user.account_status.value
+                "name": user.email.split('@')[0],  # 使用邮箱前缀作为用户名
+                "role": "管理员" if "admin" in user.email.lower() else "用户",
+                "avatar": None,
+                "email_verified": user.email_verified,
+                "account_status": user.account_status.value,
+                "failed_login_attempts": user.failed_login_attempts,
+                "account_locked_until": user.account_locked_until.isoformat() if user.account_locked_until else None,
+                "registration_timestamp": user.registration_timestamp.isoformat() if user.registration_timestamp else None,
+                "last_login_timestamp": user.last_login_timestamp.isoformat() if user.last_login_timestamp else None,
+                "last_password_change": user.last_password_change.isoformat() if user.last_password_change else None,
+                "consent_timestamp": user.consent_timestamp.isoformat() if user.consent_timestamp else None,
+                "consent_status": user.consent_status,
+                "created_at": user.created_at.isoformat() if user.created_at else None,
+                "updated_at": user.updated_at.isoformat() if user.updated_at else None,
             }
         }, None
     
@@ -480,6 +493,7 @@ class AuthService:
             Strength analysis dict
         """
         return self.password_service.get_password_strength(password)
+
 
 
 

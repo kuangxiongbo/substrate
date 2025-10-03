@@ -14,6 +14,7 @@ import {
   getGlobalStyleManager
 } from '../themes';
 import type { ThemePackageConfig } from '../themes';
+import { useAuthStore } from '../stores/authStore';
 
 // 类型定义已移动到 antd-themes.ts 文件中
 
@@ -32,6 +33,7 @@ export const THEME_STORAGE_KEYS = {
   SELECTED_THEME: 'selectedTheme',
   THEME_CONFIG: 'themeConfig',
   THEME_HISTORY: 'themeHistory',
+  USER_THEME_PREFIX: 'user_theme_', // 用户主题偏好前缀
 } as const;
 
 // 主题应用函数已由 ConfigProvider 处理
@@ -56,6 +58,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState<ThemePackageConfig | null>(null);
   const [availableThemes, setAvailableThemes] = useState<ThemePackageConfig[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user, isAuthenticated } = useAuthStore();
 
   // 初始化主题
   useEffect(() => {

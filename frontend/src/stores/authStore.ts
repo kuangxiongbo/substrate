@@ -7,6 +7,9 @@ import { setAuthToken, setRefreshToken, clearAuthTokens } from '../services/api'
 interface User {
   id: string;
   email: string;
+  name?: string;
+  role?: string;
+  avatar?: string;
   email_verified: boolean;
   account_status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
   failed_login_attempts: number;
