@@ -685,6 +685,88 @@
   color: #096dd9 !important;
 }
 
+/* 深色主题全局样式 */
+.dark-theme body {
+  background-color: #141414 !important;
+  color: #ffffff !important;
+}
+
+.dark-theme html {
+  background-color: #141414 !important;
+}
+
+.dark-theme #root,
+.dark-theme .app,
+.dark-theme .main-container {
+  background-color: #141414 !important;
+  min-height: 100vh !important;
+}
+
+.dark-theme .ant-layout {
+  background-color: #141414 !important;
+}
+
+.dark-theme .ant-layout-content {
+  background-color: #1f1f1f !important;
+}
+
+.dark-theme .ant-layout-sider {
+  background-color: #001529 !important;
+}
+
+.dark-theme .sidebar {
+  background-color: #001529 !important;
+}
+
+.dark-theme .sidebar-header {
+  background-color: #001529 !important;
+  border-bottom: 1px solid #1f1f1f !important;
+}
+
+.dark-theme .logo-text {
+  color: #ffffff !important;
+}
+
+.dark-theme .top-header {
+  background-color: #001529 !important;
+  border-bottom: 1px solid #1f1f1f !important;
+}
+
+.dark-theme .top-menu-layout {
+  background-color: #141414 !important;
+}
+
+/* 深色主题用户信息区域 */
+.dark-theme .user-info {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.dark-theme .user-info:hover {
+  color: #ffffff !important;
+}
+
+.dark-theme .user-name {
+  color: #ffffff !important;
+}
+
+.dark-theme .user-role {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* 深色主题按钮样式 */
+.dark-theme .settings-toggle-btn,
+.dark-theme .notification-btn {
+  color: rgba(255, 255, 255, 0.85) !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.dark-theme .settings-toggle-btn:hover,
+.dark-theme .notification-btn:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
 /* Typography 组件样式 */
 .dark-theme .ant-typography {
   color: #ffffff !important;
