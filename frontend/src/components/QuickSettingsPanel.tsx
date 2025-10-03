@@ -40,14 +40,35 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
       setPreviewMode(false);
     }
     
+    // 应用主题后自动关闭弹窗
+    setTimeout(() => {
+      onClose();
+    }, 100);
+    
     console.log('QuickSettingsPanel: handleThemeChange completed immediately');
   };
 
   const handleLayoutChange = (layoutType: 'sidebar' | 'top') => {
+    console.log('QuickSettingsPanel: handleLayoutChange called with:', layoutType);
+    
+    // 立即设置布局
     setLayout({ ...layout, type: layoutType });
+    
+    if (previewMode) {
+      setPreviewMode(false);
+    }
+    
+    // 应用布局后自动关闭弹窗
+    setTimeout(() => {
+      onClose();
+    }, 100);
+    
+    console.log('QuickSettingsPanel: handleLayoutChange completed immediately');
   };
 
   const handlePreview = (type: 'theme' | 'layout', value: string) => {
+    console.log('QuickSettingsPanel: handlePreview called with:', type, value);
+    
     setPreviewMode(true);
     if (type === 'theme') {
       // 立即应用预览主题
@@ -56,10 +77,13 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
       setLayout({ ...layout, type: value as 'sidebar' | 'top' });
     }
     
-    // 2秒后恢复 - 缩短预览时间
+    // 1.5秒后恢复并关闭弹窗 - 缩短预览时间
     setTimeout(() => {
       setPreviewMode(false);
-    }, 2000);
+      onClose();
+    }, 1500);
+    
+    console.log('QuickSettingsPanel: handlePreview completed, will auto-close in 1.5s');
   };
 
   const getThemeIcon = (themeName: string) => {
@@ -155,7 +179,13 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
                 <Text>快速切换</Text>
                 <Switch
                   checked={isDarkMode}
-                  onChange={toggleTheme}
+                  onChange={(checked) => {
+                    toggleTheme();
+                    // 快速切换后自动关闭弹窗
+                    setTimeout(() => {
+                      onClose();
+                    }, 100);
+                  }}
                   checkedChildren={<MoonOutlined />}
                   unCheckedChildren={<SunOutlined />}
                 />
