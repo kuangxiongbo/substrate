@@ -143,7 +143,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
               {/* 快速设置按钮 */}
               <Button
                 type="text"
-                icon={<SettingOutlined />}
+                icon={<BgColorsOutlined />}
                 onClick={() => setQuickSettingsVisible(true)}
                 className="settings-toggle-btn"
                 title="快速设置"
