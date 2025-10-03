@@ -127,7 +127,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
             <Menu
               theme={menuTheme}
               mode="horizontal"
-              defaultSelectedKeys={['dashboard']}
+              defaultSelectedKeys={['overview']}
               items={menuItems}
               className="top-menu menu-theme-unified"
             />

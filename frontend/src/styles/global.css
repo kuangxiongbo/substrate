@@ -140,10 +140,7 @@ input, textarea, select {
   background-color: #f0f9ff;
 }
 
-.ant-menu-item-selected {
-  background-color: #e6f7ff;
-  color: #1890ff;
-}
+/* 菜单选中样式已移至 menu-theme.css */
 
 /* 表格样式增强 */
 .ant-table-thead > tr > th {

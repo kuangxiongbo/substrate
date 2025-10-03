@@ -36,6 +36,9 @@
 .menu-theme-unified .ant-menu-submenu-selected > .ant-menu-submenu-title {
   border-bottom: none !important;
   border-bottom-color: transparent !important;
+  /* 确保选中状态的菜单项间距与其他项一致 */
+  margin: 0 var(--top-menu-item-margin, 8px) !important;
+  margin-inline: 0 !important;
 }
 
 /* 浅色主题菜单样式 */
@@ -166,6 +169,17 @@
 
 .menu-theme-unified.ant-menu-horizontal .ant-menu-item:last-child,
 .menu-theme-unified.ant-menu-horizontal .ant-menu-submenu:last-child > .ant-menu-submenu-title {
+  margin-right: 0 !important;
+}
+
+/* 确保选中状态的第一个和最后一个菜单项也没有额外的外边距 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item-selected:first-child,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-selected:first-child > .ant-menu-submenu-title {
+  margin-left: 0 !important;
+}
+
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item-selected:last-child,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-selected:last-child > .ant-menu-submenu-title {
   margin-right: 0 !important;
 }
 
