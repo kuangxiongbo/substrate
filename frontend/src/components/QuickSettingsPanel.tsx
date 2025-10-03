@@ -36,20 +36,27 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
   useEffect(() => {
     if (shouldAutoClose && visible) {
       console.log(`QuickSettingsPanel: Auto-closing panel due to: ${autoCloseReason}`);
+      console.log(`QuickSettingsPanel: Panel visible: ${visible}, shouldAutoClose: ${shouldAutoClose}`);
       
       // 预览模式需要更长时间
       const delay = autoCloseReason === 'preview-mode' ? 1500 : 100;
+      console.log(`QuickSettingsPanel: Will close in ${delay}ms`);
       
       const timer = setTimeout(() => {
+        console.log(`QuickSettingsPanel: Timer triggered, closing panel`);
         if (autoCloseReason === 'preview-mode') {
           setPreviewMode(false);
         }
         onClose();
         setShouldAutoClose(false);
         setAutoCloseReason('');
+        console.log(`QuickSettingsPanel: Panel closed successfully`);
       }, delay);
       
-      return () => clearTimeout(timer);
+      return () => {
+        console.log(`QuickSettingsPanel: Timer cleared`);
+        clearTimeout(timer);
+      };
     }
   }, [shouldAutoClose, visible, onClose, autoCloseReason]);
 
