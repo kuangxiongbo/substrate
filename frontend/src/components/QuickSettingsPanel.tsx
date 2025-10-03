@@ -35,35 +35,25 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
   // 自动关闭效果
   useEffect(() => {
     if (shouldAutoClose && visible) {
-      console.log(`QuickSettingsPanel: Auto-closing panel due to: ${autoCloseReason}`);
-      console.log(`QuickSettingsPanel: Panel visible: ${visible}, shouldAutoClose: ${shouldAutoClose}`);
-      
-      // 预览模式需要更长时间
       const delay = autoCloseReason === 'preview-mode' ? 1500 : 100;
-      console.log(`QuickSettingsPanel: Will close in ${delay}ms`);
       
       const timer = setTimeout(() => {
-        console.log(`QuickSettingsPanel: Timer triggered, closing panel`);
         if (autoCloseReason === 'preview-mode') {
           setPreviewMode(false);
         }
         onClose();
         setShouldAutoClose(false);
         setAutoCloseReason('');
-        console.log(`QuickSettingsPanel: Panel closed successfully`);
       }, delay);
       
-      return () => {
-        console.log(`QuickSettingsPanel: Timer cleared`);
-        clearTimeout(timer);
-      };
+      return () => clearTimeout(timer);
     }
   }, [shouldAutoClose, visible, onClose, autoCloseReason]);
 
   const handleThemeChange = (themeName: string) => {
-    console.log('QuickSettingsPanel: handleThemeChange called with:', themeName);
+    console.log('QuickSettingsPanel: Switching theme to:', themeName);
     
-    // 立即设置主题，无延迟
+    // 简单切换主题
     setTheme(themeName);
     
     if (previewMode) {
@@ -73,8 +63,6 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
     // 设置自动关闭
     setAutoCloseReason('theme-change');
     setShouldAutoClose(true);
-    
-    console.log('QuickSettingsPanel: handleThemeChange completed immediately');
   };
 
   const handleLayoutChange = (layoutType: 'sidebar' | 'top') => {

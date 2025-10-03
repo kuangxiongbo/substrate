@@ -102,59 +102,30 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     initializeTheme();
   }, []);
 
-  // 设置主题
+  // 设置主题 - 简化版本，只更换样式类名
   const setTheme = useCallback((themeName: string) => {
     try {
       const theme = getTheme(themeName);
       if (theme) {
-        console.log('Setting theme:', themeName, theme);
+        console.log('Setting theme:', themeName);
         setCurrentTheme(theme);
         
-        // 应用主题样式到DOM
-        const styleManager = getGlobalStyleManager();
-        styleManager.applyTheme(theme, {
-          targetSelector: 'body',
-          insertPosition: 'head',
-          replaceExisting: true,
-          minify: false
-        });
-        
-        // 确保主题类名正确应用到DOM
-        console.log(`Applying theme: ${theme.meta.id} (${theme.meta.displayName})`);
-        
-        // 立即应用主题类名和背景色 - 同步执行，无延迟
+        // 简单切换主题类名
         const root = document.documentElement;
         const body = document.body;
         
-        // 立即移除旧主题类名
-        root.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme');
-        body.classList.remove('light-theme', 'dark-theme', 'high-contrast-theme', 'purple-theme', 'cyan-theme');
+        // 移除所有主题类名
+        root.className = root.className.replace(/theme-\w+/g, '');
+        body.className = body.className.replace(/theme-\w+/g, '');
         
-        // 立即添加新主题类名
-        const themeClass = `${theme.meta.id}-theme`;
+        // 添加新主题类名
+        const themeClass = `theme-${theme.meta.id}`;
         root.classList.add(themeClass);
         body.classList.add(themeClass);
         
-        // 立即设置背景色
-        const backgroundColor = theme.token.colorBgLayout || 
-          (theme.meta.id === 'dark' ? '#141414' : '#f5f5f5');
-        
-        body.style.backgroundColor = backgroundColor;
-        root.style.backgroundColor = backgroundColor;
-        
-        // 强制样式重新计算
-        body.offsetHeight; // 触发重排
-        
-        console.log(`Immediately applied theme: ${themeClass} with background: ${backgroundColor}`);
-        
         // 保存到本地存储
         localStorage.setItem(THEME_STORAGE_KEYS.SELECTED_THEME, themeName);
-        console.log('Theme set successfully:', themeName);
-        
-        // 保存主题历史
-        const history = JSON.parse(localStorage.getItem(THEME_STORAGE_KEYS.THEME_HISTORY) || '[]');
-        const newHistory = [themeName, ...history.filter((name: string) => name !== themeName)].slice(0, 10);
-        localStorage.setItem(THEME_STORAGE_KEYS.THEME_HISTORY, JSON.stringify(newHistory));
+        console.log('Theme switched to:', themeName);
       } else {
         console.error('Theme not found:', themeName);
       }

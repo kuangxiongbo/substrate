@@ -522,6 +522,7 @@
   border-color: #1890ff !important;
   color: #ffffff !important;
   font-weight: 500 !important;
+  text-shadow: none !important;
 }
 
 .light-theme .ant-btn-primary:hover,
@@ -632,29 +633,7 @@
   color: #ffffff !important;
 }
 
-.dark-theme .ant-btn-default {
-  background-color: #1f1f1f !important;
-  border-color: #434343 !important;
-  color: #ffffff !important;
-}
-
-.dark-theme .ant-btn-default:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  border-color: #1890ff !important;
-  color: #1890ff !important;
-}
-
-.dark-theme .ant-btn-default:focus {
-  background-color: #1f1f1f !important;
-  border-color: #1890ff !important;
-  color: #1890ff !important;
-}
-
-.dark-theme .ant-btn-default:active {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  border-color: #1890ff !important;
-  color: #1890ff !important;
-}
+/* 移除重复的深色主题按钮样式 */
 
 .dark-theme .ant-btn-text {
   background-color: transparent !important;
@@ -680,6 +659,32 @@
   color: #ffffff !important;
 }
 
+/* 深色主题默认按钮优化 */
+.dark-theme .ant-btn-default {
+  background-color: #262626 !important;
+  border-color: #434343 !important;
+  color: #ffffff !important;
+}
+
+.dark-theme .ant-btn-default:hover {
+  background-color: #404040 !important;
+  border-color: #1890ff !important;
+  color: #1890ff !important;
+}
+
+.dark-theme .ant-btn-default:focus {
+  background-color: #262626 !important;
+  border-color: #1890ff !important;
+  color: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+.dark-theme .ant-btn-default:active {
+  background-color: #404040 !important;
+  border-color: #096dd9 !important;
+  color: #096dd9 !important;
+}
+
 /* 小尺寸按钮样式 */
 .ant-btn-sm {
   font-size: 12px;
@@ -695,6 +700,7 @@
 .light-theme .ant-btn-primary button,
 .light-theme .ant-btn-primary .ant-btn {
   color: #ffffff !important;
+  text-shadow: none !important;
 }
 
 .dark-theme .ant-btn-primary *,
@@ -1986,6 +1992,7 @@
     width: 100%;
   }
 }
+
 
 
 
