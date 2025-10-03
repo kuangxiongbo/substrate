@@ -206,16 +206,15 @@ export class StyleGenerator {
   margin: ${token.layoutContentMargin || 0}px;
 }
 
-/* 全局背景色控制 */
-body {
-  background-color: ${token.colorBgLayout} !important;
-  color: ${token.colorText} !important;
-  transition: background-color 0.3s ease, color 0.3s ease !important;
-}
-
-html {
+/* 全局背景色控制 - 最高优先级 */
+html, body {
   background-color: ${token.colorBgLayout} !important;
   transition: background-color 0.3s ease !important;
+}
+
+body {
+  color: ${token.colorText} !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* 确保所有容器都有正确的背景色 */
@@ -224,6 +223,17 @@ html {
 }
 
 .ant-layout-content {
+  background-color: ${token.colorBgBase} !important;
+}
+
+/* 强制应用主题背景色 - 覆盖所有可能的样式 */
+#root, .app, .main-container {
+  background-color: ${token.colorBgLayout} !important;
+  min-height: 100vh !important;
+}
+
+/* 确保页面内容区域背景色正确 */
+.page-content, .content-wrapper, .main-content {
   background-color: ${token.colorBgBase} !important;
 }`);
 

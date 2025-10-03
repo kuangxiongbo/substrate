@@ -180,6 +180,22 @@ input, textarea, select {
   background-color: #f5f5f5 !important;
 }
 
+/* 强制浅色主题背景色应用到所有元素 */
+.light-theme #root,
+.light-theme .app,
+.light-theme .main-container {
+  background-color: #f5f5f5 !important;
+  min-height: 100vh !important;
+}
+
+.light-theme .ant-layout {
+  background-color: #f5f5f5 !important;
+}
+
+.light-theme .ant-layout-content {
+  background-color: #ffffff !important;
+}
+
 /* 深色主题背景 */
 .dark-theme body {
   background-color: #141414 !important;
@@ -188,6 +204,22 @@ input, textarea, select {
 
 .dark-theme html {
   background-color: #141414 !important;
+}
+
+/* 强制深色主题背景色应用到所有元素 */
+.dark-theme #root,
+.dark-theme .app,
+.dark-theme .main-container {
+  background-color: #141414 !important;
+  min-height: 100vh !important;
+}
+
+.dark-theme .ant-layout {
+  background-color: #141414 !important;
+}
+
+.dark-theme .ant-layout-content {
+  background-color: #1f1f1f !important;
 }
 
 /* 确保主题切换时背景色立即生效 */

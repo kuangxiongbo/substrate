@@ -37,7 +37,7 @@ const darkTheme: ThemePackageConfig = {
     colorBgBase: '#141414',
     colorBgContainer: '#1f1f1f',
     colorBgElevated: '#262626',
-    colorBgLayout: '#000000',
+    colorBgLayout: '#141414', // 改为更明显的深色背景
     colorBgSpotlight: 'rgba(0, 0, 0, 0.85)',
     colorBgMask: 'rgba(0, 0, 0, 0.45)',
     
