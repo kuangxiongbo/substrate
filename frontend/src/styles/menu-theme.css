@@ -366,17 +366,12 @@
   color: white !important;
 }
 
-/* 统一头部样式 - 适用于左侧和顶部菜单布局 */
+/* 头部布局样式 - 由主题包控制具体样式 */
 .main-header,
 .top-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
-  padding: 0 16px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #f0f0f0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .header-left {
@@ -396,8 +391,10 @@
   align-items: center;
 }
 
-/* 快速设置按钮样式 */
-.settings-toggle-btn {
+/* 头部按钮样式 - 由主题包控制颜色 */
+.settings-toggle-btn,
+.notification-btn,
+.collapse-btn {
   font-size: 18px;
   width: 40px;
   height: 40px;
@@ -411,86 +408,25 @@
   margin-right: 8px;
 }
 
-.light-theme .settings-toggle-btn {
-  color: #1f1f1f !important;
+.settings-toggle-btn:last-child,
+.notification-btn:last-child,
+.collapse-btn:last-child {
+  margin-right: 0;
 }
 
-.light-theme .settings-toggle-btn:hover {
-  background: #f5f5f5 !important;
-  color: #1890ff !important;
-}
 
-.dark-theme .settings-toggle-btn {
-  color: rgba(255, 255, 255, 0.85) !important;
-}
-
-.dark-theme .settings-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
-}
-
-/* 通知按钮样式 */
-.notification-btn {
-  font-size: 18px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  background: transparent;
-  border: none;
-}
-
-/* 折叠按钮样式 - 统一头部按钮样式 */
-.collapse-btn {
-  font-size: 18px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  background: transparent;
-  border: none;
-}
-
+/* 浅色主题按钮样式 */
+.light-theme .settings-toggle-btn,
+.light-theme .notification-btn,
 .light-theme .collapse-btn {
-  color: #1f1f1f !important;
+  color: #1f1f1f;
 }
 
+.light-theme .settings-toggle-btn:hover,
+.light-theme .notification-btn:hover,
 .light-theme .collapse-btn:hover {
-  background: #f5f5f5 !important;
-  color: #1890ff !important;
-}
-
-.light-theme .notification-btn {
-  color: #1f1f1f !important;
-}
-
-.light-theme .notification-btn:hover {
-  background: #f5f5f5 !important;
-  color: #1890ff !important;
-}
-
-.dark-theme .notification-btn {
-  color: rgba(255, 255, 255, 0.85) !important;
-}
-
-.dark-theme .notification-btn:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
-}
-
-.dark-theme .collapse-btn {
-  color: rgba(255, 255, 255, 0.85) !important;
-}
-
-.dark-theme .collapse-btn:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
+  background: #f5f5f5;
+  color: #1890ff;
 }
 
 /* 统一用户信息样式 - 适用于两种布局 */
@@ -873,8 +809,6 @@
 .dark-theme .notification-btn,
 .dark-theme .collapse-btn {
   color: #94a3b8;
-  background-color: transparent;
-  border: none;
 }
 
 .dark-theme .settings-toggle-btn:hover,
@@ -2244,6 +2178,7 @@
     width: 100%;
   }
 }
+
 
 
 

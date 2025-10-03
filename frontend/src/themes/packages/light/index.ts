@@ -310,6 +310,28 @@ const lightTheme: ThemePackageConfig = {
       triggerColor: '#1f1f1f', // 浅色触发器文本
     },
     
+    // 顶部栏组件 - 现代浅色顶部栏
+    Header: {
+      colorBgHeader: '#ffffff',
+      colorTextHeading: '#1f1f1f',
+      colorText: '#1f1f1f',
+      colorTextSecondary: '#595959',
+      colorTextTertiary: '#8c8c8c',
+      colorTextQuaternary: '#bfbfbf',
+      colorBgElevated: '#ffffff',
+      colorBgContainer: '#ffffff',
+      colorBorder: '#f0f0f0',
+      colorBorderSecondary: '#e8e8e8',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)',
+      boxShadowSecondary: '0 1px 4px rgba(0, 0, 0, 0.04)',
+      paddingInline: 16,
+      paddingBlock: 0,
+      height: 64,
+      lineHeight: 64,
+      borderRadius: 0,
+      borderBottom: '1px solid #f0f0f0',
+    },
+    
     // 菜单组件 - 浅色系菜单设计
     Menu: {
       itemBg: 'transparent',

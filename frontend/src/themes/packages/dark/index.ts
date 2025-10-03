@@ -315,6 +315,28 @@ const darkTheme: ThemePackageConfig = {
       triggerColor: '#f8fafc',
     },
     
+    // 顶部栏组件 - 现代深色顶部栏
+    Header: {
+      colorBgHeader: '#1a1a2e',
+      colorTextHeading: '#f8fafc',
+      colorText: '#f8fafc',
+      colorTextSecondary: '#cbd5e1',
+      colorTextTertiary: '#94a3b8',
+      colorTextQuaternary: '#64748b',
+      colorBgElevated: '#16213e',
+      colorBgContainer: '#1a1a2e',
+      colorBorder: '#334155',
+      colorBorderSecondary: '#475569',
+      boxShadow: '0 4px 12px -2px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
+      boxShadowSecondary: '0 2px 8px -1px rgba(0, 0, 0, 0.2)',
+      paddingInline: 16,
+      paddingBlock: 0,
+      height: 64,
+      lineHeight: 64,
+      borderRadius: 0,
+      borderBottom: '1px solid #334155',
+    },
+    
     // 菜单组件 - 现代深色侧边栏
     Menu: {
       itemBg: 'transparent',
