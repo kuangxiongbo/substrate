@@ -84,58 +84,13 @@
 
 /* 顶部菜单样式已移至 menu-theme.css */
 
-.top-menu .ant-menu-item {
-  height: 64px;
-  line-height: 64px;
-  margin: 0 8px;
-  padding: 0 16px;
-  border-radius: 4px;
-  color: rgba(255, 255, 255, 0.85);
-  transition: all 0.3s;
-}
+/* 顶部菜单项样式已移至 menu-theme.css - 基于主题包配置 */
 
-.top-menu .ant-menu-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff !important;
-}
-
-.top-menu .ant-menu-item-selected {
-  background: #1890ff;
-  color: #ffffff !important;
-}
-
-.top-menu .ant-menu-item-selected .ant-menu-item-icon {
-  color: #ffffff !important;
-}
-
-.top-menu .ant-menu-item:hover .ant-menu-item-icon {
-  color: #ffffff !important;
-}
+/* 顶部菜单项悬停和选中状态样式已移至 menu-theme.css - 基于主题包配置 */
 
 /* 浅色主题下的顶部菜单样式已移至 menu-theme.css */
 
-.top-menu .ant-menu-submenu-title {
-  height: 64px;
-  line-height: 64px;
-  margin: 0 8px;
-  padding: 0 16px;
-  border-radius: 4px;
-  color: rgba(255, 255, 255, 0.85);
-  transition: all 0.3s;
-}
-
-.top-menu .ant-menu-submenu-title:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff !important;
-}
-
-.top-menu .ant-menu-submenu-title:hover .ant-menu-submenu-arrow {
-  color: #ffffff !important;
-}
-
-.top-menu .ant-menu-submenu-title:hover .ant-menu-item-icon {
-  color: #ffffff !important;
-}
+/* 顶部子菜单标题样式已移至 menu-theme.css - 基于主题包配置 */
 
 /* 浅色主题下的顶部子菜单样式已移至 menu-theme.css */
 

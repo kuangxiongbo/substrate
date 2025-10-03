@@ -114,6 +114,23 @@ export class StyleGenerator {
     if (token.menuItemSelectedColor) {
       variables.push(`  --menu-item-selected-color: ${token.menuItemSelectedColor};`);
     }
+    
+    // 顶部菜单专用变量
+    if (token.topMenuHeight) {
+      variables.push(`  --top-menu-height: ${token.topMenuHeight}px;`);
+    }
+    if (token.topMenuItemMargin) {
+      variables.push(`  --top-menu-item-margin: ${token.topMenuItemMargin}px;`);
+    }
+    if (token.topMenuItemPadding) {
+      variables.push(`  --top-menu-item-padding: ${token.topMenuItemPadding}px;`);
+    }
+    if (token.topMenuContainerPadding) {
+      variables.push(`  --top-menu-container-padding: ${token.topMenuContainerPadding}px;`);
+    }
+    if (token.topMenuContainerMargin) {
+      variables.push(`  --top-menu-container-margin: ${token.topMenuContainerMargin}px;`);
+    }
 
     // 按钮变量
     if (token.buttonPrimaryColor) {

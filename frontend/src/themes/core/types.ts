@@ -541,6 +541,13 @@ export interface ThemeToken {
   controlHeight: number;
   controlHeightLG: number;
   controlHeightSM: number;
+  
+  // 顶部菜单专用间距配置
+  topMenuHeight?: number;
+  topMenuItemMargin?: number;
+  topMenuItemPadding?: number;
+  topMenuContainerPadding?: number;
+  topMenuContainerMargin?: number;
 }
 
 // 主题组件配置接口

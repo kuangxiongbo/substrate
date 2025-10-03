@@ -144,6 +144,16 @@
   color: #ffffff !important;
 }
 
+/* 顶部菜单间距统一配置 - 基于主题包 */
+.menu-theme-unified.ant-menu-horizontal .ant-menu-item,
+.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-title {
+  /* 使用主题包中的配置，而不是硬编码 */
+  margin: 0 var(--top-menu-item-margin, 4px) !important;
+  padding: 0 var(--top-menu-item-padding, 16px) !important;
+  height: var(--top-menu-height, 64px) !important;
+  line-height: var(--top-menu-height, 64px) !important;
+}
+
 /* 侧边栏头部样式 */
 .sidebar-header {
   border-bottom: 1px solid #f0f0f0;

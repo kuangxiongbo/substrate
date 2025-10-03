@@ -119,6 +119,13 @@ const lightTheme: ThemePackageConfig = {
     controlHeightLG: 40,
     controlHeightSM: 24,
     
+    // 顶部菜单专用间距配置
+    topMenuHeight: 64,
+    topMenuItemMargin: 4,
+    topMenuItemPadding: 16,
+    topMenuContainerPadding: 0,
+    topMenuContainerMargin: 0,
+    
     // 扩展的样式控制
     // 自定义颜色变量
     colorCustom1: '#667eea',
@@ -167,6 +174,7 @@ const lightTheme: ThemePackageConfig = {
     menuFontWeight: 400,
     menuPadding: 8,
     menuMargin: 4,
+    
     
     // 按钮样式配置
     buttonPrimaryColor: '#1890ff',
