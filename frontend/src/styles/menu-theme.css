@@ -161,27 +161,7 @@
   margin-inline: 0 !important;
 }
 
-/* 确保第一个和最后一个菜单项没有额外的外边距 */
-.menu-theme-unified.ant-menu-horizontal .ant-menu-item:first-child,
-.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu:first-child > .ant-menu-submenu-title {
-  margin-left: 0 !important;
-}
-
-.menu-theme-unified.ant-menu-horizontal .ant-menu-item:last-child,
-.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu:last-child > .ant-menu-submenu-title {
-  margin-right: 0 !important;
-}
-
-/* 确保选中状态的第一个和最后一个菜单项也没有额外的外边距 */
-.menu-theme-unified.ant-menu-horizontal .ant-menu-item-selected:first-child,
-.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-selected:first-child > .ant-menu-submenu-title {
-  margin-left: 0 !important;
-}
-
-.menu-theme-unified.ant-menu-horizontal .ant-menu-item-selected:last-child,
-.menu-theme-unified.ant-menu-horizontal .ant-menu-submenu-selected:last-child > .ant-menu-submenu-title {
-  margin-right: 0 !important;
-}
+/* 移除首尾菜单项的特殊样式，完全由主题包控制间距 */
 
 /* 侧边栏头部样式 */
 .sidebar-header {

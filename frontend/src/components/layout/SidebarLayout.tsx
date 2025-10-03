@@ -134,7 +134,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         <Menu
           theme={currentTheme?.meta.id === 'dark' ? 'dark' : 'light'}
           mode="inline"
-          defaultSelectedKeys={['dashboard']}
+          defaultSelectedKeys={['overview']}
           items={menuItems}
           className="sidebar-menu menu-theme-unified"
         />
