@@ -1,0 +1,320 @@
+/**
+ * 合规监控仪表板样式
+ */
+
+.compliance-dashboard {
+  width: 100%;
+  padding: var(--spacing-md);
+}
+
+.compliance-dashboard .ant-card {
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-card);
+}
+
+.compliance-dashboard .ant-card-head {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.compliance-dashboard .ant-card-head-title {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+/* 统计卡片 */
+.compliance-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.stat-card {
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-base);
+  background: var(--color-bg-container);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--box-shadow-card);
+}
+
+.stat-card .ant-statistic-title {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-card .ant-statistic-content {
+  color: var(--color-text);
+}
+
+.stat-card .ant-progress {
+  margin-top: var(--spacing-xs);
+}
+
+/* 文件路径 */
+.file-path {
+  background: var(--color-fill-tertiary);
+  padding: 2px 6px;
+  border-radius: var(--border-radius-sm);
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+}
+
+/* 建议列表 */
+.suggestions-list {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+}
+
+.suggestion-item {
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.suggestion-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 状态标签 */
+.compliance-dashboard .ant-tag {
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+}
+
+/* 表格样式 */
+.compliance-dashboard .ant-table {
+  background: var(--color-bg-container);
+}
+
+.compliance-dashboard .ant-table-thead > tr > th {
+  background: var(--color-fill-tertiary);
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.compliance-dashboard .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.compliance-dashboard .ant-table-tbody > tr:hover > td {
+  background: var(--color-fill-tertiary);
+}
+
+/* 按钮组 */
+.compliance-dashboard .ant-space {
+  gap: var(--spacing-sm);
+}
+
+.compliance-dashboard .ant-btn {
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-sm);
+}
+
+.compliance-dashboard .ant-btn-primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.compliance-dashboard .ant-btn-primary:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+/* 警告框 */
+.compliance-dashboard .ant-alert {
+  border-radius: var(--border-radius-base);
+  border: none;
+}
+
+.compliance-dashboard .ant-alert-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.compliance-dashboard .ant-alert-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.compliance-dashboard .ant-alert-error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+/* 徽章 */
+.compliance-dashboard .ant-badge-status-processing .ant-badge-status-dot {
+  background: var(--color-primary);
+}
+
+.compliance-dashboard .ant-badge-status-default .ant-badge-status-dot {
+  background: var(--color-text-tertiary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .compliance-stats {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  
+  .stat-card {
+    padding: var(--spacing-sm);
+  }
+  
+  .compliance-dashboard .ant-space {
+    flex-wrap: wrap;
+  }
+  
+  .compliance-dashboard .ant-btn {
+    font-size: var(--font-size-xs);
+    padding: 4px 8px;
+  }
+}
+
+/* 深色主题 */
+.dark-theme .compliance-dashboard .ant-card {
+  background: var(--color-bg-container);
+  border-color: var(--color-border);
+}
+
+.dark-theme .stat-card {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-border);
+}
+
+.dark-theme .file-path {
+  background: var(--color-fill-secondary);
+  color: var(--color-text);
+}
+
+.dark-theme .compliance-dashboard .ant-table-thead > tr > th {
+  background: var(--color-fill-secondary);
+}
+
+/* 浅色主题 */
+.light-theme .compliance-dashboard .ant-card {
+  background: var(--color-bg-container);
+  border-color: var(--color-border);
+}
+
+.light-theme .stat-card {
+  background: var(--color-bg-base);
+  border-color: var(--color-border);
+}
+
+.light-theme .file-path {
+  background: var(--color-fill-tertiary);
+  color: var(--color-text);
+}
+
+/* 监控页面样式 */
+.monitoring-page {
+  padding: var(--spacing-lg);
+}
+
+.page-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-base);
+  background: var(--color-bg-container);
+  transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--box-shadow-card);
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-base);
+  background: var(--color-primary);
+  color: white;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.feature-content h4 {
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+.feature-content p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.usage-guide {
+  max-width: 800px;
+}
+
+.guide-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.guide-section:last-child {
+  margin-bottom: 0;
+}
+
+.guide-section h4 {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+.guide-section p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .feature-item {
+    padding: var(--spacing-sm);
+  }
+  
+  .feature-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}

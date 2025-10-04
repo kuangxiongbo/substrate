@@ -19,6 +19,7 @@ import {
   MailOutlined,
   LayoutOutlined,
   ArrowLeftOutlined,
+  MonitorOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 
@@ -61,6 +62,12 @@ const SystemSettingsPage: React.FC = () => {
       icon: <LayoutOutlined />,
       label: '布局配置',
       path: '/system-settings/layout',
+    },
+    {
+      key: 'monitoring',
+      icon: <MonitorOutlined />,
+      label: '样式监控',
+      path: '/system-settings/monitoring',
     },
   ];
 
@@ -164,6 +171,7 @@ const SystemSettingsPage: React.FC = () => {
 };
 
 export default SystemSettingsPage;
+
 
 
 

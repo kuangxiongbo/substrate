@@ -141,8 +141,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
           <Radio.Group
             value={currentTheme.name}
             onChange={handleThemeChange}
-            className="theme-options"
-            className="theme-options-container"
+            className="theme-options theme-options-container"
           >
             <Space direction="vertical" size="middle" className="theme-options-space">
               {availableThemes.map((theme) => (
