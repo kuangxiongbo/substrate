@@ -29,6 +29,7 @@ import {
   ImportOutlined,
   ReloadOutlined,
 } from '@ant-design/icons';
+import '../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 const { Search } = Input;
@@ -135,11 +136,11 @@ const UserManagementPage: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: '24px' }}>
-      <Title level={2}>用户管理</Title>
+    <div className="settings-page">
+      <Title level={2} className="settings-page-title">用户管理</Title>
       
       {/* 统计卡片 */}
-      <Row gutter={16} style={{ marginBottom: '24px' }}>
+      <Row gutter={16} className="settings-stats-section">
         <Col span={6}>
           <Card>
             <Statistic
@@ -154,7 +155,7 @@ const UserManagementPage: React.FC = () => {
             <Statistic
               title="活跃用户"
               value={856}
-              valueStyle={{ color: '#3f8600' }}
+              valueStyle={{ color: 'var(--color-success)' }}
             />
           </Card>
         </Col>
@@ -163,7 +164,7 @@ const UserManagementPage: React.FC = () => {
             <Statistic
               title="今日新增"
               value={23}
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: 'var(--color-primary)' }}
             />
           </Card>
         </Col>
@@ -172,27 +173,27 @@ const UserManagementPage: React.FC = () => {
             <Statistic
               title="在线用户"
               value={45}
-              valueStyle={{ color: '#cf1322' }}
+              valueStyle={{ color: 'var(--color-error)' }}
             />
           </Card>
         </Col>
       </Row>
 
       {/* 操作栏 */}
-      <Card style={{ marginBottom: '16px' }}>
+      <Card className="settings-card">
         <Row gutter={16} align="middle">
           <Col flex="auto">
             <Space wrap>
               <Search
                 placeholder="搜索用户"
                 allowClear
-                style={{ width: 200 }}
+                className="user-search-input"
               />
-              <Select placeholder="角色筛选" style={{ width: 120 }} allowClear>
+              <Select placeholder="角色筛选" className="user-filter-select" allowClear>
                 <Option value="admin">管理员</Option>
                 <Option value="user">普通用户</Option>
               </Select>
-              <Select placeholder="状态筛选" style={{ width: 120 }} allowClear>
+              <Select placeholder="状态筛选" className="user-filter-select" allowClear>
                 <Option value="active">活跃</Option>
                 <Option value="inactive">非活跃</Option>
               </Select>
@@ -238,6 +239,9 @@ const UserManagementPage: React.FC = () => {
 };
 
 export default UserManagementPage;
+
+
+
 
 
 

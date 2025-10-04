@@ -13,7 +13,7 @@ import {
   Typography,
   Space,
   Divider,
-  message,
+  App,
   Row,
   Col,
   Avatar,
@@ -32,6 +32,7 @@ import {
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';
 import Captcha from '../components/Captcha';
+import '../styles/login-page.css';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -46,6 +47,7 @@ interface LoginCredentials {
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const { message } = App.useApp();
   const location = useLocation();
   const { login, isLoading, error, clearError, isAuthenticated } = useAuthStore();
   const [form] = Form.useForm();
@@ -106,41 +108,38 @@ const LoginPage: React.FC = () => {
                 <Avatar
                   size={80}
                   icon={<SafetyCertificateOutlined />}
-                  style={{
-                    backgroundColor: '#1890ff',
-                    marginBottom: 24,
-                  }}
+                  className="login-hero-avatar"
                 />
-                <Title level={1} style={{ color: 'white', marginBottom: 16 }}>
+                <Title level={1} className="login-hero-title">
                   多用户管理系统
                 </Title>
-                <Paragraph style={{ color: 'rgba(255,255,255,0.8)', fontSize: 18, marginBottom: 32 }}>
+                <Paragraph className="login-hero-description">
                   安全、高效、现代化的企业级用户管理解决方案
                 </Paragraph>
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center text-white">
-                  <div className="w-2 h-2 bg-white rounded-full mr-3"></div>
-                  <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+                <div className="login-feature-item">
+                  <div className="login-feature-dot"></div>
+                  <Text className="login-feature-text">
                     基于角色的权限控制 (RBAC)
                   </Text>
                 </div>
-                <div className="flex items-center text-white">
-                  <div className="w-2 h-2 bg-white rounded-full mr-3"></div>
-                  <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+                <div className="login-feature-item">
+                  <div className="login-feature-dot"></div>
+                  <Text className="login-feature-text">
                     JWT 安全认证机制
                   </Text>
                 </div>
-                <div className="flex items-center text-white">
-                  <div className="w-2 h-2 bg-white rounded-full mr-3"></div>
-                  <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+                <div className="login-feature-item">
+                  <div className="login-feature-dot"></div>
+                  <Text className="login-feature-text">
                     GDPR 合规数据处理
                   </Text>
                 </div>
-                <div className="flex items-center text-white">
-                  <div className="w-2 h-2 bg-white rounded-full mr-3"></div>
-                  <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+                <div className="login-feature-item">
+                  <div className="login-feature-dot"></div>
+                  <Text className="login-feature-text">
                     响应式现代化界面
                   </Text>
                 </div>
@@ -155,18 +154,11 @@ const LoginPage: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <Card
-                className="login-card"
-                style={{
-                  borderRadius: 16,
-                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-                  border: 'none',
-                }}
-              >
-                <div className="text-center mb-8">
-                  <Title level={2} style={{ marginBottom: 8 }}>
-                    欢迎回来
-                  </Title>
+                <Card className="login-card">
+                  <div className="text-center mb-8">
+                    <Title level={2} className="login-card-title">
+                      欢迎回来
+                    </Title>
                   <Text type="secondary">
                     请登录您的账户以继续使用系统
                   </Text>
@@ -189,9 +181,9 @@ const LoginPage: React.FC = () => {
                     ]}
                   >
                     <Input
-                      prefix={<UserOutlined style={{ color: '#bfbfbf' }} />}
+                      prefix={<UserOutlined className="login-input-icon" />}
                       placeholder="请输入邮箱地址"
-                      style={{ borderRadius: 8 }}
+                      className="login-input"
                     />
                   </Form.Item>
 
@@ -204,10 +196,10 @@ const LoginPage: React.FC = () => {
                     ]}
                   >
                     <Input.Password
-                      prefix={<LockOutlined style={{ color: '#bfbfbf' }} />}
+                      prefix={<LockOutlined className="login-input-icon" />}
                       placeholder="请输入密码"
                       iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                      style={{ borderRadius: 8 }}
+                      className="login-input"
                     />
                   </Form.Item>
 
@@ -234,7 +226,7 @@ const LoginPage: React.FC = () => {
                       <Form.Item name="remember_me" valuePropName="checked" noStyle>
                         <Checkbox>记住我</Checkbox>
                       </Form.Item>
-                      <Link to="/forgot-password" style={{ color: '#1890ff' }}>
+                      <Link to="/forgot-password" className="login-forgot-link">
                         忘记密码？
                       </Link>
                     </div>
@@ -247,12 +239,7 @@ const LoginPage: React.FC = () => {
                       loading={isLoading}
                       block
                       size="large"
-                      style={{
-                        height: 48,
-                        borderRadius: 8,
-                        fontSize: 16,
-                        fontWeight: 500,
-                      }}
+                      className="login-submit-button"
                     >
                       {isLoading ? '登录中...' : '登录'}
                     </Button>
@@ -267,7 +254,7 @@ const LoginPage: React.FC = () => {
                     block
                     size="large"
                     onClick={handleDemoLogin}
-                    style={{ height: 44, borderRadius: 8 }}
+                    className="login-demo-button"
                   >
                     <UserOutlined /> 演示账户登录
                   </Button>
@@ -277,7 +264,7 @@ const LoginPage: React.FC = () => {
                     block
                     size="large"
                     onClick={handleAdminLogin}
-                    style={{ height: 44, borderRadius: 8 }}
+                    className="login-admin-button"
                   >
                     <SafetyCertificateOutlined /> 超级管理员登录
                   </Button>
@@ -286,7 +273,7 @@ const LoginPage: React.FC = () => {
                 <div className="text-center mt-6">
                   <Text type="secondary">
                     还没有账户？{' '}
-                    <Link to="/register" style={{ color: '#1890ff', fontWeight: 500 }}>
+                    <Link to="/register" className="login-link-bold">
                       立即注册
                     </Link>
                   </Text>
@@ -315,6 +302,11 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
+
+
+
+
+
 
 
 

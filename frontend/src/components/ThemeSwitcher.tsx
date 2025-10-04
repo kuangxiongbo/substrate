@@ -7,6 +7,7 @@ import React from 'react';
 import { Select, Space, Typography, Tooltip } from 'antd';
 import { BgColorsOutlined, SunOutlined, MoonOutlined, EyeOutlined } from '@ant-design/icons';
 import { useTheme } from '../contexts/ThemeContext';
+import '../styles/settings-pages.css';
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -55,9 +56,9 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
   };
 
   return (
-    <Space direction="vertical" size="small" style={style}>
+    <Space direction="vertical" size="small" className="theme-switcher-container">
       {showLabel && (
-        <Text strong style={{ fontSize: '14px' }}>
+        <Text strong className="theme-switcher-label">
           主题设置
         </Text>
       )}
@@ -66,7 +67,7 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
         value={currentTheme.name}
         onChange={handleThemeChange}
         size={size}
-        style={{ minWidth: 120 }}
+        className="theme-switcher-select"
         suffixIcon={<BgColorsOutlined />}
       >
         {availableThemes.map((theme) => (
@@ -81,7 +82,7 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
       
       {currentTheme.description && (
         <Tooltip title={currentTheme.description} placement="bottom">
-          <Text type="secondary" style={{ fontSize: '12px' }}>
+          <Text type="secondary" className="theme-switcher-description">
             {getThemeDescription(currentTheme.name)}
           </Text>
         </Tooltip>

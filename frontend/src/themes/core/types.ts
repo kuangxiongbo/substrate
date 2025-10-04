@@ -601,6 +601,12 @@ export interface ThemeComponents {
   Anchor?: ComponentConfig;
   BackTop?: ComponentConfig;
   Affix?: ComponentConfig;
+  // 新增组件类型定义
+  Row?: ComponentConfig;
+  Col?: ComponentConfig;
+  Space?: ComponentConfig;
+  ColorPicker?: ComponentConfig;
+  ConfigProvider?: ComponentConfig;
   [key: string]: ComponentConfig | undefined;
 }
 
@@ -716,6 +722,7 @@ export type {
   ThemePackageEvents,
   ThemePackageOptions,
 };
+
 
 
 

@@ -9,6 +9,7 @@ import { MonitorOutlined, BarChartOutlined, ToolOutlined } from '@ant-design/ico
 import ComplianceDashboard from '../../components/monitoring/ComplianceDashboard';
 import { useTheme } from '../../contexts/ThemeContext';
 import '../../styles/compliance-dashboard.css';
+import '../../styles/settings-pages.css';
 
 const { Title, Paragraph } = Typography;
 
@@ -19,12 +20,12 @@ const MonitoringPage: React.FC = () => {
     <div className={`monitoring-page ${currentTheme?.meta.id || 'light'}-theme`}>
       <div className="page-header">
         <Space align="center">
-          <MonitorOutlined style={{ fontSize: '24px', color: 'var(--color-primary)' }} />
+          <MonitorOutlined className="monitoring-header-icon" />
           <div>
-            <Title level={2} style={{ margin: 0 }}>
+            <Title level={2} className="monitoring-title">
               样式合规监控
             </Title>
-            <Paragraph type="secondary" style={{ margin: 0 }}>
+            <Paragraph type="secondary" className="monitoring-description">
               实时监控项目样式合规性，确保所有样式都通过主题包系统管理
             </Paragraph>
           </div>
@@ -41,7 +42,7 @@ const MonitoringPage: React.FC = () => {
             监控功能
           </Space>
         }
-        style={{ marginBottom: 24 }}
+        className="monitoring-feature-card"
       >
         <div className="feature-grid">
           <div className="feature-item">
@@ -82,7 +83,7 @@ const MonitoringPage: React.FC = () => {
       {/* 使用说明 */}
       <Card 
         title="使用说明"
-        style={{ marginTop: 24 }}
+        className="monitoring-usage-card"
       >
         <div className="usage-guide">
           <div className="guide-section">

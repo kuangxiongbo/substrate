@@ -29,6 +29,7 @@ import {
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';
+import '../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -232,7 +233,7 @@ const SystemSettings: React.FC = () => {
                     <Statistic
                       title="失败尝试"
                       value={systemStats?.failed_attempts_24h || 0}
-                      valueStyle={{ color: '#cf1322' }}
+                      valueStyle={{ color: 'var(--color-error)' }}
                       prefix={<ExclamationCircleOutlined />}
                     />
                   </Card>
@@ -243,7 +244,7 @@ const SystemSettings: React.FC = () => {
                       title="成功率"
                       value={systemStats?.success_rate_24h || 0}
                       suffix="%"
-                      valueStyle={{ color: '#3f8600' }}
+                      valueStyle={{ color: 'var(--color-success)' }}
                       prefix={<CheckCircleOutlined />}
                     />
                   </Card>
@@ -253,7 +254,7 @@ const SystemSettings: React.FC = () => {
                     <Statistic
                       title="冻结IP数"
                       value={systemStats?.active_frozen_ips || 0}
-                      valueStyle={{ color: '#cf1322' }}
+                      valueStyle={{ color: 'var(--color-error)' }}
                       prefix={<SecurityScanOutlined />}
                     />
                   </Card>
@@ -290,20 +291,20 @@ const SystemSettings: React.FC = () => {
                       </div>
                       <Progress 
                         percent={systemStats?.success_rate_24h || 0} 
-                        strokeColor="#52c41a"
+                        strokeColor="var(--color-success)"
                         showInfo={false}
                       />
                     </div>
                     <div className="mb-4">
                       <div className="flex justify-between items-center mb-2">
                         <Text>安全威胁</Text>
-                        <Text strong style={{ color: '#cf1322' }}>
+                        <Text strong className="system-threat-text">
                           {systemStats?.active_frozen_ips || 0} 个IP被冻结
                         </Text>
                       </div>
                       <Progress 
                         percent={Math.min((systemStats?.active_frozen_ips || 0) * 10, 100)} 
-                        strokeColor="#cf1322"
+                        strokeColor="var(--color-error)"
                         showInfo={false}
                       />
                     </div>
@@ -424,6 +425,8 @@ const SystemSettings: React.FC = () => {
 };
 
 export default SystemSettings;
+
+
 
 
 

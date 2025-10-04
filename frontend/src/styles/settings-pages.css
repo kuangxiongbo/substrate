@@ -1,0 +1,331 @@
+/* 设置页面通用样式 - 使用主题变量替代内联样式 */
+
+.settings-page {
+  padding: 24px;
+}
+
+.settings-page-title {
+  margin-bottom: 24px;
+}
+
+.settings-page-title-icon {
+  margin-right: 8px;
+}
+
+.settings-card {
+  height: 100%;
+}
+
+.settings-input-full-width {
+  width: 100%;
+}
+
+.settings-tag-large {
+  font-size: 16px;
+  padding: 8px 16px;
+}
+
+.settings-status-container {
+  width: 100%;
+}
+
+.settings-avatar-primary {
+  background-color: var(--color-primary);
+}
+
+.settings-save-section {
+  margin-top: 32px;
+}
+
+.settings-status-section {
+  margin-top: 24px;
+}
+
+/* 概览页面特有样式 */
+.overview-page {
+  padding: 24px;
+}
+
+.overview-page-title {
+  margin-bottom: 24px;
+}
+
+.overview-stats-section {
+  margin-bottom: 24px;
+}
+
+.overview-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.overview-stat-icon-blue {
+  color: var(--color-primary);
+}
+
+.overview-stat-icon-green {
+  color: var(--color-success);
+}
+
+.overview-stat-icon-orange {
+  color: var(--color-warning);
+}
+
+.overview-stat-icon-purple {
+  color: var(--color-purple, #722ed1);
+}
+
+.overview-trend-up {
+  color: var(--color-success);
+}
+
+.overview-trend-down {
+  color: var(--color-error);
+}
+
+.overview-trend-text {
+  font-size: 12px;
+}
+
+.overview-health-container {
+  width: 100%;
+}
+
+.overview-health-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.overview-activity-time {
+  font-size: 12px;
+}
+
+/* 仪表板页面特有样式 */
+.dashboard-page {
+  padding: 24px;
+}
+
+.dashboard-page-title {
+  margin-bottom: 8px;
+}
+
+.stat-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+.stat-icon {
+  /* 背景色通过内联样式控制，这里只定义基础样式 */
+}
+
+.stat-trend-up {
+  color: var(--color-success);
+}
+
+.stat-trend-down {
+  color: var(--color-error);
+}
+
+.stat-trend-text {
+  font-size: 12px;
+}
+
+.stat-trend-label {
+  font-size: 12px;
+}
+
+.dashboard-card {
+  border-radius: 12px;
+  height: 100%;
+}
+
+.dashboard-timeline-success {
+  color: var(--color-success);
+}
+
+.dashboard-timeline-error {
+  color: var(--color-error);
+}
+
+.dashboard-timeline-text {
+  font-size: 12px;
+}
+
+.user-list-text {
+  font-size: 12px;
+}
+
+.dashboard-table-card {
+  border-radius: 12px;
+}
+
+/* 管理员管理页面特有样式 */
+.admin-name {
+  font-weight: 500;
+}
+
+.admin-email {
+  font-size: 12px;
+}
+
+.admin-stat-icon-blue {
+  color: var(--color-primary);
+}
+
+.admin-stat-icon-green {
+  color: var(--color-success);
+}
+
+.admin-stat-icon-red {
+  color: var(--color-error);
+}
+
+.settings-stats-section {
+  margin-bottom: 24px;
+}
+
+/* 系统设置页面特有样式 */
+.settings-header-card {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.settings-back-button {
+  margin-right: 16px;
+}
+
+.settings-page-main-title {
+  margin: 0;
+}
+
+.settings-layout {
+  background: transparent;
+  min-height: calc(100vh - 200px);
+}
+
+.settings-sider {
+  background: var(--color-bg-container);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-right: 24px;
+}
+
+.settings-menu {
+  border: none;
+  background: transparent;
+  padding: 16px 0;
+}
+
+.settings-content {
+  background: var(--color-bg-container);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+}
+
+/* 用户管理页面特有样式 */
+.user-search-input {
+  width: 200px;
+}
+
+.user-filter-select {
+  width: 120px;
+}
+
+/* 系统配置页面特有样式 */
+.config-encrypted-icon {
+  color: var(--color-primary);
+}
+
+.config-public-icon {
+  color: var(--color-success);
+}
+
+.config-input-full-width {
+  width: 100%;
+}
+
+.config-card-spacing {
+  margin-bottom: 16px;
+}
+
+.config-page-title {
+  margin-bottom: 8px;
+}
+
+.config-main-card {
+  border-radius: 12px;
+}
+
+.config-alert {
+  margin-bottom: 24px;
+}
+
+/* 监控页面特有样式 */
+.monitoring-header-icon {
+  font-size: 24px;
+  color: var(--color-primary);
+}
+
+.monitoring-title {
+  margin: 0;
+}
+
+.monitoring-description {
+  margin: 0;
+}
+
+.monitoring-feature-card {
+  margin-bottom: 24px;
+}
+
+.monitoring-usage-card {
+  margin-top: 24px;
+}
+
+/* 系统设置页面特有样式 */
+.system-threat-text {
+  color: var(--color-error);
+}
+
+/* 主题切换器组件样式 */
+.theme-switcher-container {
+  /* 容器样式 */
+}
+
+.theme-switcher-label {
+  font-size: 14px;
+}
+
+.theme-switcher-select {
+  min-width: 120px;
+}
+
+.theme-switcher-description {
+  font-size: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 16px;
+  }
+  
+  .settings-page-title {
+    font-size: 18px;
+  }
+  
+  .settings-save-section {
+    margin-top: 24px;
+  }
+  
+  .overview-page {
+    padding: 16px;
+  }
+  
+  .overview-page-title {
+    font-size: 18px;
+  }
+}

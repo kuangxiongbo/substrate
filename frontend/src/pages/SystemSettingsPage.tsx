@@ -22,6 +22,7 @@ import {
   MonitorOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import '../styles/settings-pages.css';
 
 const { Sider, Content } = Layout;
 const { Title } = Typography;
@@ -89,73 +90,46 @@ const SystemSettingsPage: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '24px' }}>
+    <div className="settings-page">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         {/* 页面头部 */}
-        <Card
-          style={{
-            marginBottom: 24,
-            borderRadius: 12,
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-          }}
-        >
+        <Card className="settings-header-card">
           <Space align="center">
             <Button
               type="text"
               icon={<ArrowLeftOutlined />}
               onClick={() => navigate('/overview')}
-              style={{ marginRight: 16 }}
+              className="settings-back-button"
             >
               返回概览
             </Button>
-            <Title level={2} style={{ margin: 0 }}>
+            <Title level={2} className="settings-page-main-title">
               系统设置
             </Title>
           </Space>
         </Card>
 
-        <Layout
-          style={{
-            background: 'transparent',
-            minHeight: 'calc(100vh - 200px)',
-          }}
-        >
+        <Layout className="settings-layout">
           {/* 左侧设置菜单 */}
           <Sider
             width={250}
-            style={{
-              background: token.colorBgContainer,
-              borderRadius: 12,
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-              marginRight: 24,
-            }}
+            className="settings-sider"
           >
             <Menu
               mode="inline"
               selectedKeys={[getSelectedKey()]}
               items={settingsMenuItems}
               onClick={handleMenuClick}
-              style={{
-                border: 'none',
-                background: 'transparent',
-                padding: '16px 0',
-              }}
+              className="settings-menu"
             />
           </Sider>
 
           {/* 右侧内容区域 */}
-          <Content
-            style={{
-              background: token.colorBgContainer,
-              borderRadius: 12,
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-              padding: 24,
-            }}
-          >
+          <Content className="settings-content">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}

@@ -25,6 +25,7 @@ import {
   BgColorsOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import '../../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -70,8 +71,8 @@ const BasicConfigPage: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Title level={3} style={{ marginBottom: 24 }}>
-        <SettingOutlined style={{ marginRight: 8 }} />
+      <Title level={3} className="settings-page-title">
+        <SettingOutlined className="settings-page-title-icon" />
         基础配置
       </Title>
 
@@ -97,7 +98,7 @@ const BasicConfigPage: React.FC = () => {
                   系统信息
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="systemTitle"
@@ -143,14 +144,14 @@ const BasicConfigPage: React.FC = () => {
                   Logo配置
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item label="当前Logo">
-                <Space direction="vertical" align="center" style={{ width: '100%' }}>
+                <Space direction="vertical" align="center" className="settings-status-container">
                   <Avatar
                     size={80}
                     icon={<SettingOutlined />}
-                    style={{ backgroundColor: '#1890ff' }}
+                    className="settings-avatar-primary"
                   />
                   <Text type="secondary">当前系统Logo</Text>
                 </Space>
@@ -191,7 +192,7 @@ const BasicConfigPage: React.FC = () => {
                   主题配置
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="theme"
@@ -245,7 +246,7 @@ const BasicConfigPage: React.FC = () => {
                   语言配置
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="language"
@@ -288,7 +289,7 @@ const BasicConfigPage: React.FC = () => {
         </Row>
 
         {/* 保存按钮 */}
-        <Row justify="center" style={{ marginTop: 32 }}>
+        <Row justify="center" className="settings-save-section">
           <Space>
             <Button size="large" onClick={() => form.resetFields()}>
               重置
@@ -309,6 +310,8 @@ const BasicConfigPage: React.FC = () => {
 };
 
 export default BasicConfigPage;
+
+
 
 
 

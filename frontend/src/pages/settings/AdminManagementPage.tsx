@@ -30,6 +30,7 @@ import {
   TeamOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import '../../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -93,8 +94,8 @@ const AdminManagementPage: React.FC = () => {
         <Space>
           <Avatar icon={<UserOutlined />} />
           <div>
-            <div style={{ fontWeight: 500 }}>{record.name}</div>
-            <Text type="secondary" style={{ fontSize: 12 }}>
+            <div className="admin-name">{record.name}</div>
+            <Text type="secondary" className="admin-email">
               {record.email}
             </Text>
           </div>
@@ -221,17 +222,17 @@ const AdminManagementPage: React.FC = () => {
     {
       title: '总管理员',
       value: adminUsers.length,
-      icon: <TeamOutlined style={{ color: '#1890ff' }} />,
+      icon: <TeamOutlined className="admin-stat-icon-blue" />,
     },
     {
       title: '活跃管理员',
       value: adminUsers.filter(u => u.status === 'active').length,
-      icon: <SafetyCertificateOutlined style={{ color: '#52c41a' }} />,
+      icon: <SafetyCertificateOutlined className="admin-stat-icon-green" />,
     },
     {
       title: '超级管理员',
       value: adminUsers.filter(u => u.role === 'super_admin').length,
-      icon: <UserOutlined style={{ color: '#ff4d4f' }} />,
+      icon: <UserOutlined className="admin-stat-icon-red" />,
     },
   ];
 
@@ -241,13 +242,13 @@ const AdminManagementPage: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Title level={3} style={{ marginBottom: 24 }}>
-        <TeamOutlined style={{ marginRight: 8 }} />
+      <Title level={3} className="settings-page-title">
+        <TeamOutlined className="settings-page-title-icon" />
         管理员管理
       </Title>
 
       {/* 统计卡片 */}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+      <Row gutter={[16, 16]} className="settings-stats-section">
         {stats.map((stat, index) => (
           <Col xs={24} sm={8} key={index}>
             <motion.div

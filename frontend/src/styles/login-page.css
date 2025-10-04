@@ -1,120 +1,192 @@
-/**
- * 登录页面样式
- * 基于主题包变量的登录页面样式
- */
+/* 登录页面样式 - 使用主题变量替代内联样式 */
 
-/* 登录页面容器 */
 .login-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-lg);
 }
 
-/* 登录卡片 */
-.login-card {
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--box-shadow-card);
-  border: none;
-  background: var(--color-bg-container);
-}
-
-/* 登录表单 */
-.login-form {
-  padding: var(--spacing-xl);
-}
-
-.login-form .ant-form-item {
-  margin-bottom: var(--spacing-lg);
-}
-
-.login-form .ant-input,
-.login-form .ant-input-password {
-  border-radius: var(--border-radius-base);
-  height: 48px;
-  font-size: var(--font-size-base);
-}
-
-.login-form .ant-btn {
-  height: 48px;
-  border-radius: var(--border-radius-base);
-  font-size: var(--font-size-base);
-}
-
-.login-form .ant-btn-secondary {
-  height: 44px;
-  border-radius: var(--border-radius-base);
-}
-
-/* 登录标题 */
-.login-title {
+.login-hero-section {
+  flex: 1;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   color: white;
-  margin-bottom: var(--spacing-md);
 }
 
-.login-subtitle {
+.login-hero-avatar {
+  background-color: var(--color-primary);
+  margin-bottom: 24px;
+}
+
+.login-hero-title {
+  color: white;
+  margin-bottom: 16px;
+}
+
+.login-hero-description {
   color: rgba(255, 255, 255, 0.8);
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--spacing-xl);
+  font-size: 18px;
+  margin-bottom: 32px;
 }
 
-/* 功能特性列表 */
-.feature-list {
-  margin-top: var(--spacing-xl);
-}
-
-.feature-item {
+.login-feature-item {
   display: flex;
   align-items: center;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 12px;
 }
 
-.feature-dot {
+.login-feature-dot {
   width: 8px;
   height: 8px;
-  background: white;
+  background-color: white;
   border-radius: 50%;
-  margin-right: var(--spacing-sm);
+  margin-right: 12px;
 }
 
-.feature-text {
+.login-feature-text {
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* 登录按钮区域 */
-.login-actions {
-  margin-top: var(--spacing-lg);
+.login-form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.login-actions .ant-btn {
+.login-card {
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: none;
   width: 100%;
-  margin-bottom: var(--spacing-sm);
+  max-width: 400px;
 }
 
-/* 链接样式 */
+.login-card-title {
+  margin-bottom: 8px;
+}
+
+.login-input {
+  border-radius: 8px;
+}
+
+.login-input-icon {
+  color: var(--color-text-tertiary);
+}
+
+.login-submit-button {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.login-demo-button {
+  height: 44px;
+  border-radius: 8px;
+}
+
+.login-admin-button {
+  height: 44px;
+  border-radius: 8px;
+}
+
 .login-link {
   color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
 }
 
-.login-link:hover {
-  color: var(--color-primary-hover);
+.login-link-bold {
+  color: var(--color-primary);
+  font-weight: 500;
 }
 
-/* 输入框前缀图标 */
-.input-prefix-icon {
-  color: var(--color-text-tertiary);
+.login-forgot-link {
+  color: var(--color-primary);
+}
+
+/* 注册页面特有样式 */
+.register-hero-avatar {
+  background-color: var(--color-success);
+  margin-bottom: 24px;
+}
+
+.register-feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.register-feature-icon {
+  color: var(--color-success);
+  margin-right: 12px;
+}
+
+.register-feature-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.password-strength-text {
+  font-weight: 500;
+}
+
+.password-requirement-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.password-requirement-icon {
+  margin-right: 8px;
+}
+
+.password-requirement-text {
+  font-size: 12px;
+}
+
+.password-requirement-met {
+  color: var(--color-success);
+}
+
+.password-requirement-unmet {
+  color: var(--color-error);
+}
+
+.register-terms-link {
+  color: var(--color-primary);
+}
+
+.register-disclaimer-text {
+  font-size: 12px;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
   .login-page {
-    padding: var(--spacing-sm);
+    flex-direction: column;
+    padding: 16px;
   }
   
-  .login-form {
-    padding: var(--spacing-lg);
+  .login-hero-section {
+    padding: 24px;
+    text-align: center;
   }
+  
+  .login-hero-title {
+    font-size: 24px;
+  }
+  
+  .login-hero-description {
+    font-size: 16px;
+  }
+}
+
+.password-strength-bar {
+  /* 动态宽度通过内联样式控制 */
+  transition: width 0.3s ease;
 }

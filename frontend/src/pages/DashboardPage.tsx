@@ -38,6 +38,7 @@ import {
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';
+import '../styles/settings-pages.css';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -59,14 +60,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, l
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
   >
-    <Card
-      className="stat-card"
-      style={{
-        borderRadius: 12,
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02)',
-        border: 'none',
-      }}
-    >
+    <Card className="stat-card">
       <Statistic
         title={title}
         value={value}
@@ -74,6 +68,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, l
           <Avatar
             size={40}
             icon={icon}
+            className="stat-icon"
             style={{ backgroundColor: color }}
           />
         }
@@ -84,19 +79,16 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, l
         <div className="mt-2">
           <Space>
             {trend.isPositive ? (
-              <ArrowUpOutlined style={{ color: '#52c41a' }} />
+              <ArrowUpOutlined className="stat-trend-up" />
             ) : (
-              <ArrowDownOutlined style={{ color: '#ff4d4f' }} />
+              <ArrowDownOutlined className="stat-trend-down" />
             )}
             <Text
-              style={{
-                color: trend.isPositive ? '#52c41a' : '#ff4d4f',
-                fontSize: 12,
-              }}
+              className={`stat-trend-text ${trend.isPositive ? 'stat-trend-up' : 'stat-trend-down'}`}
             >
               {trend.isPositive ? '+' : ''}{trend.value}%
             </Text>
-            <Text type="secondary" style={{ fontSize: 12 }}>
+            <Text type="secondary" className="stat-trend-label">
               较上月
             </Text>
           </Space>
@@ -180,7 +172,7 @@ const DashboardPage: React.FC = () => {
           <div>
             <Text strong>{text}</Text>
             <br />
-            <Text type="secondary" style={{ fontSize: 12 }}>
+            <Text type="secondary" className="user-list-text">
               {record.email}
             </Text>
           </div>
@@ -241,7 +233,7 @@ const DashboardPage: React.FC = () => {
         transition={{ duration: 0.3 }}
         className="mb-6"
       >
-        <Title level={2} style={{ marginBottom: 8 }}>
+        <Title level={2} className="dashboard-page-title">
           仪表板
         </Title>
         <Text type="secondary">
@@ -308,7 +300,7 @@ const DashboardPage: React.FC = () => {
                   系统状态
                 </Space>
               }
-              style={{ borderRadius: 12, height: '100%' }}
+              className="dashboard-card"
             >
               <Space direction="vertical" size="large" className="w-full">
                 <div>
@@ -361,20 +353,20 @@ const DashboardPage: React.FC = () => {
                   最近活动
                 </Space>
               }
-              style={{ borderRadius: 12, height: '100%' }}
+              className="dashboard-card"
             >
               <Timeline
                 items={systemLogs.map((log, index) => ({
                   dot: log.status === 'success' ? (
-                    <CheckCircleOutlined style={{ color: '#52c41a' }} />
+                    <CheckCircleOutlined className="dashboard-timeline-success" />
                   ) : (
-                    <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />
+                    <ExclamationCircleOutlined className="dashboard-timeline-error" />
                   ),
                   children: (
                     <div>
                       <Text strong>{log.action}</Text>
                       <br />
-                      <Text type="secondary" style={{ fontSize: 12 }}>
+                      <Text type="secondary" className="dashboard-timeline-text">
                         {log.user} • {log.time}
                       </Text>
                     </div>
@@ -405,7 +397,7 @@ const DashboardPage: React.FC = () => {
               查看全部
             </Button>
           }
-          style={{ borderRadius: 12 }}
+          className="dashboard-table-card"
         >
           <Table
             columns={userColumns}
@@ -421,6 +413,9 @@ const DashboardPage: React.FC = () => {
 };
 
 export default DashboardPage;
+
+
+
 
 
 

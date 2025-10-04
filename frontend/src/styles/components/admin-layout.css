@@ -13,8 +13,27 @@
 
 /* 所有样式已移至主题包控制 */
 
+/* 新增样式类 */
+.admin-logo-gap {
+  display: flex;
+  align-items: center;
+}
 
+.admin-logo-gap.collapsed {
+  gap: 0;
+}
 
+.admin-logo-gap.expanded {
+  gap: 12px;
+}
+
+.admin-user-avatar.super-admin {
+  background-color: var(--color-error);
+}
+
+.admin-user-avatar.regular-admin {
+  background-color: var(--color-primary);
+}
 
 
 

@@ -48,6 +48,7 @@ import { useAuthStore } from '../stores/authStore';
 import ThemeSwitcher from '../components/ThemeSwitcher';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLayout } from '../contexts/LayoutContext';
+import '../styles/settings-pages.css';
 import QuickSettingsPanel from '../components/QuickSettingsPanel';
 import '../styles/components/admin-layout.css';
 
@@ -242,8 +243,7 @@ const AdminLayout: React.FC = () => {
                    initial={{ scale: 0, opacity: 0 }}
                    animate={{ scale: 1, opacity: 1 }}
                    transition={{ duration: 0.5, delay: 0.1 }}
-                   className="admin-logo-content"
-                   style={{ gap: collapsed ? 0 : 12 }}
+                   className={`admin-logo-content admin-logo-gap ${collapsed ? 'collapsed' : 'expanded'}`}
                  >
                    <Avatar
                      size={collapsed ? 32 : 40}
@@ -321,10 +321,7 @@ const AdminLayout: React.FC = () => {
                 <Avatar
                   size="default"
                   icon={<UserOutlined />}
-                  className="admin-user-avatar"
-                  style={{ 
-                    backgroundColor: isSuperAdmin ? '#ff4d4f' : 'var(--color-primary)'
-                  }}
+                  className={`admin-user-avatar ${isSuperAdmin ? 'super-admin' : 'regular-admin'}`}
                 />
                 <div className="admin-user-details">
                   <Text strong className="admin-user-email">
@@ -386,6 +383,7 @@ const AdminLayout: React.FC = () => {
 };
 
 export default AdminLayout;
+
 
 
 

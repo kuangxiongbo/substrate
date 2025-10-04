@@ -16,6 +16,7 @@ import {
 } from '@ant-design/icons';
 import { globalMonitor, MonitoringResult, MonitoringConfig } from '../../utils/continuous-monitoring';
 import { useTheme } from '../../contexts/ThemeContext';
+import '../../styles/compliance-dashboard.css';
 
 interface ComplianceDashboardProps {
   className?: string;
@@ -196,7 +197,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ className }) 
           type={currentStatus.color}
           icon={currentStatus.icon}
           showIcon
-          style={{ marginBottom: 16 }}
+          className="compliance-alert"
         />
 
         {/* 统计卡片 */}
@@ -224,7 +225,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ className }) 
               title="检查文件"
               value={monitoringResult?.totalFiles || 0}
               suffix="个"
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: 'var(--color-primary)' }}
             />
           </div>
 
@@ -243,7 +244,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ className }) 
             <Statistic
               title="最后检查"
               value={monitoringResult?.timestamp.toLocaleTimeString() || '未检查'}
-              valueStyle={{ color: '#666', fontSize: '14px' }}
+              valueStyle={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}
             />
           </div>
         </div>
@@ -253,7 +254,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ className }) 
           <Card 
             title="违规详情" 
             size="small" 
-            style={{ marginTop: 16 }}
+            className="compliance-detail-card"
           >
             <Table
               columns={columns}
@@ -270,7 +271,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ className }) 
           <Card 
             title="修复建议" 
             size="small" 
-            style={{ marginTop: 16 }}
+            className="compliance-detail-card"
           >
             <ul className="suggestions-list">
               {monitoringResult.suggestions.map((suggestion, index) => (

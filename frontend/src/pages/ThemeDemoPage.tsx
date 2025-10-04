@@ -169,13 +169,7 @@ const ThemeDemoPage: React.FC = () => {
               <Col span={6}>
                 <div className="theme-demo-center">
                   <Title level={4}>透明度控制</Title>
-                  <div 
-                    style={{
-                      background: 'rgba(24, 144, 255, 0.3)',
-                      padding: '20px',
-                      borderRadius: '8px'
-                    }}
-                  >
+                  <div className="theme-demo-highlight">
                     <Text>30% 透明度</Text>
                   </div>
                 </div>
@@ -254,6 +248,7 @@ const ThemeDemoPage: React.FC = () => {
 };
 
 export default ThemeDemoPage;
+
 
 
 

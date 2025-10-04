@@ -301,6 +301,15 @@
   line-height: 1.6;
 }
 
+/* 新增样式类 */
+.compliance-alert {
+  margin-bottom: 16px;
+}
+
+.compliance-detail-card {
+  margin-top: 16px;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .feature-grid {
@@ -318,3 +327,4 @@
     font-size: 16px;
   }
 }
+

@@ -27,6 +27,7 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import '../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 
@@ -36,28 +37,28 @@ const OverviewPage: React.FC = () => {
     {
       title: '总用户数',
       value: 1234,
-      icon: <UserOutlined style={{ color: '#1890ff' }} />,
+      icon: <UserOutlined className="overview-stat-icon-blue" />,
       trend: '+12%',
       trendUp: true,
     },
     {
       title: '活跃用户',
       value: 856,
-      icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+      icon: <CheckCircleOutlined className="overview-stat-icon-green" />,
       trend: '+8%',
       trendUp: true,
     },
     {
       title: '安全事件',
       value: 23,
-      icon: <SafetyCertificateOutlined style={{ color: '#faad14' }} />,
+      icon: <SafetyCertificateOutlined className="overview-stat-icon-orange" />,
       trend: '-15%',
       trendUp: false,
     },
     {
       title: '系统日志',
       value: 15420,
-      icon: <FileTextOutlined style={{ color: '#722ed1' }} />,
+      icon: <FileTextOutlined className="overview-stat-icon-purple" />,
       trend: '+5%',
       trendUp: true,
     },
@@ -98,18 +99,18 @@ const OverviewPage: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: '24px' }}>
+    <div className="overview-page">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Title level={2} style={{ marginBottom: 24 }}>
+        <Title level={2} className="overview-page-title">
           系统概览
         </Title>
 
         {/* 统计卡片 */}
-        <Row gutter={[24, 24]} style={{ marginBottom: 24 }}>
+        <Row gutter={[24, 24]} className="overview-stats-section">
           {systemStats.map((stat, index) => (
             <Col xs={24} sm={12} lg={6} key={index}>
               <motion.div
@@ -119,10 +120,7 @@ const OverviewPage: React.FC = () => {
               >
                 <Card
                   hoverable
-                  style={{
-                    borderRadius: 12,
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                  }}
+                  className="overview-card"
                 >
                   <Statistic
                     title={stat.title}
@@ -131,13 +129,13 @@ const OverviewPage: React.FC = () => {
                     suffix={
                       <Space>
                         {stat.trendUp ? (
-                          <ArrowUpOutlined style={{ color: '#52c41a' }} />
+                          <ArrowUpOutlined className="overview-trend-up" />
                         ) : (
-                          <ArrowDownOutlined style={{ color: '#ff4d4f' }} />
+                          <ArrowDownOutlined className="overview-trend-down" />
                         )}
                         <Text
                           type={stat.trendUp ? 'success' : 'danger'}
-                          style={{ fontSize: 12 }}
+                          className="overview-trend-text"
                         >
                           {stat.trend}
                         </Text>
@@ -158,17 +156,14 @@ const OverviewPage: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Card
-                title="系统健康状态"
-                style={{
-                  borderRadius: 12,
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                }}
-              >
-                <Space direction="vertical" size="large" style={{ width: '100%' }}>
+            <Card
+              title="系统健康状态"
+              className="overview-card"
+            >
+                <Space direction="vertical" size="large" className="overview-health-container">
                   {systemHealth.map((item, index) => (
                     <div key={index}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <div className="overview-health-item">
                         <Text strong>{item.name}</Text>
                         <Text>{item.value}%</Text>
                       </div>
@@ -197,13 +192,10 @@ const OverviewPage: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <Card
-                title="最近活动"
-                style={{
-                  borderRadius: 12,
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                }}
-              >
+            <Card
+              title="最近活动"
+              className="overview-card"
+            >
                 <Timeline
                   items={recentActivities.map((activity, index) => ({
                     key: index,
@@ -219,7 +211,7 @@ const OverviewPage: React.FC = () => {
                         <br />
                         <Text type="secondary">{activity.action}</Text>
                         <br />
-                        <Text type="secondary" style={{ fontSize: 12 }}>
+                        <Text type="secondary" className="overview-activity-time">
                           {activity.time}
                         </Text>
                       </div>
@@ -236,6 +228,10 @@ const OverviewPage: React.FC = () => {
 };
 
 export default OverviewPage;
+
+
+
+
 
 
 

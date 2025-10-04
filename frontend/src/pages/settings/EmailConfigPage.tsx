@@ -27,6 +27,7 @@ import {
   CheckCircleOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import '../../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -69,8 +70,8 @@ const EmailConfigPage: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Title level={3} style={{ marginBottom: 24 }}>
-        <MailOutlined style={{ marginRight: 8 }} />
+      <Title level={3} className="settings-page-title">
+        <MailOutlined className="settings-page-title-icon" />
         邮箱配置
       </Title>
 
@@ -101,7 +102,7 @@ const EmailConfigPage: React.FC = () => {
                   SMTP服务器配置
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="smtpHost"
@@ -119,7 +120,7 @@ const EmailConfigPage: React.FC = () => {
                 <InputNumber
                   min={1}
                   max={65535}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="例如：587"
                 />
               </Form.Item>
@@ -167,7 +168,7 @@ const EmailConfigPage: React.FC = () => {
                   邮件发送配置
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="fromEmail"
@@ -203,7 +204,7 @@ const EmailConfigPage: React.FC = () => {
                 <InputNumber
                   min={1}
                   max={1000}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入单次最大收件人数"
                 />
               </Form.Item>
@@ -216,7 +217,7 @@ const EmailConfigPage: React.FC = () => {
                 <InputNumber
                   min={5}
                   max={300}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入发送超时时间"
                 />
               </Form.Item>
@@ -240,7 +241,7 @@ const EmailConfigPage: React.FC = () => {
                   邮件模板配置
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="welcomeSubject"
@@ -291,7 +292,7 @@ const EmailConfigPage: React.FC = () => {
                   发送限制配置
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="dailyLimit"
@@ -301,7 +302,7 @@ const EmailConfigPage: React.FC = () => {
                 <InputNumber
                   min={1}
                   max={10000}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入每日发送限制"
                 />
               </Form.Item>
@@ -314,7 +315,7 @@ const EmailConfigPage: React.FC = () => {
                 <InputNumber
                   min={1}
                   max={1000}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入每小时发送限制"
                 />
               </Form.Item>
@@ -352,28 +353,28 @@ const EmailConfigPage: React.FC = () => {
         {/* 配置状态 */}
         <Card
           title="配置状态"
-          style={{ marginTop: 24 }}
+          className="settings-status-section"
         >
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={8}>
-              <Space direction="vertical" align="center" style={{ width: '100%' }}>
-                <Tag color="green" style={{ fontSize: 16, padding: '8px 16px' }}>
+              <Space direction="vertical" align="center" className="settings-status-container">
+                <Tag color="green" className="settings-tag-large">
                   SMTP连接
                 </Tag>
                 <Text type="secondary">连接正常</Text>
               </Space>
             </Col>
             <Col xs={24} sm={8}>
-              <Space direction="vertical" align="center" style={{ width: '100%' }}>
-                <Tag color="blue" style={{ fontSize: 16, padding: '8px 16px' }}>
+              <Space direction="vertical" align="center" className="settings-status-container">
+                <Tag color="blue" className="settings-tag-large">
                   邮件发送
                 </Tag>
                 <Text type="secondary">功能正常</Text>
               </Space>
             </Col>
             <Col xs={24} sm={8}>
-              <Space direction="vertical" align="center" style={{ width: '100%' }}>
-                <Tag color="orange" style={{ fontSize: 16, padding: '8px 16px' }}>
+              <Space direction="vertical" align="center" className="settings-status-container">
+                <Tag color="orange" className="settings-tag-large">
                   发送限制
                 </Tag>
                 <Text type="secondary">已启用</Text>
@@ -383,7 +384,7 @@ const EmailConfigPage: React.FC = () => {
         </Card>
 
         {/* 操作按钮 */}
-        <Row justify="center" style={{ marginTop: 32 }}>
+        <Row justify="center" className="settings-save-section">
           <Space>
             <Button
               size="large"

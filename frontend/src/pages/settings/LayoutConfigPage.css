@@ -157,3 +157,7 @@
 .theme-high-contrast .preview-content {
   border-width: 3px;
 }
+
+.layout-preview-section {
+  margin-top: 24px;
+}

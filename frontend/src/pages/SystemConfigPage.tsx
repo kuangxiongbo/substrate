@@ -35,6 +35,7 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import '../styles/settings-pages.css';
 
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -299,12 +300,12 @@ const SystemConfigPage: React.FC = () => {
         <span>{description}</span>
         {is_encrypted && (
           <Tooltip title="加密存储">
-            <SecurityScanOutlined style={{ color: '#1890ff' }} />
+            <SecurityScanOutlined className="config-encrypted-icon" />
           </Tooltip>
         )}
         {is_public && (
           <Tooltip title="公开配置">
-            <GlobalOutlined style={{ color: '#52c41a' }} />
+            <GlobalOutlined className="config-public-icon" />
           </Tooltip>
         )}
       </Space>
@@ -332,7 +333,7 @@ const SystemConfigPage: React.FC = () => {
             rules={[{ required: true, message: '请输入数值' }]}
           >
             <InputNumber
-              style={{ width: '100%' }}
+              className="config-input-full-width"
               min={0}
               placeholder="请输入数值"
             />
@@ -392,7 +393,7 @@ const SystemConfigPage: React.FC = () => {
               <Col xs={24} lg={12} key={config.key}>
                 <Card
                   size="small"
-                  style={{ marginBottom: 16 }}
+                  className="config-card-spacing"
                   styles={{ body: { padding: '16px' } }}
                 >
                   {renderConfigField(config)}
@@ -414,7 +415,7 @@ const SystemConfigPage: React.FC = () => {
         transition={{ duration: 0.3 }}
         className="mb-6"
       >
-        <Title level={2} style={{ marginBottom: 8 }}>
+        <Title level={2} className="config-page-title">
           系统配置
         </Title>
         <Text type="secondary">
@@ -453,14 +454,14 @@ const SystemConfigPage: React.FC = () => {
               </Button>
             </Space>
           }
-          style={{ borderRadius: 12 }}
+          className="config-main-card"
         >
           <Alert
             message="配置说明"
             description="修改配置后需要保存才能生效。加密配置会以安全方式存储，公开配置对普通用户可见。"
             type="info"
             showIcon
-            style={{ marginBottom: 24 }}
+            className="config-alert"
           />
 
           <Form
@@ -488,6 +489,9 @@ const SystemConfigPage: React.FC = () => {
 };
 
 export default SystemConfigPage;
+
+
+
 
 
 

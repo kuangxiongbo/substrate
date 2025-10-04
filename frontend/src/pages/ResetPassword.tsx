@@ -4,6 +4,7 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useAuthStore } from '../stores/authStore';
 import { getPasswordStrength, getPasswordStrengthColor, getPasswordStrengthText } from '../utils/helpers';
+import '../styles/login-page.css';
 
 // 定义重置密码数据类型
 interface ResetPasswordData {
@@ -187,7 +188,7 @@ const ResetPassword: React.FC = () => {
                 </div>
                 <div className="mt-1 w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className={`h-2 rounded-full transition-all duration-300 ${
+                    className={`password-strength-bar h-2 rounded-full transition-all duration-300 ${
                       passwordStrength.score <= 1 ? 'bg-error-500' :
                       passwordStrength.score <= 2 ? 'bg-warning-500' :
                       passwordStrength.score <= 3 ? 'bg-warning-400' :
@@ -240,6 +241,7 @@ const ResetPassword: React.FC = () => {
 };
 
 export default ResetPassword;
+
 
 
 

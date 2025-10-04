@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, App as AntdApp } from 'antd'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import { ThemeProvider } from './contexts/ThemeContext'
@@ -14,9 +14,11 @@ createRoot(document.getElementById('root')!).render(
     <ThemeProvider>
       <LayoutProvider>
         <ConfigProvider theme={antdTheme}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <AntdApp>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </AntdApp>
         </ConfigProvider>
       </LayoutProvider>
     </ThemeProvider>

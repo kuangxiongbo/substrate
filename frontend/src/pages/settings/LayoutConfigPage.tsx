@@ -64,7 +64,7 @@ const LayoutConfigPage: React.FC = () => {
       </Row>
 
       {/* 预览区域 */}
-      <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
+      <Row gutter={[24, 24]} className="layout-preview-section">
         <Col span={24}>
           <Card 
             title="实时预览"

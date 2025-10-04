@@ -26,6 +26,7 @@ import {
   SafetyOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import '../../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -53,8 +54,8 @@ const SecurityConfigPage: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Title level={3} style={{ marginBottom: 24 }}>
-        <SecurityScanOutlined style={{ marginRight: 8 }} />
+      <Title level={3} className="settings-page-title">
+        <SecurityScanOutlined className="settings-page-title-icon" />
         安全配置
       </Title>
 
@@ -84,7 +85,7 @@ const SecurityConfigPage: React.FC = () => {
                   登录安全
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="enableTwoFactor"
@@ -110,7 +111,7 @@ const SecurityConfigPage: React.FC = () => {
                 <InputNumber
                   min={1}
                   max={10}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入最大登录尝试次数"
                 />
               </Form.Item>
@@ -123,7 +124,7 @@ const SecurityConfigPage: React.FC = () => {
                 <InputNumber
                   min={1}
                   max={1440}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入账户锁定时间"
                 />
               </Form.Item>
@@ -136,7 +137,7 @@ const SecurityConfigPage: React.FC = () => {
                 <InputNumber
                   min={5}
                   max={1440}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入会话超时时间"
                 />
               </Form.Item>
@@ -152,7 +153,7 @@ const SecurityConfigPage: React.FC = () => {
                   密码策略
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="passwordMinLength"
@@ -162,7 +163,7 @@ const SecurityConfigPage: React.FC = () => {
                 <InputNumber
                   min={6}
                   max={32}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入密码最小长度"
                 />
               </Form.Item>
@@ -206,7 +207,7 @@ const SecurityConfigPage: React.FC = () => {
                 <InputNumber
                   min={0}
                   max={365}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="0表示永不过期"
                 />
               </Form.Item>
@@ -222,7 +223,7 @@ const SecurityConfigPage: React.FC = () => {
                   访问控制
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="enableIPWhitelist"
@@ -258,7 +259,7 @@ const SecurityConfigPage: React.FC = () => {
                 <Select
                   mode="multiple"
                   placeholder="请选择允许的国家/地区"
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                 >
                   <Option value="CN">中国</Option>
                   <Option value="US">美国</Option>
@@ -279,7 +280,7 @@ const SecurityConfigPage: React.FC = () => {
                   审计日志
                 </Space>
               }
-              style={{ height: '100%' }}
+              className="settings-card"
             >
               <Form.Item
                 name="enableAuditLog"
@@ -297,7 +298,7 @@ const SecurityConfigPage: React.FC = () => {
                 <InputNumber
                   min={1}
                   max={3650}
-                  style={{ width: '100%' }}
+                  className="settings-input-full-width"
                   placeholder="请输入日志保留天数"
                 />
               </Form.Item>
@@ -336,28 +337,28 @@ const SecurityConfigPage: React.FC = () => {
         {/* 安全状态 */}
         <Card
           title="当前安全状态"
-          style={{ marginTop: 24 }}
+          className="settings-status-section"
         >
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={8}>
-              <Space direction="vertical" align="center" style={{ width: '100%' }}>
-                <Tag color="green" style={{ fontSize: 16, padding: '8px 16px' }}>
+              <Space direction="vertical" align="center" className="settings-status-container">
+                <Tag color="green" className="settings-tag-large">
                   系统安全
                 </Tag>
                 <Text type="secondary">所有安全检查通过</Text>
               </Space>
             </Col>
             <Col xs={24} sm={8}>
-              <Space direction="vertical" align="center" style={{ width: '100%' }}>
-                <Tag color="blue" style={{ fontSize: 16, padding: '8px 16px' }}>
+              <Space direction="vertical" align="center" className="settings-status-container">
+                <Tag color="blue" className="settings-tag-large">
                   密码策略
                 </Tag>
                 <Text type="secondary">强密码策略已启用</Text>
               </Space>
             </Col>
             <Col xs={24} sm={8}>
-              <Space direction="vertical" align="center" style={{ width: '100%' }}>
-                <Tag color="orange" style={{ fontSize: 16, padding: '8px 16px' }}>
+              <Space direction="vertical" align="center" className="settings-status-container">
+                <Tag color="orange" className="settings-tag-large">
                   访问控制
                 </Tag>
                 <Text type="secondary">基础访问控制已启用</Text>
@@ -367,7 +368,7 @@ const SecurityConfigPage: React.FC = () => {
         </Card>
 
         {/* 保存按钮 */}
-        <Row justify="center" style={{ marginTop: 32 }}>
+        <Row justify="center" className="settings-save-section">
           <Space>
             <Button size="large" onClick={() => form.resetFields()}>
               重置
@@ -388,6 +389,12 @@ const SecurityConfigPage: React.FC = () => {
 };
 
 export default SecurityConfigPage;
+
+
+
+
+
+
 
 
 

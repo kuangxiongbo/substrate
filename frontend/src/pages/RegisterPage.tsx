@@ -34,6 +34,7 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';
 import { getPasswordStrength, getPasswordStrengthColor, getPasswordStrengthText } from '../utils/helpers';
 import Captcha from '../components/Captcha';
+import '../styles/login-page.css';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -110,41 +111,38 @@ const RegisterPage: React.FC = () => {
                 <Avatar
                   size={80}
                   icon={<SafetyCertificateOutlined />}
-                  style={{
-                    backgroundColor: '#52c41a',
-                    marginBottom: 24,
-                  }}
+                  className="register-hero-avatar"
                 />
-                <Title level={1} style={{ color: 'white', marginBottom: 16 }}>
+                <Title level={1} className="login-hero-title">
                   加入我们
                 </Title>
-                <Paragraph style={{ color: 'rgba(255,255,255,0.8)', fontSize: 18, marginBottom: 32 }}>
+                <Paragraph className="login-hero-description">
                   创建您的账户，开始使用专业的多用户管理系统
                 </Paragraph>
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center text-white">
-                  <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 12 }} />
-                  <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+                <div className="register-feature-item">
+                  <CheckCircleOutlined className="register-feature-icon" />
+                  <Text className="register-feature-text">
                     免费注册，无隐藏费用
                   </Text>
                 </div>
-                <div className="flex items-center text-white">
-                  <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 12 }} />
-                  <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+                <div className="register-feature-item">
+                  <CheckCircleOutlined className="register-feature-icon" />
+                  <Text className="register-feature-text">
                     企业级安全保障
                   </Text>
                 </div>
-                <div className="flex items-center text-white">
-                  <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 12 }} />
-                  <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+                <div className="register-feature-item">
+                  <CheckCircleOutlined className="register-feature-icon" />
+                  <Text className="register-feature-text">
                     24/7 技术支持
                   </Text>
                 </div>
-                <div className="flex items-center text-white">
-                  <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 12 }} />
-                  <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+                <div className="register-feature-item">
+                  <CheckCircleOutlined className="register-feature-icon" />
+                  <Text className="register-feature-text">
                     数据隐私保护
                   </Text>
                 </div>
@@ -159,18 +157,11 @@ const RegisterPage: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <Card
-                className="login-card"
-                style={{
-                  borderRadius: 16,
-                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-                  border: 'none',
-                }}
-              >
-                <div className="text-center mb-8">
-                  <Title level={2} style={{ marginBottom: 8 }}>
-                    创建账户
-                  </Title>
+                <Card className="login-card">
+                  <div className="text-center mb-8">
+                    <Title level={2} className="login-card-title">
+                      创建账户
+                    </Title>
                   <Text type="secondary">
                     填写以下信息完成注册
                   </Text>
@@ -191,9 +182,9 @@ const RegisterPage: React.FC = () => {
                         label="名字"
                       >
                         <Input
-                          prefix={<UserOutlined style={{ color: '#bfbfbf' }} />}
+                          prefix={<UserOutlined className="login-input-icon" />}
                           placeholder="名字（可选）"
-                          style={{ borderRadius: 8 }}
+                          className="login-input"
                         />
                       </Form.Item>
                     </Col>
@@ -203,9 +194,9 @@ const RegisterPage: React.FC = () => {
                         label="姓氏"
                       >
                         <Input
-                          prefix={<UserOutlined style={{ color: '#bfbfbf' }} />}
+                          prefix={<UserOutlined className="login-input-icon" />}
                           placeholder="姓氏（可选）"
-                          style={{ borderRadius: 8 }}
+                          className="login-input"
                         />
                       </Form.Item>
                     </Col>
@@ -220,9 +211,9 @@ const RegisterPage: React.FC = () => {
                     ]}
                   >
                     <Input
-                      prefix={<MailOutlined style={{ color: '#bfbfbf' }} />}
+                      prefix={<MailOutlined className="login-input-icon" />}
                       placeholder="请输入邮箱地址"
-                      style={{ borderRadius: 8 }}
+                      className="login-input"
                     />
                   </Form.Item>
 
@@ -235,10 +226,10 @@ const RegisterPage: React.FC = () => {
                     ]}
                   >
                     <Input.Password
-                      prefix={<LockOutlined style={{ color: '#bfbfbf' }} />}
+                      prefix={<LockOutlined className="login-input-icon" />}
                       placeholder="请输入密码"
                       iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                      style={{ borderRadius: 8 }}
+                      className="login-input"
                       onChange={handlePasswordChange}
                     />
                   </Form.Item>
@@ -247,7 +238,10 @@ const RegisterPage: React.FC = () => {
                     <div className="mb-4">
                       <div className="flex justify-between items-center mb-2">
                         <Text strong>密码强度</Text>
-                        <Text style={{ color: getPasswordStrengthColor(passwordStrength) }}>
+                        <Text 
+                          className="password-strength-text" 
+                          style={{ color: getPasswordStrengthColor(passwordStrength) }}
+                        >
                           {getPasswordStrengthText(passwordStrength)}
                         </Text>
                       </div>
@@ -255,21 +249,18 @@ const RegisterPage: React.FC = () => {
                         percent={passwordStrength * 20}
                         strokeColor={getPasswordStrengthColor(passwordStrength)}
                         showInfo={false}
-                        style={{ marginBottom: 12 }}
+                        className="mb-3"
                       />
                       <div className="space-y-1">
                         {getPasswordRequirements().map((req, index) => (
-                          <div key={index} className="flex items-center">
+                          <div key={index} className="password-requirement-item">
                             {req.met ? (
-                              <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 8 }} />
+                              <CheckCircleOutlined className="password-requirement-icon password-requirement-met" />
                             ) : (
-                              <CloseCircleOutlined style={{ color: '#ff4d4f', marginRight: 8 }} />
+                              <CloseCircleOutlined className="password-requirement-icon password-requirement-unmet" />
                             )}
                             <Text
-                              style={{
-                                color: req.met ? '#52c41a' : '#ff4d4f',
-                                fontSize: 12,
-                              }}
+                              className={`password-requirement-text ${req.met ? 'password-requirement-met' : 'password-requirement-unmet'}`}
                             >
                               {req.text}
                             </Text>
@@ -307,11 +298,11 @@ const RegisterPage: React.FC = () => {
                   >
                     <Checkbox>
                       我同意{' '}
-                      <Link to="/privacy" style={{ color: '#1890ff' }}>
+                      <Link to="/privacy" className="register-terms-link">
                         隐私政策
                       </Link>{' '}
                       和{' '}
-                      <Link to="/terms" style={{ color: '#1890ff' }}>
+                      <Link to="/terms" className="register-terms-link">
                         使用条款
                       </Link>
                     </Checkbox>
@@ -324,12 +315,7 @@ const RegisterPage: React.FC = () => {
                       loading={isLoading}
                       block
                       size="large"
-                      style={{
-                        height: 48,
-                        borderRadius: 8,
-                        fontSize: 16,
-                        fontWeight: 500,
-                      }}
+                      className="login-submit-button"
                     >
                       {isLoading ? '注册中...' : '创建账户'}
                     </Button>
@@ -340,19 +326,19 @@ const RegisterPage: React.FC = () => {
 
                 <div className="text-center">
                   <Link to="/login">
-                    <Button
-                      type="default"
-                      block
-                      size="large"
-                      style={{ height: 44, borderRadius: 8 }}
-                    >
+                  <Button
+                    type="default"
+                    block
+                    size="large"
+                    className="login-demo-button"
+                  >
                       立即登录
                     </Button>
                   </Link>
                 </div>
 
                 <div className="text-center mt-6">
-                  <Text type="secondary" style={{ fontSize: 12 }}>
+                  <Text type="secondary" className="register-disclaimer-text">
                     注册即表示您同意我们的服务条款和隐私政策。
                     我们承诺保护您的个人信息安全。
                   </Text>
@@ -367,6 +353,12 @@ const RegisterPage: React.FC = () => {
 };
 
 export default RegisterPage;
+
+
+
+
+
+
 
 
 
