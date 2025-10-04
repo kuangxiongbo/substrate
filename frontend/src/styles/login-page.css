@@ -1,0 +1,120 @@
+/**
+ * 登录页面样式
+ * 基于主题包变量的登录页面样式
+ */
+
+/* 登录页面容器 */
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+}
+
+/* 登录卡片 */
+.login-card {
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-card);
+  border: none;
+  background: var(--color-bg-container);
+}
+
+/* 登录表单 */
+.login-form {
+  padding: var(--spacing-xl);
+}
+
+.login-form .ant-form-item {
+  margin-bottom: var(--spacing-lg);
+}
+
+.login-form .ant-input,
+.login-form .ant-input-password {
+  border-radius: var(--border-radius-base);
+  height: 48px;
+  font-size: var(--font-size-base);
+}
+
+.login-form .ant-btn {
+  height: 48px;
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-base);
+}
+
+.login-form .ant-btn-secondary {
+  height: 44px;
+  border-radius: var(--border-radius-base);
+}
+
+/* 登录标题 */
+.login-title {
+  color: white;
+  margin-bottom: var(--spacing-md);
+}
+
+.login-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* 功能特性列表 */
+.feature-list {
+  margin-top: var(--spacing-xl);
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.feature-dot {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  margin-right: var(--spacing-sm);
+}
+
+.feature-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 登录按钮区域 */
+.login-actions {
+  margin-top: var(--spacing-lg);
+}
+
+.login-actions .ant-btn {
+  width: 100%;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 链接样式 */
+.login-link {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.login-link:hover {
+  color: var(--color-primary-hover);
+}
+
+/* 输入框前缀图标 */
+.input-prefix-icon {
+  color: var(--color-text-tertiary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .login-page {
+    padding: var(--spacing-sm);
+  }
+  
+  .login-form {
+    padding: var(--spacing-lg);
+  }
+}

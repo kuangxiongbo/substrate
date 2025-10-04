@@ -90,8 +90,8 @@ const Captcha: React.FC<CaptchaProps> = ({
   }, [value]);
 
   return (
-    <div style={style}>
-      <Space.Compact style={{ width: '100%' }}>
+    <div className="captcha-container" style={style}>
+      <Space.Compact className="captcha-input-group">
         <Input
           value={inputValue}
           onChange={handleInputChange}
@@ -100,11 +100,7 @@ const Captcha: React.FC<CaptchaProps> = ({
           disabled={disabled || loading}
           size={size}
           maxLength={4}
-          style={{ 
-            textTransform: 'uppercase',
-            fontFamily: 'monospace',
-            letterSpacing: '2px'
-          }}
+          className="captcha-input"
         />
         <Button
           type="default"

@@ -170,6 +170,31 @@
   padding: var(--spacing-lg);
 }
 
+.theme-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  flex-direction: column;
+}
+
+/* 验证码组件样式 */
+.captcha-container {
+  width: 100%;
+}
+
+.captcha-input-group {
+  width: 100%;
+}
+
+.captcha-input {
+  text-transform: uppercase;
+  font-family: monospace;
+  letter-spacing: 2px;
+}
+
 /* 主题包样式应用 */
 .sidebar-layout,
 .top-menu-layout,

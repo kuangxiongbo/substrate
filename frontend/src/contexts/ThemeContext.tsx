@@ -217,14 +217,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   if (!currentTheme) {
     return (
       <ThemeContext.Provider value={contextValue}>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          height: '100vh',
-          fontSize: '16px',
-          color: '#666'
-        }}>
+        <div className="theme-loading-container">
           正在加载主题...
         </div>
       </ThemeContext.Provider>
@@ -250,6 +243,7 @@ export const useTheme = (): ThemeContextType => {
 };
 
 // 主题配置已从 antd-themes.ts 导出
+
 
 
 
