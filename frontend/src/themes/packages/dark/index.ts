@@ -119,10 +119,8 @@ const darkTheme: ThemePackageConfig = {
     controlHeightLG: 40,
     controlHeightSM: 24,
     
-    // 全局样式控制 - 确保深色主题的文字可见性
-    colorBgContainerDisabled: '#1a1a1a',
-    colorTextDisabled: '#595959',
-    colorBgMask: 'rgba(0, 0, 0, 0.65)',
+      // 全局样式控制 - 确保深色主题的文字可见性
+      colorBgContainerDisabled: '#1a1a1a',
     
     // 顶部菜单专用间距配置 - 统一所有菜单项间距
     topMenuHeight: 64,
@@ -313,6 +311,18 @@ const darkTheme: ThemePackageConfig = {
       siderColor: '#cbd5e1',
       triggerBg: '#16213e',
       triggerColor: '#f8fafc',
+    },
+    
+    // 内容区域样式
+    'Layout.Content': {
+      minHeight: 'calc(100vh - 64px)',
+      backgroundColor: 'var(--color-bg-layout)',
+      padding: '24px',
+    },
+    
+    // 通用样式类
+    'Layout.Container': {
+      backgroundColor: 'var(--color-bg-layout)',
     },
     
     // 顶部栏组件 - 现代深色顶部栏

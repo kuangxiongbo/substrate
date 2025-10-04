@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Spin } from 'antd';
+import './styles/theme-variables.css';
 import { useAuthStore } from './stores/authStore';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -209,7 +210,7 @@ const App: React.FC = () => {
                  element={
                    <ProtectedRoute>
                      <LayoutWrapper>
-                       <div style={{ padding: '24px' }}>
+                       <div className="page-container">
                          <h2>系统日志</h2>
                          <p>系统日志功能开发中...</p>
                        </div>

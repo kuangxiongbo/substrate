@@ -310,6 +310,18 @@ const lightTheme: ThemePackageConfig = {
       triggerColor: '#1f1f1f', // 浅色触发器文本
     },
     
+    // 内容区域样式
+    'Layout.Content': {
+      minHeight: 'calc(100vh - 64px)',
+      backgroundColor: 'var(--color-bg-layout)',
+      padding: '24px',
+    },
+    
+    // 通用样式类
+    'Layout.Container': {
+      backgroundColor: 'var(--color-bg-layout)',
+    },
+    
     // 顶部栏组件 - 现代浅色顶部栏
     Header: {
       colorBgHeader: '#ffffff',

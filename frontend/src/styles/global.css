@@ -39,34 +39,34 @@ body {
   height: 6px;
 }
 
-/* 浅色主题滚动条 */
+/* 浅色主题滚动条 - 使用主题包变量 */
 .light-theme ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
+  background: var(--color-border-tertiary);
+  border-radius: var(--border-radius-sm);
 }
 
 .light-theme ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 3px;
+  background: var(--color-border);
+  border-radius: var(--border-radius-sm);
 }
 
 .light-theme ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--color-text-tertiary);
 }
 
-/* 深色主题滚动条 */
+/* 深色主题滚动条 - 使用主题包变量 */
 .dark-theme ::-webkit-scrollbar-track {
-  background: #1f1f1f;
-  border-radius: 3px;
+  background: var(--color-border-tertiary);
+  border-radius: var(--border-radius-sm);
 }
 
 .dark-theme ::-webkit-scrollbar-thumb {
-  background: #434343;
-  border-radius: 3px;
+  background: var(--color-border);
+  border-radius: var(--border-radius-sm);
 }
 
 .dark-theme ::-webkit-scrollbar-thumb:hover {
-  background: #595959;
+  background: var(--color-text-tertiary);
 }
 
 /* 链接样式 - 由主题包控制 */
@@ -208,4 +208,9 @@ html {
 }
 
 /* 工具类已移至主题包控制 */
+
+
+
+
+
 

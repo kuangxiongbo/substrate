@@ -179,7 +179,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
         </div>
       </Header>
       
-      <Content className={`top-content ${currentTheme?.meta.id || 'light'}-theme`} style={{ minHeight: 'calc(100vh - 64px)' }}>
+      <Content className={`top-content ${currentTheme?.meta.id || 'light'}-theme content-full-height`}>
         {children}
       </Content>
       
