@@ -3,7 +3,8 @@
  * 基于Spec-Kit方法重构的布局上下文提供者
  */
 
-import React, { createContext, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { useLayoutStore, selectLayout, selectIsSidebar, selectIsTop, selectIsCollapsed, selectIsLoading, type LayoutContextType } from '../../stores/layout-store';
 
 // 创建布局上下文
@@ -21,7 +22,7 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const isLoading = useLayoutStore(selectIsLoading);
   
   const setLayout = useLayoutStore((state) => state.setLayout);
-  const toggleLayout = useLayoutStore((state) => state.toggleLayout);
+  const toggleLayout = useLayoutStore((state) => state.toggleLayoutType);
   const toggleCollapse = useLayoutStore((state) => state.toggleCollapse);
 
   // 应用布局CSS变量
@@ -85,6 +86,8 @@ export const useLayout = (): LayoutContextType => {
 
 // 导出布局上下文
 export { LayoutContext };
+
+
 
 
 

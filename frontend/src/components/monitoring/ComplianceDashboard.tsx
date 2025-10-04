@@ -11,10 +11,10 @@ import {
   BugOutlined, 
   ToolOutlined,
   ReloadOutlined,
-  SettingOutlined,
   EyeOutlined
 } from '@ant-design/icons';
-import { globalMonitor, MonitoringResult, MonitoringConfig } from '../../utils/continuous-monitoring';
+import { globalMonitor } from '../../utils/continuous-monitoring';
+import type { MonitoringResult } from '../../utils/continuous-monitoring';
 import { useTheme } from '../../contexts/ThemeContext';
 import '../../styles/compliance-dashboard.css';
 

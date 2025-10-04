@@ -12,13 +12,13 @@ import {
   EyeOutlined,
 } from '@ant-design/icons';
 import { useLayout } from './LayoutProvider';
-import { type LayoutType } from '../../stores/layout-store';
+import type { LayoutType } from '../../stores/layout-store';
 import '../../styles/menu-theme.css';
 
 const { Title, Text } = Typography;
 
 const LayoutSwitcher: React.FC = () => {
-  const { layout, setLayout, toggleLayout, resetLayout } = useLayout();
+  const { layout, setLayout, resetLayout } = useLayout();
 
   const layoutOptions = [
     {
@@ -137,6 +137,9 @@ const LayoutSwitcher: React.FC = () => {
 };
 
 export default LayoutSwitcher;
+
+
+
 
 
 

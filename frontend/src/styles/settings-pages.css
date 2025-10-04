@@ -329,3 +329,117 @@
     font-size: 18px;
   }
 }
+
+/* 操作日志页面样式 */
+.operation-logs-page {
+  padding: 0;
+}
+
+.logs-header-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow-card);
+}
+
+.logs-page-title {
+  margin: 0 !important;
+  color: var(--color-text-heading);
+}
+
+.logs-filter-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow-card);
+}
+
+.logs-table-card {
+  border-radius: 8px;
+  box-shadow: var(--box-shadow-card);
+}
+
+.logs-table-card .ant-card-body {
+  padding: 24px;
+}
+
+.logs-table-card .ant-table-thead > tr > th {
+  background: var(--color-bg-container);
+  color: var(--color-text-heading);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.logs-table-card .ant-table-tbody > tr:hover > td {
+  background: var(--color-bg-elevated);
+}
+
+.logs-table-card .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--color-border-secondary);
+  color: var(--color-text);
+}
+
+.logs-table-card .ant-pagination {
+  margin-top: 16px;
+}
+
+.logs-table-card .ant-pagination-item {
+  border-color: var(--color-border);
+}
+
+.logs-table-card .ant-pagination-item:hover {
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-pagination-item-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-pagination-item-active a {
+  color: #ffffff;
+}
+
+.logs-table-card .ant-tag {
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.logs-table-card .ant-input-affix-wrapper {
+  border-color: var(--color-border);
+}
+
+.logs-table-card .ant-input-affix-wrapper:hover {
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-input-affix-wrapper:focus,
+.logs-table-card .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-outline);
+}
+
+.logs-table-card .ant-select {
+  border-color: var(--color-border);
+}
+
+.logs-table-card .ant-select:hover {
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-select-focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-outline);
+}
+
+.logs-table-card .ant-picker {
+  border-color: var(--color-border);
+}
+
+.logs-table-card .ant-picker:hover {
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-picker-focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-outline);
+}

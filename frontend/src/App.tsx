@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Spin } from 'antd';
-import { useTheme } from './contexts/ThemeContext';
 import './styles/theme-variables.css';
 import './styles/utility-classes.css';
 import { useAuthStore } from './stores/authStore';
@@ -10,12 +9,8 @@ import RegisterPage from './pages/RegisterPage';
 import OverviewPage from './pages/OverviewPage';
 import UserManagementPage from './pages/UserManagementPage';
 import SystemSettingsPage from './pages/SystemSettingsPage';
-import BasicConfigPage from './pages/settings/BasicConfigPage';
-import AdminManagementPage from './pages/settings/AdminManagementPage';
-import SecurityConfigPage from './pages/settings/SecurityConfigPage';
-import EmailConfigPage from './pages/settings/EmailConfigPage';
-import LayoutConfigPage from './pages/settings/LayoutConfigPage';
 import ThemeDemoPage from './pages/ThemeDemoPage';
+import OperationLogsPage from './pages/OperationLogsPage';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import VerifyEmail from './pages/VerifyEmail';
@@ -25,7 +20,6 @@ import LayoutWrapper from './components/layout/LayoutWrapper';
 // 受保护的路由组件
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
-  const { currentTheme } = useTheme();
   
   if (isLoading) {
     return (
@@ -45,7 +39,6 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // 公共路由组件（已登录用户不能访问）
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
-  const { currentTheme } = useTheme();
   
   if (isLoading) {
     return (
@@ -144,9 +137,7 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <LayoutWrapper>
-                <SystemSettingsPage>
-                  <BasicConfigPage />
-                </SystemSettingsPage>
+                <SystemSettingsPage />
               </LayoutWrapper>
             </ProtectedRoute>
           }
@@ -156,9 +147,7 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <LayoutWrapper>
-                <SystemSettingsPage>
-                  <AdminManagementPage />
-                </SystemSettingsPage>
+                <SystemSettingsPage />
               </LayoutWrapper>
             </ProtectedRoute>
           }
@@ -168,9 +157,7 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <LayoutWrapper>
-                <SystemSettingsPage>
-                  <SecurityConfigPage />
-                </SystemSettingsPage>
+                <SystemSettingsPage />
               </LayoutWrapper>
             </ProtectedRoute>
           }
@@ -180,9 +167,7 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <LayoutWrapper>
-                <SystemSettingsPage>
-                  <EmailConfigPage />
-                </SystemSettingsPage>
+                <SystemSettingsPage />
               </LayoutWrapper>
             </ProtectedRoute>
           }
@@ -192,9 +177,7 @@ const App: React.FC = () => {
                  element={
                    <ProtectedRoute>
                      <LayoutWrapper>
-                       <SystemSettingsPage>
-                         <LayoutConfigPage />
-                       </SystemSettingsPage>
+                       <SystemSettingsPage />
                      </LayoutWrapper>
                    </ProtectedRoute>
                  }
@@ -210,14 +193,11 @@ const App: React.FC = () => {
                  }
                />
                <Route
-                 path="/logs"
+                 path="/operation-logs"
                  element={
                    <ProtectedRoute>
                      <LayoutWrapper>
-                       <div className="page-container">
-                         <h2>系统日志</h2>
-                         <p>系统日志功能开发中...</p>
-                       </div>
+                       <OperationLogsPage />
                      </LayoutWrapper>
                    </ProtectedRoute>
                  }

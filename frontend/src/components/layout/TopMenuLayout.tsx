@@ -11,14 +11,10 @@ import {
   LogoutOutlined,
   DashboardOutlined,
   TeamOutlined,
-  FileTextOutlined,
   BellOutlined,
-  MenuOutlined,
-  AppstoreOutlined,
-  BgColorsOutlined,
   SkinOutlined,
+  HistoryOutlined,
 } from '@ant-design/icons';
-import { useLayout } from '../../contexts/LayoutContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuthStore } from '../../stores/authStore';
 import QuickSettingsPanel from '../QuickSettingsPanel';
@@ -33,10 +29,14 @@ interface TopMenuLayoutProps {
 }
 
 const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
-  const { layout, toggleLayout } = useLayout();
   const { currentTheme } = useTheme();
   const { user, logout } = useAuthStore();
   const [quickSettingsVisible, setQuickSettingsVisible] = React.useState(false);
+
+  // 检查是否为超级管理员
+  const isSuperAdmin = user?.email === 'superadmin@system.com' || 
+                      user?.email === 'demo@example.com' || 
+                      user?.role === 'super_admin';
 
   // 菜单项配置
   const menuItems = [
@@ -52,39 +52,6 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
       label: '用户管理',
       path: '/users',
     },
-    {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: '系统设置',
-      children: [
-        {
-          key: 'basic',
-          label: '基础配置',
-          path: '/system-settings/basic',
-        },
-        {
-          key: 'admin',
-          label: '管理员管理',
-          path: '/system-settings/admin',
-        },
-        {
-          key: 'security',
-          label: '安全配置',
-          path: '/system-settings/security',
-        },
-        {
-          key: 'email',
-          label: '邮箱配置',
-          path: '/system-settings/email',
-        },
-      ],
-    },
-    {
-      key: 'logs',
-      icon: <FileTextOutlined />,
-      label: '系统日志',
-      path: '/logs',
-    },
   ];
 
   // 用户下拉菜单
@@ -93,11 +60,6 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
       key: 'profile',
       icon: <UserOutlined />,
       label: '个人资料',
-    },
-    {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: '系统设置',
     },
     {
       type: 'divider' as const,
@@ -144,11 +106,33 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
                 title="快速设置"
               />
               
+              {/* 操作日志按钮 */}
+              <Button
+                type="text"
+                icon={<HistoryOutlined />}
+                className="logs-btn"
+                title="操作日志"
+                onClick={() => window.location.href = '/operation-logs'}
+              />
+              
+              {/* 通知按钮 */}
               <Button
                 type="text"
                 icon={<BellOutlined />}
                 className="notification-btn"
+                title="通知"
               />
+              
+              {/* 系统设置按钮 - 仅超级管理员可见 */}
+              {isSuperAdmin && (
+                <Button
+                  type="text"
+                  icon={<SettingOutlined />}
+                  className="system-settings-btn"
+                  title="系统设置"
+                  onClick={() => window.location.href = '/system-settings'}
+                />
+              )}
               
               <Dropdown
                 menu={{ items: userMenuItems }}
@@ -193,6 +177,8 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
 };
 
 export default TopMenuLayout;
+
+
 
 
 
