@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Spin } from 'antd';
+import { useTheme } from './contexts/ThemeContext';
 import './styles/theme-variables.css';
 import './styles/utility-classes.css';
 import { useAuthStore } from './stores/authStore';
@@ -24,6 +25,7 @@ import LayoutWrapper from './components/layout/LayoutWrapper';
 // 受保护的路由组件
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
+  const { currentTheme } = useTheme();
   
   if (isLoading) {
     return (
@@ -43,6 +45,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // 公共路由组件（已登录用户不能访问）
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
+  const { currentTheme } = useTheme();
   
   if (isLoading) {
     return (

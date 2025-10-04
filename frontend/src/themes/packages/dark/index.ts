@@ -442,7 +442,6 @@ const darkTheme: ThemePackageConfig = {
       colorPrimary: '#177ddc',
       colorText: '#ffffff',
       colorTextPlaceholder: '#737373',
-      colorTextDisabled: '#737373',
       colorTextSecondary: '#a6a6a6',
       colorError: '#dc4446',
       colorErrorHover: '#ff7875',
@@ -515,7 +514,6 @@ const darkTheme: ThemePackageConfig = {
     // 抽屉组件 - 深色侧边栏
     Drawer: {
       colorBgElevated: '#1f1f1f',
-      colorBgMask: 'rgba(0, 0, 0, 0.45)',
       colorText: '#ffffff',
       colorTextSecondary: '#a6a6a6',
       colorTextTertiary: '#737373',

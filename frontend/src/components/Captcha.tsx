@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Input, Button, Space, message, Spin } from 'antd';
 import { ReloadOutlined, EyeOutlined } from '@ant-design/icons';
 import { request } from '../services/api';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface CaptchaData {
   captcha_id: string;
@@ -28,6 +29,7 @@ const Captcha: React.FC<CaptchaProps> = ({
   size = 'middle',
   style
 }) => {
+  const { currentTheme } = useTheme();
   const [captchaData, setCaptchaData] = useState<CaptchaData | null>(null);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState(value);
@@ -90,7 +92,7 @@ const Captcha: React.FC<CaptchaProps> = ({
   }, [value]);
 
   return (
-    <div className="captcha-container" style={style}>
+    <div className={`captcha-container ${currentTheme?.meta.id || 'light'}-theme`} style={style}>
       <Space.Compact className="captcha-input-group">
         <Input
           value={inputValue}
@@ -114,16 +116,9 @@ const Captcha: React.FC<CaptchaProps> = ({
       </Space.Compact>
       
       {captchaData && (
-        <div style={{ marginTop: 8, textAlign: 'center' }}>
+        <div className="captcha-display">
           <div
-            style={{
-              display: 'inline-block',
-              border: '1px solid #d9d9d9',
-              borderRadius: 4,
-              padding: 4,
-              backgroundColor: '#fafafa',
-              cursor: 'pointer'
-            }}
+            className="captcha-image-container"
             onClick={generateCaptcha}
             title="点击刷新验证码"
           >
@@ -133,19 +128,11 @@ const Captcha: React.FC<CaptchaProps> = ({
               <img
                 src={captchaData.image}
                 alt="验证码"
-                style={{
-                  height: 40,
-                  width: 120,
-                  display: 'block'
-                }}
+                className="captcha-image"
               />
             )}
           </div>
-          <div style={{ 
-            fontSize: 12, 
-            color: '#999', 
-            marginTop: 4 
-          }}>
+          <div className="captcha-hint">
             点击图片刷新验证码
           </div>
         </div>

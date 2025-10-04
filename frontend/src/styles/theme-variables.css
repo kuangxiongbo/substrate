@@ -195,6 +195,41 @@
   letter-spacing: 2px;
 }
 
+.captcha-display {
+  margin-top: var(--spacing-sm);
+  text-align: center;
+}
+
+.captcha-image-container {
+  display: inline-block;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-xs);
+  background-color: var(--color-bg-container);
+  cursor: pointer;
+}
+
+.captcha-image {
+  height: 40px;
+  width: 120px;
+  display: block;
+}
+
+.captcha-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--spacing-xs);
+}
+
+/* 加载容器样式 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--color-bg-layout);
+}
+
 /* 主题包样式应用 */
 .sidebar-layout,
 .top-menu-layout,
