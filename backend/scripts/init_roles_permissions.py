@@ -153,7 +153,8 @@ def assign_super_admin_role(db: Session):
     # 查找超级管理员用户
     super_admin_users = db.query(User).filter(User.email.in_([
         "superadmin@system.com",
-        "demo@example.com"
+        "demo@example.com",
+        "admin@system.com"
     ])).all()
     
     # 获取超级管理员角色

@@ -9,6 +9,7 @@ from src.models.security_log import SecurityLog, EventType, EventResult
 from src.models.role import Role, Permission, SystemConfig
 from src.models.security import LoginAttempt, IPFreeze, EmailVerificationLimit, LoginAttemptResult, SecurityLevel
 from src.models.user_preferences import UserPreferences, AdminPreferences, PreferencesChangeHistory, ThemePreference, LayoutPreference
+from src.models.operation_log import OperationLog, OperationResult
 
 __all__ = [
     # Models
@@ -25,6 +26,7 @@ __all__ = [
     "UserPreferences",
     "AdminPreferences",
     "PreferencesChangeHistory",
+    "OperationLog",
     
     # Enums
     "AccountStatus",
@@ -36,6 +38,7 @@ __all__ = [
     "SecurityLevel",
     "ThemePreference",
     "LayoutPreference",
+    "OperationResult",
 ]
 
 

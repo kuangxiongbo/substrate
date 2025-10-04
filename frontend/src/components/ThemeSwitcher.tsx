@@ -20,10 +20,9 @@ interface ThemeSwitcherProps {
 
 const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ 
   size = 'middle', 
-  showLabel = true,
-  style 
+  showLabel = true
 }) => {
-  const { currentTheme, availableThemes, setTheme, isDarkMode } = useTheme();
+  const { currentTheme, availableThemes, setTheme } = useTheme();
 
   const handleThemeChange = (themeName: string) => {
     setTheme(themeName);

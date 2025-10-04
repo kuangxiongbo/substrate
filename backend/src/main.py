@@ -47,7 +47,7 @@ async def health_check():
 
 
 # Register API routers
-from src.api.v1 import auth, user, token, password, admin, captcha
+from src.api.v1 import auth, user, token, password, admin, captcha, operation_logs
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(token.router, prefix="/api/v1/auth", tags=["Tokens"])
@@ -55,6 +55,7 @@ app.include_router(password.router, prefix="/api/v1/auth", tags=["Password Manag
 app.include_router(user.router, prefix="/api/v1/users", tags=["User Management"])
 app.include_router(admin.router, prefix="/api/v1", tags=["Admin Management"])
 app.include_router(captcha.router, prefix="/api/v1", tags=["Captcha"])
+app.include_router(operation_logs.router, prefix="/api/v1/operation-logs", tags=["Operation Logs"])
 
 
 if __name__ == "__main__":

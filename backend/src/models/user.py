@@ -238,6 +238,9 @@ class User(Base):
     def is_super_admin(self) -> bool:
         """检查是否为超级管理员"""
         return self.has_role('super_admin')
+    
+    # 关联关系
+    operation_logs = relationship("OperationLog", back_populates="user", cascade="all, delete-orphan")
 
 
 

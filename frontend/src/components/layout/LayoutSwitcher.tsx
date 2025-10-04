@@ -12,13 +12,12 @@ import {
   EyeOutlined,
 } from '@ant-design/icons';
 import { useLayout } from './LayoutProvider';
-import type { LayoutType } from '../../stores/layout-store';
 import '../../styles/menu-theme.css';
 
 const { Title, Text } = Typography;
 
 const LayoutSwitcher: React.FC = () => {
-  const { layout, setLayout, resetLayout } = useLayout();
+  const { layout, setLayout } = useLayout();
 
   const layoutOptions = [
     {
@@ -47,7 +46,15 @@ const LayoutSwitcher: React.FC = () => {
   };
 
   const handleReset = () => {
-    resetLayout();
+    // 重置为默认布局
+    setLayout({
+      type: 'sidebar',
+      collapsed: false,
+      theme: 'light',
+      fixed: true,
+      width: 240,
+      height: 64,
+    });
   };
 
   return (
@@ -113,7 +120,10 @@ const LayoutSwitcher: React.FC = () => {
             <Tooltip title="快速切换布局">
               <Button
                 icon={<EyeOutlined />}
-                onClick={toggleLayout}
+                onClick={() => setLayout({
+                  ...layout,
+                  type: layout.type === 'sidebar' ? 'top' : 'sidebar'
+                })}
                 className="action-btn"
               >
                 快速切换
@@ -137,6 +147,7 @@ const LayoutSwitcher: React.FC = () => {
 };
 
 export default LayoutSwitcher;
+
 
 
 

@@ -10,7 +10,6 @@ import {
   SunOutlined,
   MoonOutlined,
   MenuOutlined,
-  SettingOutlined,
   EyeOutlined,
   SkinOutlined,
 } from '@ant-design/icons';
@@ -18,7 +17,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useLayout } from '../contexts/LayoutContext';
 import '../styles/menu-theme.css';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface QuickSettingsPanelProps {
   visible: boolean;
@@ -69,7 +68,7 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
     console.log('QuickSettingsPanel: handleLayoutChange called with:', layoutType);
     
     // 立即设置布局
-    setLayout({ ...layout, type: layoutType });
+    setLayout({ ...layout, type: layoutType as any });
     
     if (previewMode) {
       setPreviewMode(false);
@@ -90,7 +89,7 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
       // 立即应用预览主题
       setTheme(value);
     } else {
-      setLayout({ ...layout, type: value as 'sidebar' | 'top' });
+      setLayout({ ...layout, type: value as any });
     }
     
     // 设置预览模式自动关闭
@@ -193,7 +192,7 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
                 <Text>快速切换</Text>
                 <Switch
                   checked={isDarkMode}
-                  onChange={(checked) => {
+                  onChange={() => {
                     toggleTheme();
                     // 设置快速切换自动关闭
                     setAutoCloseReason('quick-switch');
@@ -310,6 +309,7 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
 };
 
 export default QuickSettingsPanel;
+
 
 
 

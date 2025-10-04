@@ -6,12 +6,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { ConfigProvider } from 'antd';
 import { 
-  themeManager,
-  loadAllThemes,
   getTheme,
   getAllThemes,
-  initializeThemes,
-  getGlobalStyleManager
+  initializeThemes
 } from '../themes';
 import type { ThemePackageConfig } from '../themes';
 import { useAuthStore } from '../stores/authStore';

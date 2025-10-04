@@ -40,6 +40,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   // 检查是否为超级管理员
   const isSuperAdmin = user?.email === 'superadmin@system.com' || 
                       user?.email === 'demo@example.com' || 
+                      user?.email === 'admin@system.com' ||
                       user?.role === 'super_admin';
 
   // 菜单项配置
@@ -149,17 +150,6 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                 title="通知"
               />
               
-              {/* 系统设置按钮 - 仅超级管理员可见 */}
-              {isSuperAdmin && (
-                <Button
-                  type="text"
-                  icon={<SettingOutlined />}
-                  className="system-settings-btn"
-                  title="系统设置"
-                  onClick={() => window.location.href = '/system-settings'}
-                />
-              )}
-              
               <Dropdown
                 menu={{ items: userMenuItems }}
                 placement="bottomRight"
@@ -184,6 +174,21 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                       </Text>
                     </div>
                   )}
+                  
+                  {/* 系统设置按钮 - 仅超级管理员可见，位于账号区域右侧 */}
+                  {isSuperAdmin && (
+                    <Button
+                      type="text"
+                      icon={<SettingOutlined />}
+                      className="system-settings-btn"
+                      title="系统设置"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.location.href = '/system-settings';
+                      }}
+                    />
+                  )}
                 </div>
               </Dropdown>
             </Space>
@@ -206,6 +211,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
 };
 
 export default SidebarLayout;
+
 
 
 

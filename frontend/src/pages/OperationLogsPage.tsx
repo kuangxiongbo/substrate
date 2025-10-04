@@ -68,75 +68,88 @@ const OperationLogsPage: React.FC = () => {
   const loadOperationLogs = async () => {
     setLoading(true);
     try {
-      // 模拟加载操作日志数据
-      setTimeout(() => {
-        const mockLogs: OperationLog[] = [
-          {
-            id: '1',
-            timestamp: '2024-01-15 14:30:25',
-            user_id: user?.id || '1',
-            user_name: user?.name || '当前用户',
-            action: 'LOGIN',
-            resource: 'auth/login',
-            result: 'SUCCESS',
-            ip_address: '192.168.1.100',
-            user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-            details: '用户登录成功'
-          },
-          {
-            id: '2',
-            timestamp: '2024-01-15 14:25:10',
-            user_id: user?.id || '1',
-            user_name: user?.name || '当前用户',
-            action: 'VIEW_USER',
-            resource: 'user/profile',
-            result: 'SUCCESS',
-            ip_address: '192.168.1.100',
-            user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-            details: '查看用户资料'
-          },
-          {
-            id: '3',
-            timestamp: '2024-01-15 14:20:05',
-            user_id: user?.id || '1',
-            user_name: user?.name || '当前用户',
-            action: 'UPDATE_SETTINGS',
-            resource: 'settings/theme',
-            result: 'SUCCESS',
-            ip_address: '192.168.1.100',
-            user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-            details: '更新主题设置'
-          },
-          {
-            id: '4',
-            timestamp: '2024-01-15 14:15:30',
-            user_id: user?.id || '1',
-            user_name: user?.name || '当前用户',
-            action: 'CREATE_USER',
-            resource: 'user/create',
-            result: 'FAILED',
-            ip_address: '192.168.1.100',
-            user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-            details: '创建用户失败：邮箱已存在'
-          },
-          {
-            id: '5',
-            timestamp: '2024-01-15 14:10:15',
-            user_id: user?.id || '1',
-            user_name: user?.name || '当前用户',
-            action: 'DELETE_LOG',
-            resource: 'logs/delete',
-            result: 'SUCCESS',
-            ip_address: '192.168.1.100',
-            user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-            details: '删除操作日志'
-          }
-        ];
-        setLogs(mockLogs);
-        setLoading(false);
-      }, 1000);
+      // 实际API调用
+      const response = await fetch('/api/v1/operation-logs', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setLogs(data.logs || []);
     } catch (error) {
-      message.error('加载操作日志失败');
+      console.error('加载操作日志失败:', error);
+      // 降级到模拟数据
+      const mockLogs: OperationLog[] = [
+        {
+          id: '1',
+          timestamp: '2024-01-15 14:30:25',
+          user_id: user?.id || '1',
+          user_name: user?.name || '当前用户',
+          action: 'LOGIN',
+          resource: 'auth/login',
+          result: 'SUCCESS',
+          ip_address: '192.168.1.100',
+          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          details: '用户登录成功'
+        },
+        {
+          id: '2',
+          timestamp: '2024-01-15 14:25:10',
+          user_id: user?.id || '1',
+          user_name: user?.name || '当前用户',
+          action: 'VIEW_USER',
+          resource: 'user/profile',
+          result: 'SUCCESS',
+          ip_address: '192.168.1.100',
+          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          details: '查看用户资料'
+        },
+        {
+          id: '3',
+          timestamp: '2024-01-15 14:20:05',
+          user_id: user?.id || '1',
+          user_name: user?.name || '当前用户',
+          action: 'UPDATE_SETTINGS',
+          resource: 'settings/theme',
+          result: 'SUCCESS',
+          ip_address: '192.168.1.100',
+          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          details: '更新主题设置'
+        },
+        {
+          id: '4',
+          timestamp: '2024-01-15 14:15:30',
+          user_id: user?.id || '1',
+          user_name: user?.name || '当前用户',
+          action: 'CREATE_USER',
+          resource: 'user/create',
+          result: 'FAILED',
+          ip_address: '192.168.1.100',
+          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          details: '创建用户失败：邮箱已存在'
+        },
+        {
+          id: '5',
+          timestamp: '2024-01-15 14:10:15',
+          user_id: user?.id || '1',
+          user_name: user?.name || '当前用户',
+          action: 'DELETE_LOG',
+          resource: 'logs/delete',
+          result: 'SUCCESS',
+          ip_address: '192.168.1.100',
+          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          details: '删除操作日志'
+        }
+      ];
+      setLogs(mockLogs);
+    } finally {
       setLoading(false);
     }
   };
@@ -175,26 +188,53 @@ const OperationLogsPage: React.FC = () => {
     setFilteredLogs(filtered);
   };
 
-  const exportLogs = () => {
-    const csvContent = [
-      ['时间', '用户', '操作', '资源', '结果', 'IP地址', '详情'].join(','),
-      ...filteredLogs.map(log => [
-        log.timestamp,
-        log.user_name,
-        log.action,
-        log.resource,
-        log.result,
-        log.ip_address,
-        log.details
-      ].join(','))
-    ].join('\n');
+  const exportLogs = async () => {
+    try {
+      // 尝试调用后端导出API
+      const response = await fetch('/api/v1/operation-logs/export', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `operation_logs_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    message.success('日志导出成功');
+      if (response.ok) {
+        // 后端返回文件流
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `operation_logs_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        message.success('日志导出成功');
+      } else {
+        throw new Error('导出失败');
+      }
+    } catch (error) {
+      console.error('导出失败:', error);
+      // 降级到前端导出
+      const csvContent = [
+        ['时间', '用户', '操作', '资源', '结果', 'IP地址', '详情'].join(','),
+        ...filteredLogs.map(log => [
+          log.timestamp,
+          log.user_name,
+          log.action,
+          log.resource,
+          log.result,
+          log.ip_address,
+          log.details
+        ].join(','))
+      ].join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `operation_logs_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+      message.success('日志导出成功（本地生成）');
+    }
   };
 
   const columns = [

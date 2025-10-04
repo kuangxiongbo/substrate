@@ -37,7 +37,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
     setPreviewTheme(themeName);
     
     // 临时应用主题
-    const tempTheme = availableThemes.find(t => t.name === themeName);
+    const tempTheme = availableThemes.find(t => t.id === themeName);
     if (tempTheme) {
       // 这里可以临时应用主题样式
       document.documentElement.className = `theme-${themeName}`;
@@ -47,7 +47,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
     setTimeout(() => {
       setIsPreviewMode(false);
       setPreviewTheme(null);
-      document.documentElement.className = `theme-${currentTheme.name}`;
+      document.documentElement.className = `theme-${currentTheme.id}`;
     }, 3000);
   };
 
@@ -121,11 +121,11 @@ const EnhancedThemeSwitcher: React.FC = () => {
           <div className="theme-status-info">
             <Space>
               <span className="theme-type-badge">
-                {getThemeIcon(currentTheme.name)}
+                {getThemeIcon(currentTheme.id)}
                 {currentTheme.displayName}
               </span>
               <Text type="secondary">
-                {getThemeDescription(currentTheme.name)}
+                {getThemeDescription(currentTheme.id)}
               </Text>
             </Space>
           </div>

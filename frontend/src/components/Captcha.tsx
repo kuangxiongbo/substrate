@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Space, message, Spin } from 'antd';
-import { ReloadOutlined, EyeOutlined } from '@ant-design/icons';
+import { ReloadOutlined } from '@ant-design/icons';
 import { request } from '../services/api';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -26,8 +26,7 @@ const Captcha: React.FC<CaptchaProps> = ({
   onCaptchaIdChange,
   placeholder = '请输入验证码',
   disabled = false,
-  size = 'middle',
-  style
+  size = 'middle'
 }) => {
   const { currentTheme } = useTheme();
   const [captchaData, setCaptchaData] = useState<CaptchaData | null>(null);
@@ -142,6 +141,7 @@ const Captcha: React.FC<CaptchaProps> = ({
 };
 
 export default Captcha;
+
 
 
 

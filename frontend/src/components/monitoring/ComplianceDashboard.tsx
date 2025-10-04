@@ -127,17 +127,17 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ className }) 
   const statusConfig = {
     success: { 
       icon: <CheckCircleOutlined />, 
-      color: 'success',
+      color: 'success' as const,
       message: '所有文件都符合主题包样式规范'
     },
     warning: { 
       icon: <ExclamationCircleOutlined />, 
-      color: 'warning',
+      color: 'warning' as const,
       message: '发现少量样式违规，建议及时修复'
     },
     error: { 
       icon: <BugOutlined />, 
-      color: 'error',
+      color: 'error' as const,
       message: '发现多个样式违规，需要立即修复'
     },
   };
