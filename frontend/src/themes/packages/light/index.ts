@@ -377,10 +377,14 @@ const lightTheme: ThemePackageConfig = {
     
     // 按钮组件 - 现代按钮设计
     Button: {
-      primaryColor: '#1890ff',
+      colorPrimary: '#1890ff',
+      colorPrimaryHover: '#40a9ff',
+      colorPrimaryActive: '#096dd9',
+      colorPrimaryBg: 'rgba(24, 144, 255, 0.1)',
+      colorPrimaryShadow: 'rgba(24, 144, 255, 0.2)',
       defaultBg: '#ffffff',
-      defaultColor: '#1f1f1f',
-      defaultBorderColor: 'rgba(0, 0, 0, 0.1)',
+      defaultColor: '#262626',
+      defaultBorderColor: '#d9d9d9',
       defaultHoverBg: '#f5f5f5',
       defaultHoverColor: '#1890ff',
       defaultHoverBorderColor: '#1890ff',
@@ -389,7 +393,8 @@ const lightTheme: ThemePackageConfig = {
       defaultActiveBorderColor: '#096dd9',
       textHoverBg: 'rgba(0, 0, 0, 0.04)',
       textHoverColor: '#1890ff',
-      textColor: '#1f1f1f',
+      textColor: '#262626',
+      textActiveColor: '#096dd9',
       dangerColor: '#ff4d4f',
       dangerBg: '#ffffff',
       dangerBorderColor: '#ff4d4f',
@@ -409,6 +414,8 @@ const lightTheme: ThemePackageConfig = {
       fontWeight: 400,
       lineWidth: 1,
       shadow: '0 1px 2px rgba(0, 0, 0, 0.03)',
+      boxShadow: '0 2px 0 rgba(0, 0, 0, 0.045)',
+      boxShadowSecondary: '0 1px 2px rgba(0, 0, 0, 0.03)',
     },
     
     // 卡片组件 - 优雅的卡片设计
