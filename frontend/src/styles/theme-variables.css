@@ -230,6 +230,27 @@
   background-color: var(--color-bg-layout);
 }
 
+/* 主题切换器样式 */
+.theme-switcher-space {
+  width: 100%;
+}
+
+.theme-options-container {
+  margin-top: var(--spacing-md);
+}
+
+.theme-options-space {
+  width: 100%;
+}
+
+.advanced-settings-space {
+  width: 100%;
+}
+
+.setting-description {
+  font-size: var(--font-size-xs);
+}
+
 /* 主题包样式应用 */
 .sidebar-layout,
 .top-menu-layout,

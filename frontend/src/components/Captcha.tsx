@@ -92,7 +92,7 @@ const Captcha: React.FC<CaptchaProps> = ({
   }, [value]);
 
   return (
-    <div className={`captcha-container ${currentTheme?.meta.id || 'light'}-theme`} style={style}>
+    <div className={`captcha-container ${currentTheme?.meta.id || 'light'}-theme`}>
       <Space.Compact className="captcha-input-group">
         <Input
           value={inputValue}

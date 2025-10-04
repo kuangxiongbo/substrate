@@ -114,7 +114,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
         </Space>
       }
     >
-      <Space direction="vertical" size="large" style={{ width: '100%' }}>
+      <Space direction="vertical" size="large" className="theme-switcher-space">
         {/* 当前主题状态 */}
         <div className="current-theme-status">
           <Title level={5}>当前主题</Title>
@@ -142,9 +142,9 @@ const EnhancedThemeSwitcher: React.FC = () => {
             value={currentTheme.name}
             onChange={handleThemeChange}
             className="theme-options"
-            style={{ marginTop: 16 }}
+            className="theme-options-container"
           >
-            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+            <Space direction="vertical" size="middle" className="theme-options-space">
               {availableThemes.map((theme) => (
                 <Radio key={theme.name} value={theme.name} className="theme-option">
                   <div className="theme-option-content">
@@ -206,13 +206,13 @@ const EnhancedThemeSwitcher: React.FC = () => {
             <Divider />
             <div className="advanced-settings">
               <Title level={5}>高级设置</Title>
-              <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+              <Space direction="vertical" size="middle" className="advanced-settings-space">
                 <div className="setting-item">
                   <Space>
                     <Text>自动切换主题</Text>
                     <Switch size="small" />
                   </Space>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>
+                  <Text type="secondary" className="setting-description">
                     根据系统时间自动切换浅色/深色主题
                   </Text>
                 </div>
@@ -222,7 +222,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
                     <Text>主题跟随系统</Text>
                     <Switch size="small" defaultChecked />
                   </Space>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>
+                  <Text type="secondary" className="setting-description">
                     跟随系统主题设置自动切换
                   </Text>
                 </div>
@@ -236,7 +236,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
                       showText
                     />
                   </Space>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>
+                  <Text type="secondary" className="setting-description">
                     自定义主题的主色调
                   </Text>
                 </div>
@@ -259,6 +259,9 @@ const EnhancedThemeSwitcher: React.FC = () => {
 };
 
 export default EnhancedThemeSwitcher;
+
+
+
 
 
 
