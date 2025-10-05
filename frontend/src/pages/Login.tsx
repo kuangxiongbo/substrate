@@ -108,37 +108,41 @@ const Login: React.FC = () => {
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">邮箱地址</label>
             <Input
-              label="邮箱地址"
               name="email"
               type="email"
               autoComplete="email"
               value={formData.email}
               onChange={handleInputChange}
-              error={formErrors.email}
               placeholder="请输入您的邮箱"
-              leftIcon={
+              prefix={
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                 </svg>
               }
             />
+            {formErrors.email && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>
+            )}
             
+            <label className="block text-sm font-medium text-gray-700 mb-2">密码</label>
             <Input
-              label="密码"
               name="password"
               type="password"
               autoComplete="current-password"
               value={formData.password}
               onChange={handleInputChange}
-              error={formErrors.password}
               placeholder="请输入您的密码"
-              leftIcon={
+              prefix={
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               }
             />
+            {formErrors.password && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.password}</p>
+            )}
           </div>
           
           <div className="flex items-center justify-between">
@@ -182,8 +186,8 @@ const Login: React.FC = () => {
           )}
           
           <Button
-            type="submit"
-            fullWidth
+            type="primary"
+            block
             loading={isLoading}
             disabled={isLoading}
           >
@@ -212,6 +216,13 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
+
+
+
+
+
+
 
 
 

@@ -6,7 +6,7 @@ import {
   Form,
   Input,
   Switch,
-  Select,
+  // Select,
   InputNumber,
   Card,
   Row,
@@ -15,36 +15,53 @@ import {
   Space,
   Button,
   message,
-  Divider,
-  Alert,
+  // Divider,
+  // Alert,
   Tag,
-  Steps,
+  // Steps,
 } from 'antd';
 import {
   MailOutlined,
   SendOutlined,
   SettingOutlined,
-  CheckCircleOutlined,
+  // CheckCircleOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../contexts/ThemeContext';
 import '../../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
-const { Option } = Select;
-const { Step } = Steps;
+// const { Option } = Select;
+// const { Step } = Steps;
 
 const EmailConfigPage: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [testLoading, setTestLoading] = useState(false);
+  const { currentTheme } = useTheme();
 
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/api/v1/admin/configs', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          category: 'email',
+          configs: values
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       message.success('邮箱配置保存成功！');
     } catch (error) {
+      console.error('保存邮箱配置失败:', error);
       message.error('保存失败，请重试');
     } finally {
       setLoading(false);
@@ -65,15 +82,12 @@ const EmailConfigPage: React.FC = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <Title level={3} className="settings-page-title">
-        <MailOutlined className="settings-page-title-icon" />
-        邮箱配置
-      </Title>
+    <div className={`settings-page ${currentTheme?.meta.id || 'light'}-theme`}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
 
       <Form
         form={form}
@@ -408,7 +422,8 @@ const EmailConfigPage: React.FC = () => {
           </Space>
         </Row>
       </Form>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 };
 

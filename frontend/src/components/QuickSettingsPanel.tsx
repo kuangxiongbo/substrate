@@ -26,7 +26,7 @@ interface QuickSettingsPanelProps {
 
 const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClose }) => {
   const { currentTheme, setTheme, availableThemes, isDarkMode, toggleTheme } = useTheme();
-  const { layout, setLayout, toggleLayout } = useLayout();
+  const { layout, setLayout, switchLayoutType } = useLayout();
   const [previewMode, setPreviewMode] = useState(false);
   const [shouldAutoClose, setShouldAutoClose] = useState(false);
   const [autoCloseReason, setAutoCloseReason] = useState<string>('');
@@ -64,11 +64,11 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
     setShouldAutoClose(true);
   };
 
-  const handleLayoutChange = (layoutType: 'sidebar' | 'top') => {
+  const handleLayoutChange = (layoutType: 'sidebar' | 'top_menu') => {
     console.log('QuickSettingsPanel: handleLayoutChange called with:', layoutType);
     
     // 立即设置布局
-    setLayout({ ...layout, type: layoutType as any });
+    switchLayoutType(layoutType as any);
     
     if (previewMode) {
       setPreviewMode(false);
@@ -265,11 +265,11 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
                         />
                       </Tooltip>
                       <Button
-                        type={layout.type === 'top' ? 'primary' : 'default'}
+                        type={layout.type === 'top_menu' ? 'primary' : 'default'}
                         size="small"
-                        onClick={() => handleLayoutChange('top')}
+                        onClick={() => handleLayoutChange('top_menu')}
                       >
-                        {layout.type === 'top' ? '当前' : '应用'}
+                        {layout.type === 'top_menu' ? '当前' : '应用'}
                       </Button>
                     </Space>
                   </div>
@@ -283,12 +283,12 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
               <Space>
                 <Text>快速切换</Text>
                 <Switch
-                  checked={layout.type === 'top'}
-                  onChange={toggleLayout}
+                  checked={layout.type === 'top_menu'}
+                  onChange={() => switchLayoutType(layout.type === 'top_menu' ? 'sidebar' : 'top_menu')}
                   checkedChildren={<AppstoreOutlined />}
                   unCheckedChildren={<MenuOutlined />}
                 />
-                <Text type="secondary">{layout.type === 'top' ? '顶部菜单' : '侧边栏'}</Text>
+                <Text type="secondary">{layout.type === 'top_menu' ? '顶部菜单' : '侧边栏'}</Text>
               </Space>
             </div>
           </Space>
@@ -309,6 +309,14 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
 };
 
 export default QuickSettingsPanel;
+
+
+
+
+
+
+
+
 
 
 

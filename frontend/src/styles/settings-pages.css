@@ -1,11 +1,11 @@
 /* 设置页面通用样式 - 使用主题变量替代内联样式 */
 
 .settings-page {
-  padding: 24px;
+  padding: 0;
 }
 
 .settings-page-title {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .settings-page-title-icon {
@@ -14,6 +14,13 @@
 
 .settings-card {
   height: 100%;
+  background: var(--color-bg-container);
+  border: 1px solid var(--color-border);
+}
+
+/* 减少Card内部间距 */
+.settings-card .ant-card-body {
+  padding: 8px !important;
 }
 
 .settings-input-full-width {
@@ -43,7 +50,7 @@
 
 /* 概览页面特有样式 */
 .overview-page {
-  padding: 24px;
+  padding: 0;
 }
 
 .overview-page-title {
@@ -103,11 +110,83 @@
 
 /* 仪表板页面特有样式 */
 .dashboard-page {
-  padding: 24px;
+  padding: 0;
 }
 
 .dashboard-page-title {
   margin-bottom: 8px;
+}
+
+/* 操作日志页面样式 */
+.operation-logs-search-input {
+  width: 300px;
+}
+
+.operation-logs-filter-select {
+  width: 120px;
+}
+
+.operation-logs-date-picker {
+  width: 240px;
+}
+
+.operation-logs-count {
+  margin-bottom: 16px;
+  color: var(--color-text-tertiary);
+  font-size: 14px;
+}
+
+/* 基础配置页面样式 */
+.current-system-info {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-fill-quaternary);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.current-system-info .info-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.current-system-info .info-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 通用页面样式 */
+.page-title {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+/* 主题演示页面样式 */
+.demo-alert {
+  margin-bottom: var(--spacing-lg);
+}
+
+.demo-space {
+  width: 100%;
+}
+
+.demo-select {
+  width: 100%;
+}
+
+.demo-theme-card {
+  margin-top: var(--spacing-lg);
+}
+
+.demo-theme-info {
+  margin-top: var(--spacing-md);
+}
+
+/* 重置密码页面样式 */
+.reset-password-actions {
+  text-align: center;
+  margin-top: var(--spacing-md);
 }
 
 .stat-card {
@@ -247,6 +326,110 @@
   width: 100%;
 }
 
+/* 操作日志页面样式 */
+.logs-filter-select {
+  width: 100%;
+}
+
+.logs-date-range-picker {
+  width: 100%;
+}
+
+.logs-reset-button {
+  width: 100%;
+}
+
+/* 统计图标背景色 */
+.stat-icon.stat-icon-blue {
+  background-color: #1890ff !important;
+}
+
+.stat-icon.stat-icon-green {
+  background-color: #52c41a !important;
+}
+
+.stat-icon.stat-icon-orange {
+  background-color: #faad14 !important;
+}
+
+.stat-icon.stat-icon-red {
+  background-color: #f5222d !important;
+}
+
+.stat-icon.stat-icon-purple {
+  background-color: #722ed1 !important;
+}
+
+.stat-icon.stat-icon-default {
+  background-color: var(--color-primary) !important;
+}
+
+/* 监控页面样式 */
+.monitoring-description {
+  font-size: var(--font-size-xs);
+}
+
+.monitoring-space-full-width {
+  width: 100%;
+}
+
+/* 备份页面样式 */
+.backup-description {
+  font-size: var(--font-size-xs);
+}
+
+/* 日志页面样式 */
+.logs-filter-full-width {
+  width: 100%;
+}
+
+/* 个人资料页面样式 */
+.profile-date-picker {
+  width: 100%;
+}
+
+.profile-space-full-width {
+  width: 100%;
+}
+
+.profile-input-full-width {
+  width: 100%;
+}
+
+/* 文件管理页面样式 */
+.file-manager-upload-width {
+  width: 200px;
+}
+
+/* 通知中心页面样式 */
+.notification-icon-info {
+  color: var(--color-primary);
+}
+
+.notification-icon-warning {
+  color: var(--color-warning);
+}
+
+.notification-icon-error {
+  color: var(--color-error);
+}
+
+.notification-icon-success {
+  color: var(--color-success);
+}
+
+.notification-input-full-width {
+  width: 100%;
+}
+
+.notification-item-transparent {
+  background-color: transparent;
+}
+
+.notification-timestamp {
+  font-size: var(--font-size-xs);
+}
+
 .config-card-spacing {
   margin-bottom: 16px;
 }
@@ -310,7 +493,7 @@
 /* 响应式设计 */
 @media (max-width: 768px) {
   .settings-page {
-    padding: 16px;
+    padding: 0;
   }
   
   .settings-page-title {

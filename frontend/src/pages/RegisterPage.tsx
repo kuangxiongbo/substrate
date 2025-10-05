@@ -11,14 +11,12 @@ import {
   Button,
   Checkbox,
   Typography,
-  Space,
   Divider,
   message,
   Row,
   Col,
   Avatar,
   Progress,
-  Tooltip,
 } from 'antd';
 import {
   UserOutlined,
@@ -32,7 +30,8 @@ import {
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';
-import { getPasswordStrength, getPasswordStrengthColor, getPasswordStrengthText } from '../utils/helpers';
+import { useTheme } from '../contexts/ThemeContext';
+import { getPasswordStrength, getPasswordStrengthColor, getPasswordStrengthText, getPasswordStrengthClass } from '../utils/helpers';
 import Captcha from '../components/Captcha';
 import '../styles/login-page.css';
 
@@ -51,7 +50,8 @@ interface RegisterData {
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
-  const { register, isLoading, error, clearError, isAuthenticated } = useAuthStore();
+  const { register, isLoading, clearError, isAuthenticated } = useAuthStore();
+  const { currentTheme } = useTheme();
   const [form] = Form.useForm();
   const [password, setPassword] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
@@ -66,7 +66,7 @@ const RegisterPage: React.FC = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-    setPasswordStrength(getPasswordStrength(newPassword));
+    setPasswordStrength(getPasswordStrength(newPassword).score);
   };
 
   const handleSubmit = async (values: RegisterData) => {
@@ -91,7 +91,7 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className={`login-container ${currentTheme?.meta.id || 'light'}-theme`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -239,8 +239,7 @@ const RegisterPage: React.FC = () => {
                       <div className="flex justify-between items-center mb-2">
                         <Text strong>密码强度</Text>
                         <Text 
-                          className="password-strength-text" 
-                          style={{ color: getPasswordStrengthColor(passwordStrength) }}
+                          className={`password-strength-text ${getPasswordStrengthClass(passwordStrength)}`}
                         >
                           {getPasswordStrengthText(passwordStrength)}
                         </Text>
@@ -279,7 +278,6 @@ const RegisterPage: React.FC = () => {
                     ]}
                   >
                     <Captcha
-                      placeholder="请输入验证码"
                       onCaptchaIdChange={(captchaId) => {
                         form.setFieldsValue({ captcha_id: captchaId });
                       }}
@@ -353,6 +351,15 @@ const RegisterPage: React.FC = () => {
 };
 
 export default RegisterPage;
+
+
+
+
+
+
+
+
+
 
 
 

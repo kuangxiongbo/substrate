@@ -190,6 +190,7 @@ export const useAuthStore = create<AuthStore>()(
             refreshToken: null,
             isAuthenticated: false,
             error: '登录已过期，请重新登录',
+            // refreshTokenFn: undefined,
           });
           throw error;
         }

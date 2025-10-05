@@ -218,48 +218,6 @@ const SystemSettings: React.FC = () => {
             key="overview"
           >
             <Spin spinning={loading}>
-              <Row gutter={[16, 16]} className="mb-6">
-                <Col xs={24} sm={12} lg={6}>
-                  <Card>
-                    <Statistic
-                      title="24小时登录尝试"
-                      value={systemStats?.login_attempts_24h || 0}
-                      prefix={<ClockCircleOutlined />}
-                    />
-                  </Card>
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                  <Card>
-                    <Statistic
-                      title="失败尝试"
-                      value={systemStats?.failed_attempts_24h || 0}
-                      valueStyle={{ color: 'var(--color-error)' }}
-                      prefix={<ExclamationCircleOutlined />}
-                    />
-                  </Card>
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                  <Card>
-                    <Statistic
-                      title="成功率"
-                      value={systemStats?.success_rate_24h || 0}
-                      suffix="%"
-                      valueStyle={{ color: 'var(--color-success)' }}
-                      prefix={<CheckCircleOutlined />}
-                    />
-                  </Card>
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                  <Card>
-                    <Statistic
-                      title="冻结IP数"
-                      value={systemStats?.active_frozen_ips || 0}
-                      valueStyle={{ color: 'var(--color-error)' }}
-                      prefix={<SecurityScanOutlined />}
-                    />
-                  </Card>
-                </Col>
-              </Row>
 
               <Row gutter={[16, 16]}>
                 <Col xs={24} lg={12}>
@@ -425,6 +383,13 @@ const SystemSettings: React.FC = () => {
 };
 
 export default SystemSettings;
+
+
+
+
+
+
+
 
 
 

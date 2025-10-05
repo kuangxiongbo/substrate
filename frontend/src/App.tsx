@@ -4,6 +4,7 @@ import { Spin } from 'antd';
 import './styles/theme-variables.css';
 import './styles/utility-classes.css';
 import { useAuthStore } from './stores/authStore';
+import ErrorBoundary from './components/ErrorBoundary';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import OverviewPage from './pages/OverviewPage';
@@ -11,6 +12,12 @@ import UserManagementPage from './pages/UserManagementPage';
 import SystemSettingsPage from './pages/SystemSettingsPage';
 import ThemeDemoPage from './pages/ThemeDemoPage';
 import OperationLogsPage from './pages/OperationLogsPage';
+import SystemMonitoringPage from './pages/SystemMonitoringPage';
+import DataBackupPage from './pages/DataBackupPage';
+import SystemLogsPage from './pages/SystemLogsPage';
+import FileManagerPage from './pages/FileManagerPage';
+import NotificationCenterPage from './pages/NotificationCenterPage';
+import ProfilePage from './pages/ProfilePage';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import VerifyEmail from './pages/VerifyEmail';
@@ -57,8 +64,9 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <Routes>
+    <ErrorBoundary>
+      <div className="App">
+        <Routes>
         {/* 公共路由 */}
         <Route
           path="/login"
@@ -202,6 +210,66 @@ const App: React.FC = () => {
                    </ProtectedRoute>
                  }
                />
+               <Route
+                 path="/system-monitoring"
+                 element={
+                   <ProtectedRoute>
+                     <LayoutWrapper>
+                       <SystemMonitoringPage />
+                     </LayoutWrapper>
+                   </ProtectedRoute>
+                 }
+               />
+               <Route
+                 path="/data-backup"
+                 element={
+                   <ProtectedRoute>
+                     <LayoutWrapper>
+                       <DataBackupPage />
+                     </LayoutWrapper>
+                   </ProtectedRoute>
+                 }
+               />
+               <Route
+                 path="/system-logs"
+                 element={
+                   <ProtectedRoute>
+                     <LayoutWrapper>
+                       <SystemLogsPage />
+                     </LayoutWrapper>
+                   </ProtectedRoute>
+                 }
+               />
+               <Route
+                 path="/file-manager"
+                 element={
+                   <ProtectedRoute>
+                     <LayoutWrapper>
+                       <FileManagerPage />
+                     </LayoutWrapper>
+                   </ProtectedRoute>
+                 }
+               />
+               <Route
+                 path="/notifications"
+                 element={
+                   <ProtectedRoute>
+                     <LayoutWrapper>
+                       <NotificationCenterPage />
+                     </LayoutWrapper>
+                   </ProtectedRoute>
+                 }
+               />
+               <Route
+                 path="/profile"
+                 element={
+                   <ProtectedRoute>
+                     <LayoutWrapper>
+                       <ProfilePage />
+                     </LayoutWrapper>
+                   </ProtectedRoute>
+                 }
+               />
         
         {/* Dashboard 路由 - 重定向到概览页面 */}
         <Route path="/dashboard" element={<Navigate to="/overview" replace />} />
@@ -212,7 +280,8 @@ const App: React.FC = () => {
         {/* 404页面 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 };
 

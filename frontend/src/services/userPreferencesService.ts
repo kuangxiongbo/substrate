@@ -3,7 +3,7 @@
  * 处理用户主题和布局偏好的API调用
  */
 
-import { api } from './api';
+import api from './api';
 import type {
   UserPreferences,
   UserPreferencesUpdate,

@@ -1,7 +1,7 @@
 /**
  * 管理员管理页面 - 管理系统管理员账户
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   Button,
@@ -9,82 +9,113 @@ import {
   Tag,
   Modal,
   Form,
-  Input,
   Select,
   Switch,
   message,
-  Popconfirm,
   Typography,
   Card,
-  Row,
-  Col,
-  Statistic,
   Avatar,
 } from 'antd';
 import {
-  PlusOutlined,
   EditOutlined,
-  DeleteOutlined,
   UserOutlined,
   SafetyCertificateOutlined,
   TeamOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../contexts/ThemeContext';
 import '../../styles/settings-pages.css';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { Option } = Select;
 
 interface AdminUser {
   id: string;
   email: string;
-  name: string;
-  role: 'super_admin' | 'admin' | 'moderator';
-  status: 'active' | 'inactive' | 'suspended';
-  lastLogin: string;
-  createdAt: string;
-  permissions: string[];
+  email_verified: boolean;
+  account_status: string;
+  failed_login_attempts: number;
+  account_locked_until?: string;
+  registration_timestamp: string;
+  last_login_timestamp?: string;
+  roles: string[];
+  created_at: string;
+  updated_at?: string;
 }
+
+// interface AdminStats {
+//   total_users: number;
+//   active_users: number;
+//   total_roles: number;
+//   total_permissions: number;
+//   total_configs: number;
+// }
 
 const AdminManagementPage: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const { currentTheme } = useTheme();
+  // const [adminStats] = useState<AdminStats | null>(null);
 
-  // 模拟数据
-  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([
-    {
-      id: '1',
-      email: 'superadmin@system.com',
-      name: '超级管理员',
-      role: 'super_admin',
-      status: 'active',
-      lastLogin: '2024-01-15 14:30:00',
-      createdAt: '2024-01-01 00:00:00',
-      permissions: ['all'],
-    },
-    {
-      id: '2',
-      email: 'admin@system.com',
-      name: '系统管理员',
-      role: 'admin',
-      status: 'active',
-      lastLogin: '2024-01-15 12:15:00',
-      createdAt: '2024-01-05 10:30:00',
-      permissions: ['user_management', 'system_config'],
-    },
-    {
-      id: '3',
-      email: 'moderator@system.com',
-      name: '内容管理员',
-      role: 'moderator',
-      status: 'inactive',
-      lastLogin: '2024-01-10 16:45:00',
-      createdAt: '2024-01-08 14:20:00',
-      permissions: ['content_management'],
-    },
-  ]);
+  useEffect(() => {
+    loadAdminUsers();
+    loadStats();
+  }, []);
+
+  const loadAdminUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/v1/admin/users', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // 过滤出管理员用户（包括超级管理员、管理员、演示账号）
+      const admins = data.filter((user: AdminUser) => 
+        user.roles.some(role => ['admin', 'super_admin', 'moderator', 'demo'].includes(role))
+      );
+      setAdminUsers(admins);
+    } catch (error) {
+      console.error('加载管理员列表失败:', error);
+      message.error('加载管理员列表失败，请重试');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadStats = async () => {
+    try {
+      const response = await fetch('/api/v1/admin/stats', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // const data = await response.json();
+      // setAdminStats(data);
+    } catch (error) {
+      console.error('加载统计数据失败:', error);
+    }
+  };
+
+  // 模拟数据 - 作为降级方案（已移除，使用真实API）
 
   const columns = [
     {
@@ -94,9 +125,9 @@ const AdminManagementPage: React.FC = () => {
         <Space>
           <Avatar icon={<UserOutlined />} />
           <div>
-            <div className="admin-name">{record.name}</div>
+            <div className="admin-name">{record.email}</div>
             <Text type="secondary" className="admin-email">
-              {record.email}
+              {record.email_verified ? '已验证' : '未验证'}
             </Text>
           </div>
         </Space>
@@ -104,22 +135,27 @@ const AdminManagementPage: React.FC = () => {
     },
     {
       title: '角色',
-      dataIndex: 'role',
-      key: 'role',
-      render: (role: string) => {
-        const roleConfig = {
-          super_admin: { color: 'red', text: '超级管理员' },
-          admin: { color: 'blue', text: '管理员' },
-          moderator: { color: 'green', text: '内容管理员' },
-        };
-        const config = roleConfig[role as keyof typeof roleConfig];
-        return <Tag color={config.color}>{config.text}</Tag>;
-      },
+      dataIndex: 'roles',
+      key: 'roles',
+      render: (roles: string[]) => (
+        <Space>
+          {roles.map(role => {
+            const roleConfig = {
+              super_admin: { color: 'red', text: '超级管理员' },
+              admin: { color: 'blue', text: '管理员' },
+              moderator: { color: 'green', text: '内容管理员' },
+              demo: { color: 'purple', text: '演示账号' },
+            };
+            const config = roleConfig[role as keyof typeof roleConfig] || { color: 'default', text: role };
+            return <Tag key={role} color={config.color}>{config.text}</Tag>;
+          })}
+        </Space>
+      ),
     },
     {
       title: '状态',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'account_status',
+      key: 'account_status',
       render: (status: string) => {
         const statusConfig = {
           active: { color: 'green', text: '活跃' },
@@ -132,13 +168,16 @@ const AdminManagementPage: React.FC = () => {
     },
     {
       title: '最后登录',
-      dataIndex: 'lastLogin',
-      key: 'lastLogin',
+      dataIndex: 'last_login_timestamp',
+      key: 'last_login_timestamp',
+      render: (timestamp: string) => timestamp ? 
+        new Date(timestamp).toLocaleString('zh-CN') : '从未登录',
     },
     {
       title: '创建时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (timestamp: string) => new Date(timestamp).toLocaleString('zh-CN'),
     },
     {
       title: '操作',
@@ -152,26 +191,16 @@ const AdminManagementPage: React.FC = () => {
           >
             编辑
           </Button>
-          <Popconfirm
-            title="确定要删除这个管理员吗？"
-            onConfirm={() => handleDelete(record.id)}
-            okText="确定"
-            cancelText="取消"
-          >
-            <Button type="link" danger icon={<DeleteOutlined />}>
-              删除
-            </Button>
-          </Popconfirm>
         </Space>
       ),
     },
   ];
 
-  const handleAdd = () => {
-    setEditingUser(null);
-    form.resetFields();
-    setModalVisible(true);
-  };
+  // const handleAdd = () => {
+  //   setEditingUser(null);
+  //   form.resetFields();
+  //   setModalVisible(true);
+  // };
 
   const handleEdit = (user: AdminUser) => {
     setEditingUser(user);
@@ -179,18 +208,25 @@ const AdminManagementPage: React.FC = () => {
     setModalVisible(true);
   };
 
-  const handleDelete = (id: string) => {
-    setAdminUsers(adminUsers.filter(user => user.id !== id));
-    message.success('删除成功');
-  };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
       
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 真实API调用
+      const response = await fetch('/api/v1/admin/users', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       if (editingUser) {
         // 编辑
@@ -226,47 +262,23 @@ const AdminManagementPage: React.FC = () => {
     },
     {
       title: '活跃管理员',
-      value: adminUsers.filter(u => u.status === 'active').length,
+      value: adminUsers.filter(u => u.account_status === 'active').length,
       icon: <SafetyCertificateOutlined className="admin-stat-icon-green" />,
     },
     {
       title: '超级管理员',
-      value: adminUsers.filter(u => u.role === 'super_admin').length,
+      value: adminUsers.filter(u => u.roles.includes('super_admin')).length,
       icon: <UserOutlined className="admin-stat-icon-red" />,
     },
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <Title level={3} className="settings-page-title">
-        <TeamOutlined className="settings-page-title-icon" />
-        管理员管理
-      </Title>
-
-      {/* 统计卡片 */}
-      <Row gutter={[16, 16]} className="settings-stats-section">
-        {stats.map((stat, index) => (
-          <Col xs={24} sm={8} key={index}>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card>
-                <Statistic
-                  title={stat.title}
-                  value={stat.value}
-                  prefix={stat.icon}
-                />
-              </Card>
-            </motion.div>
-          </Col>
-        ))}
-      </Row>
+    <div className={`settings-page ${currentTheme?.meta.id || 'light'}-theme`}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
 
       {/* 管理员列表 */}
       <Card
@@ -274,8 +286,7 @@ const AdminManagementPage: React.FC = () => {
         extra={
           <Button
             type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleAdd}
+            onClick={() => setModalVisible(true)}
           >
             添加管理员
           </Button>
@@ -312,63 +323,29 @@ const AdminManagementPage: React.FC = () => {
           }}
         >
           <Form.Item
-            name="name"
-            label="姓名"
-            rules={[{ required: true, message: '请输入姓名' }]}
+            name="email_verified"
+            label="邮箱验证状态"
+            valuePropName="checked"
           >
-            <Input placeholder="请输入姓名" />
+            <Switch checkedChildren="已验证" unCheckedChildren="未验证" />
           </Form.Item>
 
           <Form.Item
-            name="email"
-            label="邮箱"
-            rules={[
-              { required: true, message: '请输入邮箱' },
-              { type: 'email', message: '请输入有效的邮箱地址' },
-            ]}
+            name="account_status"
+            label="账户状态"
           >
-            <Input placeholder="请输入邮箱" />
-          </Form.Item>
-
-          <Form.Item
-            name="role"
-            label="角色"
-            rules={[{ required: true, message: '请选择角色' }]}
-          >
-            <Select placeholder="请选择角色">
-              <Option value="super_admin">超级管理员</Option>
-              <Option value="admin">管理员</Option>
-              <Option value="moderator">内容管理员</Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="status"
-            label="状态"
-            rules={[{ required: true, message: '请选择状态' }]}
-          >
-            <Select placeholder="请选择状态">
+            <Select>
               <Option value="active">活跃</Option>
               <Option value="inactive">非活跃</Option>
-              <Option value="suspended">已暂停</Option>
+              <Option value="locked">锁定</Option>
             </Select>
           </Form.Item>
 
-          {!editingUser && (
-            <Form.Item
-              name="password"
-              label="初始密码"
-              rules={[
-                { required: true, message: '请输入初始密码' },
-                { min: 6, message: '密码至少6位' },
-              ]}
-            >
-              <Input.Password placeholder="请输入初始密码" />
-            </Form.Item>
-          )}
+
         </Form>
       </Modal>
     </motion.div>
+    </div>
   );
 };
 

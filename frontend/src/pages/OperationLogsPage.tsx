@@ -3,17 +3,13 @@
  */
 import React, { useState, useEffect } from 'react';
 import {
-  Card,
   Table,
-  Space,
   Button,
   Input,
   Select,
   DatePicker,
   Tag,
-  Typography,
-  Row,
-  Col,
+  Space,
   message,
   Spin,
 } from 'antd';
@@ -26,11 +22,11 @@ import {
   ClockCircleOutlined,
   EnvironmentOutlined,
 } from '@ant-design/icons';
-import { motion } from 'framer-motion';
-import { useAuthStore } from '../stores/authStore';
+// import { motion } from 'framer-motion';
+// import { useAuthStore } from '../stores/authStore';
+// import { useTheme } from '../contexts/ThemeContext';
+import ContentPageLayout, { type ToolbarItem } from '../components/layout/ContentPageLayout';
 import '../styles/settings-pages.css';
-
-const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -51,11 +47,12 @@ const OperationLogsPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState<OperationLog[]>([]);
   const [filteredLogs, setFilteredLogs] = useState<OperationLog[]>([]);
+  // const { currentTheme } = useTheme();
   const [searchText, setSearchText] = useState('');
   const [actionFilter, setActionFilter] = useState<string>('all');
   const [resultFilter, setResultFilter] = useState<string>('all');
   const [dateRange, setDateRange] = useState<[any, any] | null>(null);
-  const { user } = useAuthStore();
+  // const { user } = useAuthStore();
 
   useEffect(() => {
     loadOperationLogs();
@@ -83,72 +80,11 @@ const OperationLogsPage: React.FC = () => {
 
       const data = await response.json();
       setLogs(data.logs || []);
+      message.success('操作日志加载成功');
     } catch (error) {
       console.error('加载操作日志失败:', error);
-      // 降级到模拟数据
-      const mockLogs: OperationLog[] = [
-        {
-          id: '1',
-          timestamp: '2024-01-15 14:30:25',
-          user_id: user?.id || '1',
-          user_name: user?.name || '当前用户',
-          action: 'LOGIN',
-          resource: 'auth/login',
-          result: 'SUCCESS',
-          ip_address: '192.168.1.100',
-          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-          details: '用户登录成功'
-        },
-        {
-          id: '2',
-          timestamp: '2024-01-15 14:25:10',
-          user_id: user?.id || '1',
-          user_name: user?.name || '当前用户',
-          action: 'VIEW_USER',
-          resource: 'user/profile',
-          result: 'SUCCESS',
-          ip_address: '192.168.1.100',
-          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-          details: '查看用户资料'
-        },
-        {
-          id: '3',
-          timestamp: '2024-01-15 14:20:05',
-          user_id: user?.id || '1',
-          user_name: user?.name || '当前用户',
-          action: 'UPDATE_SETTINGS',
-          resource: 'settings/theme',
-          result: 'SUCCESS',
-          ip_address: '192.168.1.100',
-          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-          details: '更新主题设置'
-        },
-        {
-          id: '4',
-          timestamp: '2024-01-15 14:15:30',
-          user_id: user?.id || '1',
-          user_name: user?.name || '当前用户',
-          action: 'CREATE_USER',
-          resource: 'user/create',
-          result: 'FAILED',
-          ip_address: '192.168.1.100',
-          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-          details: '创建用户失败：邮箱已存在'
-        },
-        {
-          id: '5',
-          timestamp: '2024-01-15 14:10:15',
-          user_id: user?.id || '1',
-          user_name: user?.name || '当前用户',
-          action: 'DELETE_LOG',
-          resource: 'logs/delete',
-          result: 'SUCCESS',
-          ip_address: '192.168.1.100',
-          user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-          details: '删除操作日志'
-        }
-      ];
-      setLogs(mockLogs);
+      message.error('加载操作日志失败，请检查网络连接或联系管理员');
+      setLogs([]);
     } finally {
       setLoading(false);
     }
@@ -246,7 +182,7 @@ const OperationLogsPage: React.FC = () => {
       render: (timestamp: string) => (
         <Space>
           <ClockCircleOutlined />
-          <Text>{timestamp}</Text>
+          <span>{timestamp}</span>
         </Space>
       ),
     },
@@ -258,7 +194,7 @@ const OperationLogsPage: React.FC = () => {
       render: (name: string) => (
         <Space>
           <UserOutlined />
-          <Text>{name}</Text>
+          <span>{name}</span>
         </Space>
       ),
     },
@@ -301,7 +237,7 @@ const OperationLogsPage: React.FC = () => {
       render: (ip: string) => (
         <Space>
           <EnvironmentOutlined />
-          <Text code>{ip}</Text>
+          <code>{ip}</code>
         </Space>
       ),
     },
@@ -313,127 +249,140 @@ const OperationLogsPage: React.FC = () => {
     },
   ];
 
+  // 定义工具栏
+  const toolbar: ToolbarItem[] = [
+    {
+      key: 'search',
+      type: 'search',
+      content: (
+        <Input
+          placeholder="搜索操作、资源或详情"
+          prefix={<SearchOutlined />}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="operation-logs-search-input"
+        />
+      ),
+    },
+    {
+      key: 'action-filter',
+      type: 'filter',
+      content: (
+        <Select
+          placeholder="操作类型"
+          value={actionFilter}
+          onChange={setActionFilter}
+          className="operation-logs-filter-select"
+        >
+          <Option value="all">全部操作</Option>
+          <Option value="LOGIN">登录</Option>
+          <Option value="CREATE">创建</Option>
+          <Option value="UPDATE">更新</Option>
+          <Option value="DELETE">删除</Option>
+          <Option value="VIEW">查看</Option>
+        </Select>
+      ),
+    },
+    {
+      key: 'result-filter',
+      type: 'filter',
+      content: (
+        <Select
+          placeholder="操作结果"
+          value={resultFilter}
+          onChange={setResultFilter}
+          className="operation-logs-filter-select"
+        >
+          <Option value="all">全部结果</Option>
+          <Option value="SUCCESS">成功</Option>
+          <Option value="FAILED">失败</Option>
+        </Select>
+      ),
+    },
+    {
+      key: 'date-range',
+      type: 'filter',
+      content: (
+        <RangePicker
+          placeholder={['开始日期', '结束日期']}
+          value={dateRange}
+          onChange={setDateRange}
+          className="operation-logs-date-picker"
+        />
+      ),
+    },
+    {
+      key: 'reset',
+      type: 'button',
+      content: (
+        <Button
+          icon={<FilterOutlined />}
+          onClick={() => {
+            setSearchText('');
+            setActionFilter('all');
+            setResultFilter('all');
+            setDateRange(null);
+          }}
+        >
+          重置过滤
+        </Button>
+      ),
+    },
+    {
+      key: 'refresh',
+      type: 'button',
+      content: (
+        <Button
+          icon={<ReloadOutlined />}
+          onClick={loadOperationLogs}
+          loading={loading}
+        >
+          刷新
+        </Button>
+      ),
+    },
+    {
+      key: 'export',
+      type: 'button',
+      content: (
+        <Button
+          icon={<DownloadOutlined />}
+          onClick={exportLogs}
+          disabled={filteredLogs.length === 0}
+        >
+          导出
+        </Button>
+      ),
+    },
+  ];
+
   return (
-    <div className="operation-logs-page">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Card className="logs-header-card">
-          <Row justify="space-between" align="middle">
-            <Col>
-              <Title level={3} className="logs-page-title">
-                操作日志
-              </Title>
-              <Text type="secondary">
-                查看您的操作历史记录，共 {filteredLogs.length} 条记录
-              </Text>
-            </Col>
-            <Col>
-              <Space>
-                <Button
-                  icon={<ReloadOutlined />}
-                  onClick={loadOperationLogs}
-                  loading={loading}
-                >
-                  刷新
-                </Button>
-                <Button
-                  icon={<DownloadOutlined />}
-                  onClick={exportLogs}
-                  disabled={filteredLogs.length === 0}
-                >
-                  导出
-                </Button>
-              </Space>
-            </Col>
-          </Row>
-        </Card>
-
-        <Card className="logs-filter-card">
-          <Row gutter={[16, 16]} align="middle">
-            <Col xs={24} sm={6}>
-              <Input
-                placeholder="搜索操作、资源或详情"
-                prefix={<SearchOutlined />}
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                allowClear
-              />
-            </Col>
-            <Col xs={24} sm={4}>
-              <Select
-                placeholder="操作类型"
-                value={actionFilter}
-                onChange={setActionFilter}
-                style={{ width: '100%' }}
-              >
-                <Option value="all">全部操作</Option>
-                <Option value="LOGIN">登录</Option>
-                <Option value="CREATE">创建</Option>
-                <Option value="UPDATE">更新</Option>
-                <Option value="DELETE">删除</Option>
-                <Option value="VIEW">查看</Option>
-              </Select>
-            </Col>
-            <Col xs={24} sm={4}>
-              <Select
-                placeholder="操作结果"
-                value={resultFilter}
-                onChange={setResultFilter}
-                style={{ width: '100%' }}
-              >
-                <Option value="all">全部结果</Option>
-                <Option value="SUCCESS">成功</Option>
-                <Option value="FAILED">失败</Option>
-              </Select>
-            </Col>
-            <Col xs={24} sm={6}>
-              <RangePicker
-                placeholder={['开始日期', '结束日期']}
-                value={dateRange}
-                onChange={setDateRange}
-                style={{ width: '100%' }}
-              />
-            </Col>
-            <Col xs={24} sm={4}>
-              <Button
-                icon={<FilterOutlined />}
-                onClick={() => {
-                  setSearchText('');
-                  setActionFilter('all');
-                  setResultFilter('all');
-                  setDateRange(null);
-                }}
-                style={{ width: '100%' }}
-              >
-                重置过滤
-              </Button>
-            </Col>
-          </Row>
-        </Card>
-
-        <Card className="logs-table-card">
-          <Spin spinning={loading}>
-            <Table
-              columns={columns}
-              dataSource={filteredLogs}
-              rowKey="id"
-              pagination={{
-                pageSize: 20,
-                showSizeChanger: true,
-                showQuickJumper: true,
-                showTotal: (total, range) => 
-                  `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
-              }}
-              scroll={{ x: 1000 }}
-              size="middle"
-            />
-          </Spin>
-        </Card>
-      </motion.div>
-    </div>
+    <ContentPageLayout
+      mode="simple"
+      toolbar={toolbar}
+      helpCenterUrl="/help/operation-logs"
+    >
+      <div className="operation-logs-count">
+        共 {filteredLogs.length} 条记录
+      </div>
+      
+      <Spin spinning={loading}>
+        <Table
+          columns={columns}
+          dataSource={filteredLogs}
+          rowKey="id"
+          pagination={{
+            pageSize: 20,
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: (total, range) => 
+              `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
+          }}
+          scroll={{ x: 1000 }}
+          size="middle"
+        />
+      </Spin>
+    </ContentPageLayout>
   );
 };
 

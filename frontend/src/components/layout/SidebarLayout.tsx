@@ -16,6 +16,10 @@ import {
   BellOutlined,
   SkinOutlined,
   HistoryOutlined,
+  // MonitorOutlined,
+  // DatabaseOutlined,
+  // FileTextOutlined,
+  // FolderOutlined,
 } from '@ant-design/icons';
 import { useLayout } from '../../contexts/LayoutContext';
 import { useAuthStore } from '../../stores/authStore';
@@ -36,6 +40,45 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const { user, logout } = useAuthStore();
   const { currentTheme } = useTheme(); // Added theme context
   const [quickSettingsVisible, setQuickSettingsVisible] = React.useState(false);
+  const [systemTitle, setSystemTitle] = React.useState('Spec-Kit');
+
+  // 加载系统标题
+  React.useEffect(() => {
+    const loadSystemTitle = () => {
+      const savedTitle = localStorage.getItem('systemTitle');
+      if (savedTitle) {
+        setSystemTitle(savedTitle);
+        document.title = savedTitle;
+      }
+    };
+
+    loadSystemTitle();
+
+    // 监听系统标题更改事件
+    const handleTitleChange = (event: any) => {
+      const title = event.detail?.systemTitle;
+      if (title) {
+        setSystemTitle(title);
+        document.title = title;
+      }
+    };
+
+    // 监听localStorage变化
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'systemTitle' && event.newValue) {
+        setSystemTitle(event.newValue);
+        document.title = event.newValue;
+      }
+    };
+
+    window.addEventListener('systemTitleChanged', handleTitleChange);
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('systemTitleChanged', handleTitleChange);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   // 检查是否为超级管理员
   const isSuperAdmin = user?.email === 'superadmin@system.com' || 
@@ -44,20 +87,22 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                       user?.role === 'super_admin';
 
   // 菜单项配置
-  const menuItems = [
-    {
-      key: 'overview',
-      icon: <DashboardOutlined />,
-      label: '概览',
-      path: '/overview',
-    },
-    {
-      key: 'users',
-      icon: <TeamOutlined />,
-      label: '用户管理',
-      path: '/users',
-    },
-  ];
+    const menuItems = [
+      {
+        key: 'overview',
+        icon: <DashboardOutlined />,
+        label: '概览',
+        path: '/overview',
+        onClick: () => window.location.href = '/overview',
+      },
+      {
+        key: 'users',
+        icon: <TeamOutlined />,
+        label: '用户管理',
+        path: '/users',
+        onClick: () => window.location.href = '/users',
+      },
+    ];
 
   // 用户下拉菜单
   const userMenuItems = [
@@ -65,6 +110,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
       key: 'profile',
       icon: <UserOutlined />,
       label: '个人资料',
+      onClick: () => window.location.href = '/profile',
     },
     {
       type: 'divider' as const,
@@ -83,16 +129,16 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         trigger={null}
         collapsible
         collapsed={isCollapsed}
-        width={layout.width || 240}
+        width={layout.sidebarWidth || 240}
         collapsedWidth={80}
         className={`sidebar ${currentTheme?.meta.id || 'light'}-theme`}
       >
         <div className="sidebar-header">
           <div className="logo">
             {isCollapsed ? (
-              <div className="logo-icon">S</div>
+              <div className="logo-icon">{systemTitle.charAt(0).toUpperCase()}</div>
             ) : (
-              <div className="logo-text">Spec-Kit</div>
+              <div className="logo-text">{systemTitle}</div>
             )}
           </div>
         </div>
@@ -211,6 +257,11 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
 };
 
 export default SidebarLayout;
+
+
+
+
+
 
 
 

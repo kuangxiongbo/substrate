@@ -1,150 +1,92 @@
+/**
+ * 验证码组件
+ */
 import React, { useState, useEffect } from 'react';
-import { Input, Button, Space, message, Spin } from 'antd';
+import { Input, Button } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
-import { request } from '../services/api';
 import { useTheme } from '../contexts/ThemeContext';
-
-interface CaptchaData {
-  captcha_id: string;
-  image: string;
-  expires_in: number;
-}
+import '../styles/login-page.css';
 
 interface CaptchaProps {
-  value?: string;
-  onChange?: (value: string) => void;
-  onCaptchaIdChange?: (captchaId: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  size?: 'small' | 'middle' | 'large';
-  style?: React.CSSProperties;
+  onCaptchaIdChange: (captchaId: string) => void;
+  onVerify?: (captchaId: string, captchaValue: string) => void;
+  onRefresh?: () => void;
 }
 
-const Captcha: React.FC<CaptchaProps> = ({
-  value = '',
-  onChange,
-  onCaptchaIdChange,
-  placeholder = '请输入验证码',
-  disabled = false,
-  size = 'middle'
-}) => {
+const Captcha: React.FC<CaptchaProps> = ({ onCaptchaIdChange, onVerify, onRefresh }) => {
   const { currentTheme } = useTheme();
-  const [captchaData, setCaptchaData] = useState<CaptchaData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState(value);
+  const [captchaId, setCaptchaId] = useState<string>('');
+  const [captchaValue, setCaptchaValue] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>('');
 
-  // 生成验证码
-  const generateCaptcha = async () => {
-    setLoading(true);
-    try {
-      const response = await request.get<CaptchaData>('/v1/captcha/generate');
-      setCaptchaData(response);
-      if (onCaptchaIdChange) {
-        onCaptchaIdChange(response.captcha_id);
-      }
-      message.success('验证码已刷新');
-    } catch (error: any) {
-      message.error(error.detail || '获取验证码失败');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 验证验证码
-  const verifyCaptcha = async (captchaId: string, captchaText: string) => {
-    try {
-      await request.post('/v1/captcha/verify', {
-        captcha_id: captchaId,
-        captcha_text: captchaText
-      });
-      return true;
-    } catch (error: any) {
-      message.error(error.detail || '验证码错误');
-      return false;
-    }
-  };
-
-  // 处理输入变化
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value.toUpperCase();
-    setInputValue(newValue);
-    if (onChange) {
-      onChange(newValue);
-    }
-  };
-
-  // 处理回车键
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && captchaData) {
-      verifyCaptcha(captchaData.captcha_id, inputValue);
-    }
-  };
-
-  // 组件挂载时生成验证码
   useEffect(() => {
     generateCaptcha();
   }, []);
 
-  // 同步外部value变化
-  useEffect(() => {
-    setInputValue(value);
-  }, [value]);
+  const generateCaptcha = async () => {
+    try {
+      const response = await fetch('/api/v1/captcha/generate');
+      if (response.ok) {
+        const data = await response.json();
+        setCaptchaId(data.captcha_id);
+        setImageUrl(data.image_url);
+        setCaptchaValue('');
+        onCaptchaIdChange(data.captcha_id);
+      }
+    } catch (error) {
+      console.error('生成验证码失败:', error);
+    }
+  };
+
+  const handleRefresh = () => {
+    generateCaptcha();
+    if (onRefresh) {
+      onRefresh();
+    }
+  };
+
+  const handleVerify = () => {
+    if (captchaId && captchaValue && onVerify) {
+      onVerify(captchaId, captchaValue);
+    }
+  };
 
   return (
     <div className={`captcha-container ${currentTheme?.meta.id || 'light'}-theme`}>
-      <Space.Compact className="captcha-input-group">
+      <div className="captcha-input-group">
         <Input
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyPress={handleKeyPress}
-          placeholder={placeholder}
-          disabled={disabled || loading}
-          size={size}
-          maxLength={4}
+          value={captchaValue}
+          onChange={(e) => setCaptchaValue(e.target.value)}
+          placeholder="请输入验证码"
           className="captcha-input"
+          onPressEnter={handleVerify}
         />
-        <Button
-          type="default"
-          icon={<ReloadOutlined />}
-          onClick={generateCaptcha}
-          disabled={disabled}
-          loading={loading}
-          size={size}
-          title="刷新验证码"
-        />
-      </Space.Compact>
-      
-      {captchaData && (
         <div className="captcha-display">
-          <div
-            className="captcha-image-container"
-            onClick={generateCaptcha}
-            title="点击刷新验证码"
-          >
-            {loading ? (
-              <Spin size="small" />
-            ) : (
+          <div className="captcha-image-container">
+            {imageUrl && (
               <img
-                src={captchaData.image}
+                src={imageUrl}
                 alt="验证码"
                 className="captcha-image"
+                onClick={handleRefresh}
               />
             )}
           </div>
-          <div className="captcha-hint">
-            点击图片刷新验证码
-          </div>
+          <Button
+            icon={<ReloadOutlined />}
+            onClick={handleRefresh}
+            size="small"
+            className="captcha-refresh-btn"
+          >
+            刷新
+          </Button>
         </div>
-      )}
+      </div>
+      <div className="captcha-hint">
+        点击图片或刷新按钮可更换验证码
+      </div>
     </div>
   );
 };
 
 export default Captcha;
-
-
-
-
-
-
-

@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
+import { useTheme } from '../contexts/ThemeContext';
+import '../styles/login-page.css';
 
 const NotFound: React.FC = () => {
+  const { currentTheme } = useTheme();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className={`not-found-page min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${currentTheme?.meta.id || 'light'}-theme`}>
       <div className="max-w-md w-full space-y-8 text-center">
         <div>
           <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-gray-100">
@@ -22,14 +26,14 @@ const NotFound: React.FC = () => {
         <div className="space-y-4">
           <Button
             onClick={() => window.history.back()}
-            variant="secondary"
-            fullWidth
+            type="default"
+            block
           >
             返回上一页
           </Button>
           
           <Link to="/dashboard">
-            <Button fullWidth>
+            <Button block>
               返回首页
             </Button>
           </Link>
@@ -44,6 +48,13 @@ const NotFound: React.FC = () => {
 };
 
 export default NotFound;
+
+
+
+
+
+
+
 
 
 

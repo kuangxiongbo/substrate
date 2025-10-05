@@ -13,13 +13,11 @@ import {
   Space,
   Button,
   Avatar,
-  List,
   Tag,
   Timeline,
   Table,
   Badge,
   Tooltip,
-  Divider,
 } from 'antd';
 import {
   UserOutlined,
@@ -40,7 +38,25 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';
 import '../styles/settings-pages.css';
 
-const { Title, Text, Paragraph } = Typography;
+// 获取统计图标背景色CSS类名
+const getStatIconClass = (color: string): string => {
+  switch (color) {
+    case '#1890ff':
+      return 'stat-icon-blue';
+    case '#52c41a':
+      return 'stat-icon-green';
+    case '#faad14':
+      return 'stat-icon-orange';
+    case '#f5222d':
+      return 'stat-icon-red';
+    case '#722ed1':
+      return 'stat-icon-purple';
+    default:
+      return 'stat-icon-default';
+  }
+};
+
+const { Title, Text } = Typography;
 
 interface StatCardProps {
   title: string;
@@ -68,8 +84,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, l
           <Avatar
             size={40}
             icon={icon}
-            className="stat-icon"
-            style={{ backgroundColor: color }}
+            className={`stat-icon ${getStatIconClass(color)}`}
           />
         }
         loading={loading}
@@ -98,82 +113,122 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, l
   </motion.div>
 );
 
+interface DashboardStats {
+  total_users: number;
+  active_users: number;
+  total_roles: number;
+  total_permissions: number;
+  total_configs: number;
+}
+
+interface RecentUser {
+  id: string;
+  email: string;
+  email_verified: boolean;
+  account_status: string;
+  failed_login_attempts: number;
+  account_locked_until?: string;
+  registration_timestamp: string; // Added for sorting
+  last_login_timestamp?: string;
+  roles: string[];
+}
+
+interface SystemLog {
+  time: string;
+  action: string;
+  user: string;
+  status: 'success' | 'error';
+}
+
 const DashboardPage: React.FC = () => {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [recentUsers, setRecentUsers] = useState<RecentUser[]>([]);
+  const [systemLogs, setSystemLogs] = useState<SystemLog[]>([]);
 
   useEffect(() => {
-    // 模拟数据加载
-    setTimeout(() => setLoading(false), 1000);
+    loadDashboardData();
   }, []);
 
-  const recentUsers = [
-    {
-      id: 1,
-      name: '张三',
-      email: 'zhangsan@example.com',
-      role: '管理员',
-      status: 'active',
-      lastLogin: '2024-01-15 10:30',
-    },
-    {
-      id: 2,
-      name: '李四',
-      email: 'lisi@example.com',
-      role: '用户',
-      status: 'active',
-      lastLogin: '2024-01-15 09:15',
-    },
-    {
-      id: 3,
-      name: '王五',
-      email: 'wangwu@example.com',
-      role: '用户',
-      status: 'inactive',
-      lastLogin: '2024-01-14 16:45',
-    },
-  ];
+  const loadDashboardData = async () => {
+    setLoading(true);
+    try {
+      // 并行加载多个API
+      const [statsResponse, usersResponse] = await Promise.all([
+        fetch('/api/v1/admin/stats', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        }),
+        fetch('/api/v1/admin/users', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        })
+      ]);
 
-  const systemLogs = [
-    {
-      time: '2024-01-15 10:30:00',
-      action: '用户登录',
-      user: '张三',
-      status: 'success',
-    },
-    {
-      time: '2024-01-15 10:25:00',
-      action: '密码修改',
-      user: '李四',
-      status: 'success',
-    },
-    {
-      time: '2024-01-15 10:20:00',
-      action: '登录失败',
-      user: '未知用户',
-      status: 'error',
-    },
-    {
-      time: '2024-01-15 10:15:00',
-      action: '系统配置更新',
-      user: '超级管理员',
-      status: 'success',
-    },
-  ];
+      if (statsResponse.ok) {
+        const statsData = await statsResponse.json();
+        setStats(statsData);
+      }
+
+      if (usersResponse.ok) {
+        const usersData = await usersResponse.json();
+        // 取最近注册的5个用户
+        const sortedUsers = usersData
+          .sort((a: RecentUser, b: RecentUser) => 
+            new Date(b.registration_timestamp).getTime() - new Date(a.registration_timestamp).getTime()
+          )
+          .slice(0, 5);
+        setRecentUsers(sortedUsers);
+      }
+
+      // 模拟系统日志（暂时使用模拟数据，因为需要专门的日志API）
+      const mockLogs: SystemLog[] = [
+        {
+          time: new Date().toISOString(),
+          action: '用户登录',
+          user: user?.email || '当前用户',
+          status: 'success',
+        },
+        {
+          time: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+          action: '查看仪表板',
+          user: user?.email || '当前用户',
+          status: 'success',
+        },
+        {
+          time: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+          action: '系统配置更新',
+          user: user?.email || '当前用户',
+          status: 'success',
+        },
+      ];
+      setSystemLogs(mockLogs);
+
+    } catch (error) {
+      console.error('加载仪表板数据失败:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const userColumns = [
     {
       title: '用户',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text: string, record: any) => (
+      dataIndex: 'email',
+      key: 'email',
+      render: (email: string, record: RecentUser) => (
         <Space>
           <Avatar size="small" icon={<UserOutlined />} />
           <div>
-            <Text strong>{text}</Text>
+            <Text strong>{email}</Text>
             <br />
             <Text type="secondary" className="user-list-text">
-              {record.email}
+              {record.email_verified ? '已验证' : '未验证'}
             </Text>
           </div>
         </Space>
@@ -181,29 +236,35 @@ const DashboardPage: React.FC = () => {
     },
     {
       title: '角色',
-      dataIndex: 'role',
-      key: 'role',
-      render: (role: string) => (
-        <Tag color={role === '管理员' ? 'blue' : 'green'}>
-          {role}
-        </Tag>
+      dataIndex: 'roles',
+      key: 'roles',
+      render: (roles: string[]) => (
+        <Space>
+          {roles.map(role => (
+            <Tag key={role} color={role === 'admin' ? 'blue' : 'green'}>
+              {role}
+            </Tag>
+          ))}
+        </Space>
       ),
     },
     {
       title: '状态',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'account_status',
+      key: 'account_status',
       render: (status: string) => (
         <Badge
           status={status === 'active' ? 'success' : 'default'}
-          text={status === 'active' ? '活跃' : '非活跃'}
+          text={status === 'active' ? '活跃' : status === 'inactive' ? '非活跃' : '锁定'}
         />
       ),
     },
     {
       title: '最后登录',
-      dataIndex: 'lastLogin',
-      key: 'lastLogin',
+      dataIndex: 'last_login_timestamp',
+      key: 'last_login_timestamp',
+      render: (timestamp: string) => timestamp ? 
+        new Date(timestamp).toLocaleString('zh-CN') : '从未登录',
     },
     {
       title: '操作',
@@ -241,49 +302,6 @@ const DashboardPage: React.FC = () => {
         </Text>
       </motion.div>
 
-      {/* 统计卡片 */}
-      <Row gutter={[24, 24]} className="mb-6">
-        <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="总用户数"
-            value={1248}
-            icon={<UserOutlined />}
-            color="#1890ff"
-            trend={{ value: 12.5, isPositive: true }}
-            loading={loading}
-          />
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="活跃用户"
-            value={892}
-            icon={<TeamOutlined />}
-            color="#52c41a"
-            trend={{ value: 8.2, isPositive: true }}
-            loading={loading}
-          />
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="系统角色"
-            value={3}
-            icon={<SafetyCertificateOutlined />}
-            color="#faad14"
-            trend={{ value: 0, isPositive: true }}
-            loading={loading}
-          />
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="邮件发送"
-            value={156}
-            icon={<MailOutlined />}
-            color="#722ed1"
-            trend={{ value: -2.1, isPositive: false }}
-            loading={loading}
-          />
-        </Col>
-      </Row>
 
       <Row gutter={[24, 24]}>
         {/* 系统状态 */}
@@ -356,7 +374,7 @@ const DashboardPage: React.FC = () => {
               className="dashboard-card"
             >
               <Timeline
-                items={systemLogs.map((log, index) => ({
+                items={systemLogs.map((log) => ({
                   dot: log.status === 'success' ? (
                     <CheckCircleOutlined className="dashboard-timeline-success" />
                   ) : (
@@ -413,6 +431,15 @@ const DashboardPage: React.FC = () => {
 };
 
 export default DashboardPage;
+
+
+
+
+
+
+
+
+
 
 
 

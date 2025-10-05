@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useAuthStore } from '../stores/authStore';
+import { useTheme } from '../contexts/ThemeContext';
 import { isValidEmail } from '../utils/helpers';
+import '../styles/login-page.css';
 
 // 定义忘记密码数据类型
 interface ForgotPasswordData {
@@ -12,6 +14,7 @@ interface ForgotPasswordData {
 
 const ForgotPassword: React.FC = () => {
   const { forgotPassword, isLoading, error, clearError } = useAuthStore();
+  const { currentTheme } = useTheme();
   const [formData, setFormData] = useState<ForgotPasswordData>({ email: '' });
   const [formErrors, setFormErrors] = useState<Partial<ForgotPasswordData>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -92,7 +95,7 @@ const ForgotPassword: React.FC = () => {
   }
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className={`login-container ${currentTheme?.meta.id || 'light'}-theme`}>
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -105,21 +108,23 @@ const ForgotPassword: React.FC = () => {
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">邮箱地址</label>
             <Input
-              label="邮箱地址"
               name="email"
               type="email"
               autoComplete="email"
               value={formData.email}
               onChange={handleInputChange}
-              error={formErrors.email}
               placeholder="请输入您的邮箱"
-              leftIcon={
+              prefix={
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                 </svg>
               }
             />
+            {formErrors.email && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>
+            )}
           </div>
           
           {error && (
@@ -138,8 +143,8 @@ const ForgotPassword: React.FC = () => {
           )}
           
           <Button
-            type="submit"
-            fullWidth
+            type="primary"
+            block
             loading={isLoading}
             disabled={isLoading}
           >
@@ -161,6 +166,13 @@ const ForgotPassword: React.FC = () => {
 };
 
 export default ForgotPassword;
+
+
+
+
+
+
+
 
 
 

@@ -113,9 +113,6 @@ export const antdTheme: ThemeConfig = {
       itemActiveBg: 'rgba(24, 144, 255, 0.15)',
       itemColor: '#262626',
       itemHoverColor: '#1890ff',
-      itemSelectedIconColor: '#ffffff',
-      itemIconColor: '#8c8c8c',
-      itemHoverIconColor: '#1890ff',
     },
     
     // 布局组件
@@ -188,6 +185,13 @@ export const antdDarkTheme: ThemeConfig = {
     colorBorderSecondary: '#303030',
   },
 };
+
+
+
+
+
+
+
 
 
 

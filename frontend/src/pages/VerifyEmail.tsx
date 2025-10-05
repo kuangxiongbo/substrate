@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { useAuthStore } from '../stores/authStore';
+import { useTheme } from '../contexts/ThemeContext';
+import '../styles/login-page.css';
 
 const VerifyEmail: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { verifyEmail, isLoading, error, clearError } = useAuthStore();
+  const { currentTheme } = useTheme();
   
   const [token, setToken] = useState<string>('');
   const [isVerified, setIsVerified] = useState(false);
@@ -46,7 +49,7 @@ const VerifyEmail: React.FC = () => {
   
   if (isVerified) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className={`login-container ${currentTheme?.meta.id || 'light'}-theme`}>
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-success-100">
@@ -63,7 +66,7 @@ const VerifyEmail: React.FC = () => {
             <div className="mt-6">
               <Button
                 onClick={() => navigate('/login')}
-                fullWidth
+                block
               >
                 前往登录页面
               </Button>
@@ -76,7 +79,7 @@ const VerifyEmail: React.FC = () => {
   
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className={`login-container ${currentTheme?.meta.id || 'light'}-theme`}>
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-warning-100">
@@ -106,7 +109,7 @@ const VerifyEmail: React.FC = () => {
   
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className={`login-container ${currentTheme?.meta.id || 'light'}-theme`}>
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-error-100">
@@ -124,7 +127,7 @@ const VerifyEmail: React.FC = () => {
               <Button
                 onClick={handleVerify}
                 loading={isLoading}
-                fullWidth
+                block
               >
                 重试验证
               </Button>
@@ -164,6 +167,13 @@ const VerifyEmail: React.FC = () => {
 };
 
 export default VerifyEmail;
+
+
+
+
+
+
+
 
 
 

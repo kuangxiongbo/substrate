@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
               <p className="text-gray-600">欢迎回来，{user.email}</p>
             </div>
             <Button
-              variant="secondary"
+              type="default"
               onClick={handleLogout}
               loading={isLoading}
             >
@@ -134,16 +134,16 @@ const Dashboard: React.FC = () => {
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg leading-6 font-medium text-gray-900">快速操作</h3>
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <Button variant="secondary" fullWidth>
+                  <Button type="default" block>
                     修改密码
                   </Button>
-                  <Button variant="secondary" fullWidth>
+                  <Button type="default" block>
                     导出数据
                   </Button>
-                  <Button variant="secondary" fullWidth>
+                  <Button type="default" block>
                     安全设置
                   </Button>
-                  <Button variant="error" fullWidth>
+                  <Button type="primary" danger block>
                     删除账户
                   </Button>
                 </div>
@@ -192,6 +192,13 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+
+
+
+
+
+
+
 
 
 

@@ -190,3 +190,127 @@
   /* 动态宽度通过内联样式控制 */
   transition: width 0.3s ease;
 }
+
+/* 密码强度文字颜色 */
+.password-strength-text.strength-very-weak {
+  color: var(--color-error);
+}
+
+.password-strength-text.strength-weak {
+  color: var(--color-warning);
+}
+
+.password-strength-text.strength-medium {
+  color: var(--color-warning);
+}
+
+.password-strength-text.strength-strong {
+  color: var(--color-success);
+}
+
+.password-strength-text.strength-very-strong {
+  color: var(--color-success);
+}
+
+/* 密码强度条背景色 */
+.password-strength-bar.strength-very-weak {
+  background-color: var(--color-error) !important;
+}
+
+.password-strength-bar.strength-weak {
+  background-color: var(--color-warning) !important;
+}
+
+.password-strength-bar.strength-medium {
+  background-color: var(--color-warning) !important;
+}
+
+.password-strength-bar.strength-strong {
+  background-color: var(--color-success) !important;
+}
+
+.password-strength-bar.strength-very-strong {
+  background-color: var(--color-success) !important;
+}
+
+/* 404页面样式 */
+.not-found-page {
+  background-color: var(--color-bg-container);
+}
+
+.not-found-page .max-w-md {
+  background-color: var(--color-bg-container);
+  color: var(--color-text);
+}
+
+.not-found-page .bg-gray-100 {
+  background-color: var(--color-fill-quaternary);
+}
+
+.not-found-page .text-gray-400 {
+  color: var(--color-text-tertiary);
+}
+
+.not-found-page .text-gray-900 {
+  color: var(--color-text);
+}
+
+.not-found-page .text-gray-600 {
+  color: var(--color-text-secondary);
+}
+
+.not-found-page .text-gray-500 {
+  color: var(--color-text-tertiary);
+}
+
+/* 验证码组件样式 */
+.captcha-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.captcha-input-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+}
+
+.captcha-input {
+  flex: 1;
+  min-width: 120px;
+}
+
+.captcha-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.captcha-image-container {
+  width: 120px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--color-bg-container);
+}
+
+.captcha-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.captcha-refresh-btn {
+  width: 120px;
+  font-size: var(--font-size-xs);
+}
+
+.captcha-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  text-align: center;
+}

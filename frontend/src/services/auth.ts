@@ -63,9 +63,9 @@ interface ChangePasswordData {
   new_password: string;
 }
 
-interface VerifyEmailData {
-  token: string;
-}
+// interface VerifyEmailData {
+//   token: string;
+// }
 
 interface PasswordPolicy {
   level: 'basic' | 'high';

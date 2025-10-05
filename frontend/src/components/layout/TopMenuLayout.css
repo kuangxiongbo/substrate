@@ -6,27 +6,17 @@
 .top-menu-layout {
   height: 100vh;
   overflow: hidden;
+  background: var(--color-bg-layout);
 }
 
 .top-header {
-  background: #001529;
+  background: var(--color-bg-container);
   padding: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--box-shadow);
   z-index: 100;
   height: 64px;
   line-height: 64px;
-}
-
-/* 浅色主题下的顶部头部 */
-.top-header.light-theme {
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-/* 深色主题下的顶部头部 */
-.top-header.dark-theme {
-  background: #001529;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .header-content {
@@ -34,9 +24,10 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
+  width: 100%;
+  margin: 0;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 
 .header-left {
@@ -52,27 +43,18 @@
 }
 
 .logo-text {
-  color: white;
+  color: var(--color-text);
   font-size: 20px;
   font-weight: bold;
   white-space: nowrap;
-}
-
-/* 浅色主题下的Logo文字 */
-.top-header.light-theme .logo-text {
-  color: #1f1f1f;
-}
-
-/* 深色主题下的Logo文字 */
-.top-header.dark-theme .logo-text {
-  color: white;
 }
 
 .header-center {
   flex: 1;
   display: flex;
   justify-content: center;
-  margin: 0 24px;
+  margin: 0 16px;
+  min-width: 0;
 }
 
 .top-menu {
@@ -97,30 +79,30 @@
 /* 头部右侧样式已移至 menu-theme.css */
 
 .top-content {
-  background: #f0f2f5;
-  margin: 24px;
-  padding: 24px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: auto;
-  min-height: calc(100vh - 112px);
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden; /* 防止整体滚动 */
+  height: calc(100vh - 64px); /* 固定高度 */
+  border: none;
 }
 
 /* 响应式设计 */
 @media (max-width: 1200px) {
   .header-content {
-    padding: 0 16px;
+    padding: 0 12px;
   }
   
   .header-center {
-    margin: 0 16px;
+    margin: 0 12px;
   }
 }
 
 @media (max-width: 768px) {
   .header-content {
-    padding: 0 12px;
+    padding: 0 8px;
   }
   
   .header-center {
@@ -128,9 +110,9 @@
   }
   
   .top-content {
-    margin: 16px;
-    padding: 16px;
-    min-height: calc(100vh - 80px);
+    margin: 0;
+    padding: 0;
+    height: calc(100vh - 64px);
   }
   
   .user-details {
@@ -168,18 +150,22 @@
 
 /* 下拉菜单样式 */
 .ant-dropdown-menu {
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  background: var(--color-bg-container);
+  border: 1px solid var(--color-border);
 }
 
 .ant-dropdown-menu-item {
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
   margin: 2px 4px;
+  color: var(--color-text);
 }
 
 .ant-dropdown-menu-item:hover {
-  background: #f5f5f5;
+  background: var(--color-fill-quaternary);
+  color: var(--color-primary);
 }
 
 /* 滚动条样式 */
@@ -188,17 +174,17 @@
 }
 
 .top-content::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--color-fill-quaternary);
   border-radius: 3px;
 }
 
 .top-content::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: var(--color-border);
   border-radius: 3px;
 }
 
 .top-content::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--color-text-tertiary);
 }
 
 /* 动画效果 */
@@ -214,6 +200,16 @@
 .notification-btn {
   transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

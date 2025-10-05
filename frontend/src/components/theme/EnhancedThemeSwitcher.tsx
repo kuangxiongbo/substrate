@@ -37,7 +37,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
     setPreviewTheme(themeName);
     
     // 临时应用主题
-    const tempTheme = availableThemes.find(t => t.id === themeName);
+    const tempTheme = availableThemes.find((t: any) => t.id === themeName);
     if (tempTheme) {
       // 这里可以临时应用主题样式
       document.documentElement.className = `theme-${themeName}`;
@@ -47,7 +47,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
     setTimeout(() => {
       setIsPreviewMode(false);
       setPreviewTheme(null);
-      document.documentElement.className = `theme-${currentTheme.id}`;
+      document.documentElement.className = `theme-${(currentTheme as any)?.id}`;
     }, 3000);
   };
 
@@ -121,11 +121,11 @@ const EnhancedThemeSwitcher: React.FC = () => {
           <div className="theme-status-info">
             <Space>
               <span className="theme-type-badge">
-                {getThemeIcon(currentTheme.id)}
-                {currentTheme.displayName}
+                {getThemeIcon((currentTheme as any)?.id)}
+                {(currentTheme as any)?.displayName || (currentTheme as any)?.name || '当前主题'}
               </span>
               <Text type="secondary">
-                {getThemeDescription(currentTheme.id)}
+                {getThemeDescription((currentTheme as any)?.id)}
               </Text>
             </Space>
           </div>
@@ -139,24 +139,24 @@ const EnhancedThemeSwitcher: React.FC = () => {
           <Text type="secondary">选择您偏好的界面主题</Text>
           
           <Radio.Group
-            value={currentTheme.name}
+            value={(currentTheme as any)?.name || (currentTheme as any)?.id}
             onChange={handleThemeChange}
             className="theme-options theme-options-container"
           >
             <Space direction="vertical" size="middle" className="theme-options-space">
-              {availableThemes.map((theme) => (
-                <Radio key={theme.name} value={theme.name} className="theme-option">
+              {availableThemes.map((theme: any) => (
+                <Radio key={theme.id || theme.name} value={theme.id || theme.name} className="theme-option">
                   <div className="theme-option-content">
                     <Space>
                       <div className="theme-option-icon">
-                        {getThemeIcon(theme.name)}
+                        {getThemeIcon(theme.id || theme.name)}
                       </div>
                       <div className="theme-option-details">
                         <div className="theme-option-title">
-                          {theme.displayName}
+                          {theme.displayName || theme.name || theme.id}
                         </div>
                         <Text type="secondary" className="theme-option-description">
-                          {getThemeDescription(theme.name)}
+                          {getThemeDescription(theme.id || theme.name)}
                         </Text>
                       </div>
                     </Space>
@@ -166,7 +166,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
                           type="text" 
                           icon={<EyeOutlined />} 
                           size="small"
-                          onClick={() => handlePreview(theme.name)}
+                          onClick={() => handlePreview(theme.id || theme.name)}
                         />
                       </Tooltip>
                     </div>
@@ -231,7 +231,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
                     <Text>自定义主色调</Text>
                     <ColorPicker 
                       size="small" 
-                      defaultValue="#1890ff"
+                      defaultValue="var(--color-primary)"
                       showText
                     />
                   </Space>
@@ -248,7 +248,7 @@ const EnhancedThemeSwitcher: React.FC = () => {
         {isPreviewMode && previewTheme && (
           <div className="preview-mode-tip">
             <Text type="warning">
-              <EyeOutlined /> 正在预览 {availableThemes.find(t => t.name === previewTheme)?.displayName} 主题，3秒后自动退出
+              <EyeOutlined /> 正在预览 {(availableThemes.find((t: any) => t.id === previewTheme || t.name === previewTheme) as any)?.displayName || previewTheme} 主题，3秒后自动退出
             </Text>
           </div>
         )}

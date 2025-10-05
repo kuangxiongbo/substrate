@@ -1,79 +1,107 @@
 /**
- * 系统设置页面 - 多Tab页面统一管理所有系统配置
+ * 系统设置页面 - 使用统一布局组件
  */
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  Tabs,
-  Card,
-  Typography,
-  Space,
-  Button,
-  theme,
-} from 'antd';
 import {
   GlobalOutlined,
   TeamOutlined,
   SecurityScanOutlined,
   MailOutlined,
   LayoutOutlined,
-  ArrowLeftOutlined,
   MonitorOutlined,
+  DatabaseOutlined,
+  FileTextOutlined,
+  FolderOutlined,
+  BellOutlined,
 } from '@ant-design/icons';
-import { motion } from 'framer-motion';
+// import { useTheme } from '../contexts/ThemeContext';
+import ContentPageLayout, { type TabItem } from '../components/layout/ContentPageLayout';
 import BasicConfigPage from './settings/BasicConfigPage';
 import AdminManagementPage from './settings/AdminManagementPage';
 import SecurityConfigPage from './settings/SecurityConfigPage';
 import EmailConfigPage from './settings/EmailConfigPage';
 import LayoutConfigPage from './settings/LayoutConfigPage';
 import MonitoringPage from './settings/MonitoringPage';
-import '../styles/settings-pages.css';
-
-const { TabPane } = Tabs;
-const { Title } = Typography;
+import SystemMonitoringPage from './SystemMonitoringPage';
+import DataBackupPage from './DataBackupPage';
+import SystemLogsPage from './SystemLogsPage';
+import FileManagerPage from './FileManagerPage';
+import NotificationCenterPage from './NotificationCenterPage';
 
 const SystemSettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('basic');
   const navigate = useNavigate();
   const location = useLocation();
-  const { token } = theme.useToken();
+  // const { currentTheme } = useTheme();
 
-  const settingsTabs = [
+  // 定义Tab配置
+  const settingsTabs: TabItem[] = [
     {
       key: 'basic',
       icon: <GlobalOutlined />,
       label: '基础配置',
-      component: <BasicConfigPage />,
+      content: <BasicConfigPage />,
     },
     {
       key: 'admin',
       icon: <TeamOutlined />,
       label: '管理员管理',
-      component: <AdminManagementPage />,
+      content: <AdminManagementPage />,
     },
     {
       key: 'security',
       icon: <SecurityScanOutlined />,
       label: '安全配置',
-      component: <SecurityConfigPage />,
+      content: <SecurityConfigPage />,
     },
     {
       key: 'email',
       icon: <MailOutlined />,
       label: '邮箱配置',
-      component: <EmailConfigPage />,
+      content: <EmailConfigPage />,
     },
     {
       key: 'layout',
       icon: <LayoutOutlined />,
       label: '布局配置',
-      component: <LayoutConfigPage />,
+      content: <LayoutConfigPage />,
     },
     {
       key: 'monitoring',
       icon: <MonitorOutlined />,
       label: '样式监控',
-      component: <MonitoringPage />,
+      content: <MonitoringPage />,
+    },
+    {
+      key: 'system-monitoring',
+      icon: <MonitorOutlined />,
+      label: '系统监控',
+      content: <SystemMonitoringPage />,
+    },
+    {
+      key: 'data-backup',
+      icon: <DatabaseOutlined />,
+      label: '数据备份',
+      content: <DataBackupPage />,
+    },
+    {
+      key: 'system-logs',
+      icon: <FileTextOutlined />,
+      label: '系统日志',
+      content: <SystemLogsPage />,
+    },
+    {
+      key: 'file-manager',
+      icon: <FolderOutlined />,
+      label: '文件管理',
+      content: <FileManagerPage />,
+    },
+    {
+      key: 'notifications',
+      icon: <BellOutlined />,
+      label: '通知中心',
+      content: <NotificationCenterPage />,
     },
   ];
 
@@ -98,65 +126,26 @@ const SystemSettingsPage: React.FC = () => {
       else if (path.includes('/email')) setActiveTab('email');
       else if (path.includes('/layout')) setActiveTab('layout');
       else if (path.includes('/monitoring')) setActiveTab('monitoring');
+      else if (path.includes('/system-monitoring')) setActiveTab('system-monitoring');
+      else if (path.includes('/data-backup')) setActiveTab('data-backup');
+      else if (path.includes('/system-logs')) setActiveTab('system-logs');
+      else if (path.includes('/file-manager')) setActiveTab('file-manager');
+      else if (path.includes('/notifications')) setActiveTab('notifications');
       else setActiveTab('basic');
     }
   }, [location]);
 
   return (
-    <div className="settings-page">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* 页面头部 */}
-        <Card className="settings-header-card">
-          <Space align="center">
-            <Button
-              type="text"
-              icon={<ArrowLeftOutlined />}
-              onClick={() => navigate('/overview')}
-              className="settings-back-button"
-            >
-              返回概览
-            </Button>
-            <Title level={2} className="settings-page-main-title">
-              系统设置
-            </Title>
-          </Space>
-        </Card>
-
-        {/* Tab页面内容 */}
-        <Card className="settings-content">
-          <Tabs
-            activeKey={activeTab}
-            onChange={handleTabChange}
-            size="large"
-            tabBarStyle={{ marginBottom: 24 }}
-          >
-            {settingsTabs.map(tab => (
-              <TabPane
-                tab={
-                  <span>
-                    {tab.icon}
-                    {tab.label}
-                  </span>
-                }
-                key={tab.key}
-              >
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {tab.component}
-                </motion.div>
-              </TabPane>
-            ))}
-          </Tabs>
-        </Card>
-      </motion.div>
-    </div>
+    <ContentPageLayout
+      mode="tabs"
+      tabs={settingsTabs}
+      activeTab={activeTab}
+      onTabChange={handleTabChange}
+      helpCenterUrl="/help/system-settings"
+      helpCenterVisible={true}
+    >
+      {/* Tab内容由tabs配置提供 */}
+    </ContentPageLayout>
   );
 };
 

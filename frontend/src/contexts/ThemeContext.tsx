@@ -3,7 +3,7 @@
  * 基于Spec-Kit方法实现的主题状态管理
  */
 
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { ConfigProvider } from 'antd';
 import { 
   getTheme,
@@ -21,6 +21,7 @@ export interface ThemeContextType {
   availableThemes: ThemePackageConfig[];
   setTheme: (themeName: string) => void;
   toggleTheme: () => void;
+  switchTheme: (themeName: string) => void;
   isDarkMode: boolean;
   isLoading: boolean;
 }
@@ -206,6 +207,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     availableThemes,
     setTheme,
     toggleTheme,
+    switchTheme: setTheme,
     isDarkMode: currentTheme?.meta.id === 'dark',
     isLoading,
   };
@@ -240,6 +242,13 @@ export const useTheme = (): ThemeContextType => {
 };
 
 // 主题配置已从 antd-themes.ts 导出
+
+
+
+
+
+
+
 
 
 

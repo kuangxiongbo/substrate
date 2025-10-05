@@ -1,25 +1,21 @@
 /**
  * 概览页面 - 系统总览和统计信息
  */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Row,
   Col,
   Card,
   Statistic,
   Progress,
-  Table,
-  Tag,
   Space,
   Typography,
-  Avatar,
-  List,
   Timeline,
+  message,
 } from 'antd';
 import {
   UserOutlined,
   SafetyCertificateOutlined,
-  MailOutlined,
   FileTextOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -27,66 +23,117 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import { useAuthStore } from '../stores/authStore';
+import { useTheme } from '../contexts/ThemeContext';
 import '../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 
+interface SystemStats {
+  total_users: number;
+  active_users: number;
+  total_roles: number;
+  total_permissions: number;
+  total_configs: number;
+}
+
+interface RecentActivity {
+  time: string;
+  user: string;
+  action: string;
+  status: 'success' | 'error';
+}
+
 const OverviewPage: React.FC = () => {
-  // 模拟数据
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<SystemStats | null>(null);
+  const { user } = useAuthStore();
+  const { currentTheme } = useTheme();
+
+  useEffect(() => {
+    loadSystemStats();
+  }, []);
+
+  const loadSystemStats = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/v1/admin/stats', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setStats(data);
+    } catch (error) {
+      console.error('加载系统统计失败:', error);
+      message.error('加载系统统计失败，请重试');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 基于真实数据构建统计信息
   const systemStats = [
     {
       title: '总用户数',
-      value: 1234,
+      value: stats?.total_users || 0,
       icon: <UserOutlined className="overview-stat-icon-blue" />,
       trend: '+12%',
       trendUp: true,
     },
     {
       title: '活跃用户',
-      value: 856,
+      value: stats?.active_users || 0,
       icon: <CheckCircleOutlined className="overview-stat-icon-green" />,
       trend: '+8%',
       trendUp: true,
     },
     {
-      title: '安全事件',
-      value: 23,
+      title: '系统角色',
+      value: stats?.total_roles || 0,
       icon: <SafetyCertificateOutlined className="overview-stat-icon-orange" />,
-      trend: '-15%',
-      trendUp: false,
+      trend: '0%',
+      trendUp: true,
     },
     {
-      title: '系统日志',
-      value: 15420,
+      title: '系统配置',
+      value: stats?.total_configs || 0,
       icon: <FileTextOutlined className="overview-stat-icon-purple" />,
       trend: '+5%',
       trendUp: true,
     },
   ];
 
-  const recentActivities = [
+  // 模拟最近活动（暂时使用模拟数据，因为需要专门的日志API）
+  const recentActivities: RecentActivity[] = [
     {
-      time: '2024-01-15 14:30',
-      user: 'admin@system.com',
-      action: '修改系统配置',
+      time: new Date().toISOString(),
+      user: user?.email || 'admin@system.com',
+      action: '查看系统概览',
       status: 'success',
     },
     {
-      time: '2024-01-15 14:25',
-      user: 'user@example.com',
+      time: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+      user: user?.email || 'admin@system.com',
+      action: '加载统计信息',
+      status: 'success',
+    },
+    {
+      time: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+      user: user?.email || 'admin@system.com',
+      action: '系统初始化',
+      status: 'success',
+    },
+    {
+      time: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+      user: user?.email || 'admin@system.com',
       action: '登录系统',
-      status: 'success',
-    },
-    {
-      time: '2024-01-15 14:20',
-      user: 'test@example.com',
-      action: '登录失败',
-      status: 'error',
-    },
-    {
-      time: '2024-01-15 14:15',
-      user: 'admin@system.com',
-      action: '创建新用户',
       status: 'success',
     },
   ];
@@ -99,54 +146,12 @@ const OverviewPage: React.FC = () => {
   ];
 
   return (
-    <div className="overview-page">
+    <div className={`overview-page ${currentTheme?.meta.id || 'light'}-theme`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Title level={2} className="overview-page-title">
-          系统概览
-        </Title>
-
-        {/* 统计卡片 */}
-        <Row gutter={[24, 24]} className="overview-stats-section">
-          {systemStats.map((stat, index) => (
-            <Col xs={24} sm={12} lg={6} key={index}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card
-                  hoverable
-                  className="overview-card"
-                >
-                  <Statistic
-                    title={stat.title}
-                    value={stat.value}
-                    prefix={stat.icon}
-                    suffix={
-                      <Space>
-                        {stat.trendUp ? (
-                          <ArrowUpOutlined className="overview-trend-up" />
-                        ) : (
-                          <ArrowDownOutlined className="overview-trend-down" />
-                        )}
-                        <Text
-                          type={stat.trendUp ? 'success' : 'danger'}
-                          className="overview-trend-text"
-                        >
-                          {stat.trend}
-                        </Text>
-                      </Space>
-                    }
-                  />
-                </Card>
-              </motion.div>
-            </Col>
-          ))}
-        </Row>
 
         <Row gutter={[24, 24]}>
           {/* 系统健康状态 */}
@@ -171,10 +176,10 @@ const OverviewPage: React.FC = () => {
                         percent={item.value}
                         strokeColor={
                           item.status === 'excellent'
-                            ? '#52c41a'
+                            ? 'var(--color-success)'
                             : item.status === 'normal'
-                            ? '#1890ff'
-                            : '#faad14'
+                            ? 'var(--color-primary)'
+                            : 'var(--color-warning)'
                         }
                         showInfo={false}
                       />
@@ -228,6 +233,12 @@ const OverviewPage: React.FC = () => {
 };
 
 export default OverviewPage;
+
+
+
+
+
+
 
 
 

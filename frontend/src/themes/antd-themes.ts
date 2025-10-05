@@ -9,12 +9,12 @@ import {
   purple, 
   cyan, 
   green, 
-  magenta, 
+  // magenta, 
   red, 
-  volcano, 
-  orange, 
+  // volcano, 
+  // orange, 
   gold, 
-  lime 
+  // lime 
 } from '@ant-design/colors';
 
 // 完整的主题类型定义
@@ -939,6 +939,13 @@ export const getThemeByName = (name: string): AntdThemeConfig | undefined => {
 export const getDefaultTheme = (): AntdThemeConfig => {
   return lightTheme;
 };
+
+
+
+
+
+
+
 
 
 

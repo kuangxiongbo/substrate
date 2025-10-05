@@ -79,7 +79,7 @@ export class ThemePackageAutoDiscovery {
       }
 
       // 动态导入主题包
-      const module = await import(packagePath);
+        const module = await import(/* @vite-ignore */ packagePath);
       
       if (!module.default) {
         throw new Error(`Theme package '${packageId}' does not export a default configuration`);
@@ -173,6 +173,13 @@ export class ThemePackageAutoDiscovery {
 
 // 导出单例实例
 export const themePackageAutoDiscovery = ThemePackageAutoDiscovery.getInstance();
+
+
+
+
+
+
+
 
 
 

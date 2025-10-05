@@ -63,26 +63,26 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
       )}
       
       <Select
-        value={currentTheme.name}
+        value={(currentTheme as any)?.name}
         onChange={handleThemeChange}
         size={size}
         className="theme-switcher-select"
         suffixIcon={<BgColorsOutlined />}
       >
-        {availableThemes.map((theme) => (
-          <Option key={theme.name} value={theme.name}>
+        {availableThemes.map((theme: any) => (
+          <Option key={theme.id || theme.name} value={theme.id || theme.name}>
             <Space>
-              {getThemeIcon(theme.name)}
-              <span>{theme.displayName}</span>
+              {getThemeIcon(theme.id || theme.name)}
+              <span>{theme.displayName || theme.name}</span>
             </Space>
           </Option>
         ))}
       </Select>
       
-      {currentTheme.description && (
-        <Tooltip title={currentTheme.description} placement="bottom">
+      {(currentTheme as any)?.description && (
+        <Tooltip title={(currentTheme as any).description} placement="bottom">
           <Text type="secondary" className="theme-switcher-description">
-            {getThemeDescription(currentTheme.name)}
+            {getThemeDescription((currentTheme as any)?.name || (currentTheme as any)?.id)}
           </Text>
         </Tooltip>
       )}

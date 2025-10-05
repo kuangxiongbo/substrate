@@ -1,322 +1,138 @@
 """
-Custom Validators
-Email validation (RFC 5322) and password policy validation
+验证工具模块
 """
 import re
-from typing import Tuple, List, Optional
-from email_validator import validate_email, EmailNotValidError
+from typing import Dict, List, Any
 
-from src.config import settings
-
-
-# ============================================================================
-# Email Validation
-# ============================================================================
-
-def validate_email_format(email: str) -> Tuple[bool, str]:
-    """
-    Validate email address according to RFC 5322
-    
-    Args:
-        email: Email address to validate
-        
-    Returns:
-        Tuple of (is_valid: bool, normalized_email: str)
-        
-    Example:
-        >>> is_valid, normalized = validate_email_format("User@Example.COM")
-        >>> is_valid
-        True
-        >>> normalized
-        'user@example.com'
-    """
-    try:
-        # Validate and normalize email
-        email_info = validate_email(email, check_deliverability=False)
-        normalized_email = email_info.normalized
-        return True, normalized_email
-    except EmailNotValidError as e:
-        return False, str(e)
-
+def validate_email_format(email: str) -> bool:
+    """验证邮箱格式"""
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
 
 def is_valid_email(email: str) -> bool:
-    """
-    Quick check if email is valid
-    
-    Args:
-        email: Email address to check
-        
-    Returns:
-        True if valid, False otherwise
-    """
-    is_valid, _ = validate_email_format(email)
-    return is_valid
+    """检查邮箱是否有效"""
+    return validate_email_format(email)
 
-
-# ============================================================================
-# Password Policy Validation
-# ============================================================================
-
-# Password policy configurations (from FR-003, FR-004)
-PASSWORD_POLICIES = {
-    "basic": {
+def get_password_policy() -> Dict[str, Any]:
+    """获取密码策略"""
+    return {
         "min_length": 8,
         "require_uppercase": True,
         "require_lowercase": True,
-        "require_digit": True,
-        "require_special": False,
-        "description": "Password must be at least 8 characters with uppercase, lowercase, and digit"
-    },
-    "high": {
-        "min_length": 12,
-        "require_uppercase": True,
-        "require_lowercase": True,
-        "require_digit": True,
-        "require_special": True,
-        "description": "Password must be at least 12 characters with uppercase, lowercase, digit, and special character"
+        "require_digits": True,
+        "require_special_chars": False,
+        "max_length": 128
     }
-}
 
-
-def get_password_policy(level: Optional[str] = None) -> dict:
-    """
-    Get password policy configuration
+def validate_password_policy(password: str, policy: Dict[str, Any] = None) -> Dict[str, Any]:
+    """验证密码是否符合策略"""
+    if policy is None:
+        policy = get_password_policy()
     
-    Args:
-        level: Policy level ('basic' or 'high'), defaults to settings
-        
-    Returns:
-        Policy configuration dict
-    """
-    if level is None:
-        level = settings.PASSWORD_POLICY_LEVEL
+    result = {
+        "valid": True,
+        "errors": []
+    }
     
-    return PASSWORD_POLICIES.get(level, PASSWORD_POLICIES["basic"])
-
-
-def validate_password_policy(password: str, level: Optional[str] = None) -> Tuple[bool, List[str]]:
-    """
-    Validate password against current policy
-    
-    Args:
-        password: Password to validate
-        level: Policy level to check against (defaults to settings)
-        
-    Returns:
-        Tuple of (is_valid: bool, violations: List[str])
-        
-    Example:
-        >>> is_valid, violations = validate_password_policy("weak")
-        >>> is_valid
-        False
-        >>> violations
-        ['Password must be at least 8 characters', 'Must contain uppercase letter']
-    """
-    policy = get_password_policy(level)
-    violations = []
-    
-    # Check minimum length
     if len(password) < policy["min_length"]:
-        violations.append(f"Password must be at least {policy['min_length']} characters long")
+        result["valid"] = False
+        result["errors"].append(f"密码长度至少{policy['min_length']}位")
     
-    # Check uppercase requirement
+    if len(password) > policy["max_length"]:
+        result["valid"] = False
+        result["errors"].append(f"密码长度不能超过{policy['max_length']}位")
+    
     if policy["require_uppercase"] and not re.search(r'[A-Z]', password):
-        violations.append("Password must contain at least one uppercase letter")
+        result["valid"] = False
+        result["errors"].append("密码必须包含大写字母")
     
-    # Check lowercase requirement
     if policy["require_lowercase"] and not re.search(r'[a-z]', password):
-        violations.append("Password must contain at least one lowercase letter")
+        result["valid"] = False
+        result["errors"].append("密码必须包含小写字母")
     
-    # Check digit requirement
-    if policy["require_digit"] and not re.search(r'\d', password):
-        violations.append("Password must contain at least one digit")
+    if policy["require_digits"] and not re.search(r'\d', password):
+        result["valid"] = False
+        result["errors"].append("密码必须包含数字")
     
-    # Check special character requirement
-    if policy["require_special"] and not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-        violations.append("Password must contain at least one special character (!@#$%^&*...)")
+    if policy["require_special_chars"] and not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        result["valid"] = False
+        result["errors"].append("密码必须包含特殊字符")
     
-    is_valid = len(violations) == 0
-    return is_valid, violations
+    return result
 
-
-def check_password_strength(password: str) -> dict:
-    """
-    Check password strength and provide feedback
-    
-    Args:
-        password: Password to analyze
-        
-    Returns:
-        Dict with strength score, rating, and feedback
-        
-    Example:
-        >>> result = check_password_strength("SecurePass123!")
-        >>> result["strength"]
-        'strong'
-        >>> result["score"]
-        85
-    """
+def check_password_strength(password: str) -> Dict[str, Any]:
+    """检查密码强度"""
     score = 0
     feedback = []
     
-    # Length scoring
-    length = len(password)
-    if length >= 12:
-        score += 25
-    elif length >= 10:
-        score += 20
-    elif length >= 8:
-        score += 15
+    if len(password) >= 8:
+        score += 1
     else:
-        feedback.append("Use at least 8 characters")
-        score += length * 2
+        feedback.append("密码长度至少8位")
     
-    # Character variety scoring
-    has_upper = bool(re.search(r'[A-Z]', password))
-    has_lower = bool(re.search(r'[a-z]', password))
-    has_digit = bool(re.search(r'\d', password))
-    has_special = bool(re.search(r'[!@#$%^&*(),.?":{}|<>]', password))
-    
-    if has_upper:
-        score += 15
+    if re.search(r'[a-z]', password):
+        score += 1
     else:
-        feedback.append("Add uppercase letters")
+        feedback.append("包含小写字母")
     
-    if has_lower:
-        score += 15
+    if re.search(r'[A-Z]', password):
+        score += 1
     else:
-        feedback.append("Add lowercase letters")
+        feedback.append("包含大写字母")
     
-    if has_digit:
-        score += 15
+    if re.search(r'\d', password):
+        score += 1
     else:
-        feedback.append("Add numbers")
+        feedback.append("包含数字")
     
-    if has_special:
-        score += 20
+    if re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        score += 1
     else:
-        feedback.append("Add special characters (!@#$%...)")
+        feedback.append("包含特殊字符")
     
-    # Bonus for length > 14
-    if length > 14:
-        score += 10
-    
-    # Cap score at 100
-    score = min(score, 100)
-    
-    # Determine strength rating
-    if score >= 80:
-        strength = "strong"
-        feedback = ["Password is strong!"] if not feedback else feedback
-    elif score >= 60:
-        strength = "medium"
-    else:
-        strength = "weak"
-    
-    # Check against current policy
-    is_valid, violations = validate_password_policy(password)
+    strength_levels = ["很弱", "弱", "中等", "强", "很强"]
+    strength = strength_levels[min(score, 4)]
     
     return {
         "score": score,
         "strength": strength,
-        "feedback": feedback,
-        "meets_policy": is_valid,
-        "policy_violations": violations
+        "feedback": feedback
     }
 
-
-# ============================================================================
-# Common Password Checks
-# ============================================================================
-
-# Common weak passwords to reject
-COMMON_WEAK_PASSWORDS = {
-    "password", "password123", "123456", "12345678", "qwerty",
-    "abc123", "monkey", "1234567", "letmein", "trustno1",
-    "dragon", "baseball", "111111", "iloveyou", "master",
-    "sunshine", "ashley", "bailey", "passw0rd", "shadow"
-}
-
-
 def is_common_password(password: str) -> bool:
-    """
-    Check if password is a commonly used weak password
-    
-    Args:
-        password: Password to check
-        
-    Returns:
-        True if password is common/weak, False otherwise
-    """
-    return password.lower() in COMMON_WEAK_PASSWORDS
+    """检查是否为常见密码"""
+    common_passwords = [
+        "password", "123456", "123456789", "qwerty", "abc123",
+        "password123", "admin", "letmein", "welcome", "monkey"
+    ]
+    return password.lower() in common_passwords
 
+def contains_email(password: str, email: str = None) -> bool:
+    """检查密码是否包含邮箱信息"""
+    if not email:
+        return False
+    
+    email_parts = email.split('@')[0]
+    return email_parts.lower() in password.lower()
 
-def contains_email(password: str, email: str) -> bool:
-    """
-    Check if password contains parts of the email address
+def validate_password_security(password: str, email: str = None) -> Dict[str, Any]:
+    """综合密码安全检查"""
+    result = {
+        "secure": True,
+        "issues": []
+    }
     
-    Args:
-        password: Password to check
-        email: User's email address
-        
-    Returns:
-        True if password contains email parts, False otherwise
-        
-    Example:
-        >>> contains_email("myname123", "myname@example.com")
-        True
-    """
-    email_local = email.split('@')[0].lower()
-    password_lower = password.lower()
-    
-    # Check if email local part (before @) is in password
-    if len(email_local) >= 3 and email_local in password_lower:
-        return True
-    
-    return False
-
-
-def validate_password_security(password: str, email: Optional[str] = None) -> Tuple[bool, List[str]]:
-    """
-    Comprehensive password security validation
-    
-    Args:
-        password: Password to validate
-        email: User's email (optional, for additional checks)
-        
-    Returns:
-        Tuple of (is_secure: bool, warnings: List[str])
-    """
-    warnings = []
-    
-    # Check against common passwords
     if is_common_password(password):
-        warnings.append("This password is too common and easily guessable")
+        result["secure"] = False
+        result["issues"].append("密码过于常见")
     
-    # Check if password contains email
     if email and contains_email(password, email):
-        warnings.append("Password should not contain your email address")
+        result["secure"] = False
+        result["issues"].append("密码不应包含邮箱信息")
     
-    # Check for repeated characters
-    if re.search(r'(.)\1{2,}', password):
-        warnings.append("Avoid repeating the same character multiple times")
+    strength = check_password_strength(password)
+    if strength["score"] < 3:
+        result["secure"] = False
+        result["issues"].append("密码强度不足")
     
-    # Check for sequential characters
-    if re.search(r'(abc|bcd|cde|def|123|234|345|456|567|678|789)', password.lower()):
-        warnings.append("Avoid sequential characters")
-    
-    is_secure = len(warnings) == 0
-    return is_secure, warnings
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return result

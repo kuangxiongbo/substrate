@@ -15,8 +15,8 @@ import {
   Space,
   Button,
   message,
-  Divider,
-  Alert,
+  // Divider,
+  // Alert,
   Tag,
 } from 'antd';
 import {
@@ -38,10 +38,25 @@ const SecurityConfigPage: React.FC = () => {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/api/v1/admin/configs', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          category: 'security',
+          configs: values
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       message.success('安全配置保存成功！');
     } catch (error) {
+      console.error('保存安全配置失败:', error);
       message.error('保存失败，请重试');
     } finally {
       setLoading(false);
@@ -54,10 +69,6 @@ const SecurityConfigPage: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Title level={3} className="settings-page-title">
-        <SecurityScanOutlined className="settings-page-title-icon" />
-        安全配置
-      </Title>
 
       <Form
         form={form}
@@ -389,6 +400,12 @@ const SecurityConfigPage: React.FC = () => {
 };
 
 export default SecurityConfigPage;
+
+
+
+
+
+
 
 
 

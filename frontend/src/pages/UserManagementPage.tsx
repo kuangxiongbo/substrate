@@ -1,133 +1,162 @@
 /**
- * 用户管理页面
- * 基于Ant Design的用户管理界面
+ * 用户管理页面 - 使用统一布局组件
  */
-import React from 'react';
-import {
-  Card,
-  Table,
-  Button,
-  Space,
-  Tag,
-  Avatar,
-  Typography,
-  Row,
-  Col,
-  Statistic,
-  Input,
-  Select,
-  DatePicker,
-  Form,
-} from 'antd';
-import {
-  UserOutlined,
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  SearchOutlined,
-  ExportOutlined,
-  ImportOutlined,
-  ReloadOutlined,
-} from '@ant-design/icons';
-import '../styles/settings-pages.css';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Space, message, Modal, Form, Input, Select, Tag, Typography } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+// import { useTheme } from '../contexts/ThemeContext';
+import ContentPageLayout, { type ToolbarItem } from '../components/layout/ContentPageLayout';
 
-const { Title, Text } = Typography;
-const { Search } = Input;
+const { Title } = Typography;
+
 const { Option } = Select;
-const { RangePicker } = DatePicker;
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  email_verified: boolean;
+  account_status: string;
+  last_login_timestamp: string;
+}
 
 const UserManagementPage: React.FC = () => {
-  // 模拟用户数据
-  const mockUsers = [
-    {
-      key: '1',
-      id: '1',
-      name: '张三',
-      email: 'zhangsan@example.com',
-      role: '普通用户',
-      status: 'active',
-      lastLogin: '2024-01-15 10:30:00',
-      registrationDate: '2024-01-01',
-      avatar: null,
-    },
-    {
-      key: '2',
-      id: '2',
-      name: '李四',
-      email: 'lisi@example.com',
-      role: '管理员',
-      status: 'active',
-      lastLogin: '2024-01-14 15:45:00',
-      registrationDate: '2024-01-02',
-      avatar: null,
-    },
-    {
-      key: '3',
-      id: '3',
-      name: '王五',
-      email: 'wangwu@example.com',
-      role: '普通用户',
-      status: 'inactive',
-      lastLogin: '2024-01-10 09:20:00',
-      registrationDate: '2024-01-03',
-      avatar: null,
-    },
-  ];
+  // const { currentTheme } = useTheme();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  const loadUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/v1/admin/users', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setUsers(data.users || []);
+      }
+    } catch (error) {
+      console.error('加载用户失败:', error);
+      message.error('加载用户失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddUser = () => {
+    setEditingUser(null);
+    form.resetFields();
+    setModalVisible(true);
+  };
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
+    form.setFieldsValue(user);
+    setModalVisible(true);
+  };
+
+  const handleDeleteUser = async (id: string) => {
+    try {
+      const response = await fetch(`/api/v1/admin/users/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.ok) {
+        message.success('用户删除成功');
+        loadUsers();
+      }
+    } catch (error) {
+      console.error('删除用户失败:', error);
+      message.error('删除用户失败');
+    }
+  };
+
+  const handleModalOk = async () => {
+    try {
+      const values = await form.validateFields();
+      
+      const response = await fetch(
+        editingUser ? `/api/v1/admin/users/${editingUser.id}` : '/api/v1/admin/users',
+        {
+          method: editingUser ? 'PUT' : 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(values)
+        }
+      );
+      
+      if (response.ok) {
+        message.success(editingUser ? '用户更新成功' : '用户创建成功');
+        setModalVisible(false);
+        loadUsers();
+      }
+    } catch (error) {
+      console.error('保存用户失败:', error);
+      message.error('保存用户失败');
+    }
+  };
 
   const columns = [
     {
-      title: '用户',
+      title: '邮箱',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: '姓名',
       dataIndex: 'name',
       key: 'name',
-      render: (text: string, record: any) => (
-        <Space>
-          <Avatar icon={<UserOutlined />} />
-          <div>
-            <div>{text}</div>
-            <Text type="secondary">{record.email}</Text>
-          </div>
-        </Space>
-      ),
     },
     {
       title: '角色',
       dataIndex: 'role',
       key: 'role',
       render: (role: string) => (
-        <Tag color={role === '管理员' ? 'blue' : 'default'}>
-          {role}
-        </Tag>
+        <Tag color={role === 'admin' ? 'red' : 'blue'}>{role}</Tag>
       ),
     },
     {
       title: '状态',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'account_status',
+      key: 'account_status',
       render: (status: string) => (
-        <Tag color={status === 'active' ? 'green' : 'red'}>
-          {status === 'active' ? '活跃' : '非活跃'}
-        </Tag>
+        <Tag color={status === 'active' ? 'green' : 'red'}>{status}</Tag>
       ),
-    },
-    {
-      title: '最后登录',
-      dataIndex: 'lastLogin',
-      key: 'lastLogin',
-    },
-    {
-      title: '注册时间',
-      dataIndex: 'registrationDate',
-      key: 'registrationDate',
     },
     {
       title: '操作',
       key: 'action',
-      render: () => (
-        <Space size="middle">
-          <Button type="link" icon={<EditOutlined />} size="small">
+      render: (_: any, record: User) => (
+        <Space>
+          <Button
+            icon={<EditOutlined />}
+            size="small"
+            onClick={() => handleEditUser(record)}
+          >
             编辑
           </Button>
-          <Button type="link" danger icon={<DeleteOutlined />} size="small">
+          <Button
+            icon={<DeleteOutlined />}
+            size="small"
+            danger
+            onClick={() => handleDeleteUser(record.id)}
+          >
             删除
           </Button>
         </Space>
@@ -135,116 +164,93 @@ const UserManagementPage: React.FC = () => {
     },
   ];
 
+  // 定义工具栏
+  const toolbar: ToolbarItem[] = [
+    {
+      key: 'add-user',
+      type: 'button',
+      content: (
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={handleAddUser}
+        >
+          添加用户
+        </Button>
+      ),
+    },
+  ];
+
   return (
-    <div className="settings-page">
-      <Title level={2} className="settings-page-title">用户管理</Title>
-      
-      {/* 统计卡片 */}
-      <Row gutter={16} className="settings-stats-section">
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="总用户数"
-              value={1128}
-              prefix={<UserOutlined />}
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="活跃用户"
-              value={856}
-              valueStyle={{ color: 'var(--color-success)' }}
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="今日新增"
-              value={23}
-              valueStyle={{ color: 'var(--color-primary)' }}
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="在线用户"
-              value={45}
-              valueStyle={{ color: 'var(--color-error)' }}
-            />
-          </Card>
-        </Col>
-      </Row>
-
-      {/* 操作栏 */}
-      <Card className="settings-card">
-        <Row gutter={16} align="middle">
-          <Col flex="auto">
-            <Space wrap>
-              <Search
-                placeholder="搜索用户"
-                allowClear
-                className="user-search-input"
-              />
-              <Select placeholder="角色筛选" className="user-filter-select" allowClear>
-                <Option value="admin">管理员</Option>
-                <Option value="user">普通用户</Option>
-              </Select>
-              <Select placeholder="状态筛选" className="user-filter-select" allowClear>
-                <Option value="active">活跃</Option>
-                <Option value="inactive">非活跃</Option>
-              </Select>
-              <RangePicker placeholder={['开始日期', '结束日期']} />
-            </Space>
-          </Col>
-          <Col>
-            <Space>
-              <Button type="primary" icon={<PlusOutlined />}>
-                新增用户
-              </Button>
-              <Button icon={<ImportOutlined />}>
-                导入
-              </Button>
-              <Button icon={<ExportOutlined />}>
-                导出
-              </Button>
-              <Button icon={<ReloadOutlined />}>
-                刷新
-              </Button>
-            </Space>
-          </Col>
-        </Row>
-      </Card>
-
-      {/* 用户表格 */}
-      <Card>
+    <>
+      <ContentPageLayout
+        mode="simple"
+        toolbar={toolbar}
+        helpCenterUrl="/help/user-management"
+      >
+        
         <Table
           columns={columns}
-          dataSource={mockUsers}
-          pagination={{
-            total: mockUsers.length,
+          dataSource={users}
+          rowKey="id"
+          loading={loading}
+          pagination={{ 
             pageSize: 10,
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) =>
-              `第 ${range[0]}-${range[1]} 条/共 ${total} 条`,
+              `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
           }}
         />
-      </Card>
-    </div>
+      </ContentPageLayout>
+
+      <Modal
+        title={editingUser ? '编辑用户' : '添加用户'}
+        open={modalVisible}
+        onOk={handleModalOk}
+        onCancel={() => setModalVisible(false)}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item
+            name="email"
+            label="邮箱"
+            rules={[{ required: true, type: 'email', message: '请输入有效邮箱' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="姓名"
+            rules={[{ required: true, message: '请输入姓名' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="role"
+            label="角色"
+            rules={[{ required: true, message: '请选择角色' }]}
+          >
+            <Select>
+              <Option value="user">用户</Option>
+              <Option value="admin">管理员</Option>
+              <Option value="super_admin">超级管理员</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="account_status"
+            label="状态"
+            rules={[{ required: true, message: '请选择状态' }]}
+          >
+            <Select>
+              <Option value="active">激活</Option>
+              <Option value="inactive">未激活</Option>
+              <Option value="suspended">已暂停</Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
   );
 };
 
 export default UserManagementPage;
-
-
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
 /**
  * 基础配置页面 - 系统标题、Logo、主题配置
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Form,
   Input,
@@ -25,25 +25,224 @@ import {
   BgColorsOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../contexts/ThemeContext';
 import '../../styles/settings-pages.css';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
+interface ConfigItem {
+  id: string;
+  key: string;
+  value: string;
+  value_type: string;
+  category: string;
+  description?: string;
+  is_encrypted: boolean;
+  is_public: boolean;
+  created_at: string;
+  updated_at?: string;
+}
+
 const BasicConfigPage: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [configs, setConfigs] = useState<ConfigItem[]>([]);
+  const [currentLogo, setCurrentLogo] = useState<string>('/assets/logo.png');
+  const [currentFavicon, setCurrentFavicon] = useState<string>('/assets/favicon.ico');
+  const { currentTheme } = useTheme();
+
+  useEffect(() => {
+    loadConfigs();
+    loadGlobalSettings();
+  }, []);
+
+  // 加载全局设置
+  const loadGlobalSettings = () => {
+    try {
+      // 从localStorage加载已保存的全局设置
+      const systemTitle = localStorage.getItem('systemTitle');
+      const language = localStorage.getItem('systemLanguage');
+      const dateFormat = localStorage.getItem('dateFormat');
+      const timezone = localStorage.getItem('systemTimezone');
+      const systemLogo = localStorage.getItem('systemLogo');
+      const systemFavicon = localStorage.getItem('systemFavicon');
+
+      // 设置默认值
+      const defaultValues: any = {};
+      if (systemTitle) defaultValues.systemTitle = systemTitle;
+      if (language) defaultValues.language = language;
+      if (dateFormat) defaultValues.dateFormat = dateFormat;
+      if (timezone) defaultValues.timezone = timezone;
+      if (systemLogo) defaultValues.logo = systemLogo;
+      if (systemFavicon) defaultValues.favicon = systemFavicon;
+
+      // 更新当前Logo和Favicon状态
+      if (systemLogo) setCurrentLogo(systemLogo);
+      if (systemFavicon) setCurrentFavicon(systemFavicon);
+
+      // 设置表单默认值
+      if (Object.keys(defaultValues).length > 0) {
+        form.setFieldsValue(defaultValues);
+      }
+    } catch (error) {
+      console.error('加载全局设置失败:', error);
+    }
+  };
+
+  const loadConfigs = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/v1/admin/configs?category=basic', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setConfigs(data);
+      
+      // 初始化表单值
+      const formValues: any = {};
+      data.forEach((config: ConfigItem) => {
+        if (config.value_type === 'bool') {
+          formValues[config.key] = config.value === 'true';
+        } else {
+          formValues[config.key] = config.value;
+        }
+        
+        // 更新当前Logo和Favicon状态
+        if (config.key === 'logo') {
+          setCurrentLogo(config.value);
+        }
+        if (config.key === 'favicon') {
+          setCurrentFavicon(config.value);
+        }
+      });
+      form.setFieldsValue(formValues);
+    } catch (error) {
+      console.error('加载基础配置失败:', error);
+      message.error('加载基础配置失败，请重试');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      message.success('基础配置保存成功！');
+      // 批量更新配置
+      const updatePromises = Object.entries(values).map(async ([key, value]) => {
+        const config = configs.find(c => c.key === key);
+        if (!config) return;
+
+        let stringValue = '';
+        if (config.value_type === 'bool') {
+          stringValue = value ? 'true' : 'false';
+        } else {
+          stringValue = value as string;
+        }
+
+        const response = await fetch(`/api/v1/admin/configs/${key}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ value: stringValue })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to update config ${key}`);
+        }
+
+        return response.json();
+      });
+
+      await Promise.all(updatePromises);
+      
+      // 重新加载配置
+      await loadConfigs();
+      
+      // 全局生效处理
+      await applyGlobalSettings(values);
+      
+      message.success('基础配置保存成功！全局设置已生效');
     } catch (error) {
+      console.error('基础配置保存失败:', error);
       message.error('保存失败，请重试');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 应用全局设置
+  const applyGlobalSettings = async (values: any) => {
+    try {
+      // 更新页面标题
+      if (values.systemTitle) {
+        document.title = values.systemTitle;
+        // 更新所有页面的标题
+        localStorage.setItem('systemTitle', values.systemTitle);
+        
+        // 触发系统标题更改事件
+        window.dispatchEvent(new CustomEvent('systemTitleChanged', { 
+          detail: { systemTitle: values.systemTitle } 
+        }));
+      }
+
+      // 更新语言设置
+      if (values.language) {
+        localStorage.setItem('systemLanguage', values.language);
+        // 触发语言切换事件
+        window.dispatchEvent(new CustomEvent('languageChanged', { 
+          detail: { language: values.language } 
+        }));
+      }
+
+      // 更新日期格式
+      if (values.dateFormat) {
+        localStorage.setItem('dateFormat', values.dateFormat);
+        // 触发日期格式切换事件
+        window.dispatchEvent(new CustomEvent('dateFormatChanged', { 
+          detail: { format: values.dateFormat } 
+        }));
+      }
+
+      // 更新时区
+      if (values.timezone) {
+        localStorage.setItem('systemTimezone', values.timezone);
+        // 触发时区切换事件
+        window.dispatchEvent(new CustomEvent('timezoneChanged', { 
+          detail: { timezone: values.timezone } 
+        }));
+      }
+
+      // 更新Logo和Favicon
+      if (values.logo || values.favicon) {
+        // 更新本地状态
+        if (values.logo) {
+          setCurrentLogo(values.logo);
+          localStorage.setItem('systemLogo', values.logo);
+        }
+        if (values.favicon) {
+          setCurrentFavicon(values.favicon);
+          localStorage.setItem('systemFavicon', values.favicon);
+        }
+        
+        // 触发Logo更新事件
+        window.dispatchEvent(new CustomEvent('logoChanged', { 
+          detail: { logo: values.logo, favicon: values.favicon } 
+        }));
+      }
+
+    } catch (error) {
+      console.error('应用全局设置失败:', error);
     }
   };
 
@@ -59,6 +258,17 @@ const BasicConfigPage: React.FC = () => {
       }
       if (info.file.status === 'done') {
         message.success(`${info.file.name} 文件上传成功`);
+        // 更新Logo状态
+        const response = info.file.response;
+        if (response && response.url) {
+          if (info.file.uid.toString().includes('logo')) {
+            setCurrentLogo(response.url);
+            form.setFieldValue('logo', response.url);
+          } else if (info.file.uid.toString().includes('favicon')) {
+            setCurrentFavicon(response.url);
+            form.setFieldValue('favicon', response.url);
+          }
+        }
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败`);
       }
@@ -66,102 +276,60 @@ const BasicConfigPage: React.FC = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <Title level={3} className="settings-page-title">
-        <SettingOutlined className="settings-page-title-icon" />
-        基础配置
-      </Title>
+    <div className={`settings-page ${currentTheme?.meta.id || 'light'}-theme`}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
 
       <Form
         form={form}
         layout="vertical"
         onFinish={onFinish}
-        initialValues={{
-          systemTitle: '管理系统',
-          systemDescription: '现代化管理系统',
-          theme: 'light',
-          language: 'zh-CN',
-          enableDarkMode: false,
-        }}
+        initialValues={{}}
       >
-        <Row gutter={[24, 24]}>
-          {/* 系统信息配置 */}
+        <Row gutter={[16, 16]}>
+          {/* 系统基础配置 */}
           <Col xs={24} lg={12}>
             <Card
               title={
                 <Space>
                   <SettingOutlined />
-                  系统信息
+                  系统基础配置
                 </Space>
               }
               className="settings-card"
             >
               <Form.Item
                 name="systemTitle"
-                label="系统标题"
-                rules={[{ required: true, message: '请输入系统标题' }]}
+                label="系统名称"
+                rules={[{ required: true, message: '请输入系统名称' }]}
+                tooltip="系统名称将显示在页面标题和Logo旁"
               >
-                <Input placeholder="请输入系统标题" />
+                <Input placeholder="请输入系统名称" />
               </Form.Item>
 
-              <Form.Item
-                name="systemDescription"
-                label="系统描述"
-                rules={[{ required: true, message: '请输入系统描述' }]}
-              >
-                <Input.TextArea
-                  rows={3}
-                  placeholder="请输入系统描述"
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="systemVersion"
-                label="系统版本"
-              >
-                <Input placeholder="请输入系统版本" />
-              </Form.Item>
-
-              <Form.Item
-                name="copyright"
-                label="版权信息"
-              >
-                <Input placeholder="请输入版权信息" />
-              </Form.Item>
-            </Card>
-          </Col>
-
-          {/* Logo配置 */}
-          <Col xs={24} lg={12}>
-            <Card
-              title={
-                <Space>
-                  <PictureOutlined />
-                  Logo配置
-                </Space>
-              }
-              className="settings-card"
-            >
-              <Form.Item label="当前Logo">
-                <Space direction="vertical" align="center" className="settings-status-container">
-                  <Avatar
-                    size={80}
-                    icon={<SettingOutlined />}
-                    className="settings-avatar-primary"
-                  />
-                  <Text type="secondary">当前系统Logo</Text>
-                </Space>
-              </Form.Item>
-
-              <Divider />
+              {/* 当前系统信息显示 */}
+              <div className="current-system-info">
+                <div className="info-item">
+                  <Text strong>当前系统名称：</Text>
+                  <Text>{form.getFieldValue('systemTitle') || 'Spec-Kit'}</Text>
+                </div>
+                <div className="info-item">
+                  <Text strong>当前Logo：</Text>
+                  <Text type="secondary">{currentLogo}</Text>
+                </div>
+                <div className="info-item">
+                  <Text strong>当前图标：</Text>
+                  <Text type="secondary">{currentFavicon}</Text>
+                </div>
+              </div>
 
               <Form.Item
                 name="logo"
-                label="上传新Logo"
+                label="Logo"
+                tooltip="系统Logo，建议尺寸 200x60 像素"
               >
                 <Upload {...uploadProps}>
                   <Button icon={<UploadOutlined />}>
@@ -172,7 +340,8 @@ const BasicConfigPage: React.FC = () => {
 
               <Form.Item
                 name="favicon"
-                label="网站图标 (Favicon)"
+                label="图标 (Favicon)"
+                tooltip="网站图标，建议尺寸 32x32 像素"
               >
                 <Upload {...uploadProps}>
                   <Button icon={<UploadOutlined />}>
@@ -183,67 +352,13 @@ const BasicConfigPage: React.FC = () => {
             </Card>
           </Col>
 
-          {/* 主题配置 */}
-          <Col xs={24} lg={12}>
-            <Card
-              title={
-                <Space>
-                  <BgColorsOutlined />
-                  主题配置
-                </Space>
-              }
-              className="settings-card"
-            >
-              <Form.Item
-                name="theme"
-                label="默认主题"
-                rules={[{ required: true, message: '请选择默认主题' }]}
-              >
-                <Select placeholder="请选择默认主题">
-                  <Option value="light">浅色主题</Option>
-                  <Option value="dark">深色主题</Option>
-                  <Option value="auto">跟随系统</Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item
-                name="primaryColor"
-                label="主色调"
-              >
-                <Select placeholder="请选择主色调">
-                  <Option value="#1890ff">蓝色</Option>
-                  <Option value="#52c41a">绿色</Option>
-                  <Option value="#faad14">橙色</Option>
-                  <Option value="#f5222d">红色</Option>
-                  <Option value="#722ed1">紫色</Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item
-                name="enableDarkMode"
-                label="启用深色模式"
-                valuePropName="checked"
-              >
-                <Switch />
-              </Form.Item>
-
-              <Form.Item
-                name="enableAnimation"
-                label="启用动画效果"
-                valuePropName="checked"
-              >
-                <Switch />
-              </Form.Item>
-            </Card>
-          </Col>
-
-          {/* 语言配置 */}
+          {/* 语言与格式配置 */}
           <Col xs={24} lg={12}>
             <Card
               title={
                 <Space>
                   <SettingOutlined />
-                  语言配置
+                  语言与格式配置
                 </Space>
               }
               className="settings-card"
@@ -252,6 +367,7 @@ const BasicConfigPage: React.FC = () => {
                 name="language"
                 label="默认语言"
                 rules={[{ required: true, message: '请选择默认语言' }]}
+                tooltip="系统默认显示语言，全局生效"
               >
                 <Select placeholder="请选择默认语言">
                   <Option value="zh-CN">简体中文</Option>
@@ -262,26 +378,29 @@ const BasicConfigPage: React.FC = () => {
               </Form.Item>
 
               <Form.Item
-                name="timezone"
-                label="时区设置"
-              >
-                <Select placeholder="请选择时区">
-                  <Option value="Asia/Shanghai">中国标准时间 (UTC+8)</Option>
-                  <Option value="UTC">协调世界时 (UTC)</Option>
-                  <Option value="America/New_York">美国东部时间 (UTC-5)</Option>
-                  <Option value="Europe/London">英国时间 (UTC+0)</Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item
                 name="dateFormat"
-                label="日期格式"
+                label="默认日期格式"
+                rules={[{ required: true, message: '请选择日期格式' }]}
+                tooltip="全局日期显示格式，影响所有日期组件"
               >
                 <Select placeholder="请选择日期格式">
                   <Option value="YYYY-MM-DD">2024-01-15</Option>
                   <Option value="MM/DD/YYYY">01/15/2024</Option>
                   <Option value="DD/MM/YYYY">15/01/2024</Option>
                   <Option value="YYYY年MM月DD日">2024年01月15日</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="timezone"
+                label="时区设置"
+                tooltip="系统时区，影响时间显示和计算"
+              >
+                <Select placeholder="请选择时区">
+                  <Option value="Asia/Shanghai">中国标准时间 (UTC+8)</Option>
+                  <Option value="UTC">协调世界时 (UTC)</Option>
+                  <Option value="America/New_York">美国东部时间 (UTC-5)</Option>
+                  <Option value="Europe/London">英国时间 (UTC+0)</Option>
                 </Select>
               </Form.Item>
             </Card>
@@ -305,11 +424,18 @@ const BasicConfigPage: React.FC = () => {
           </Space>
         </Row>
       </Form>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 };
 
 export default BasicConfigPage;
+
+
+
+
+
+
 
 
 

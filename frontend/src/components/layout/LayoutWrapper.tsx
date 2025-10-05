@@ -20,7 +20,7 @@ const LayoutContent: React.FC<LayoutWrapperProps> = ({ children }) => {
     return <SidebarLayout>{children}</SidebarLayout>;
   }
 
-  if (layout.type === 'top') {
+  if (layout.type === 'top_menu') {
     return <TopMenuLayout>{children}</TopMenuLayout>;
   }
 
@@ -37,6 +37,13 @@ const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
 };
 
 export default LayoutWrapper;
+
+
+
+
+
+
+
 
 
 

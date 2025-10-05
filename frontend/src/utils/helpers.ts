@@ -274,3 +274,14 @@ export function getPasswordStrengthText(score: number): string {
   if (score <= 4) return '强';
   return '很强';
 }
+
+/**
+ * 生成密码强度CSS类名
+ */
+export function getPasswordStrengthClass(score: number): string {
+  if (score <= 1) return 'strength-very-weak';
+  if (score <= 2) return 'strength-weak';
+  if (score <= 3) return 'strength-medium';
+  if (score <= 4) return 'strength-strong';
+  return 'strength-very-strong';
+}

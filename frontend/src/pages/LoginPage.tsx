@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { message } = App.useApp();
   const location = useLocation();
-  const { login, isLoading, error, clearError, isAuthenticated } = useAuthStore();
+  const { login, isLoading, clearError, isAuthenticated } = useAuthStore();
   const [form] = Form.useForm();
   const [showCaptcha, setShowCaptcha] = useState(false);
 
@@ -213,8 +213,7 @@ const LoginPage: React.FC = () => {
                       ]}
                     >
                       <Captcha
-                        placeholder="请输入验证码"
-                        onCaptchaIdChange={(captchaId) => {
+                        onCaptchaIdChange={(captchaId: string) => {
                           form.setFieldsValue({ captcha_id: captchaId });
                         }}
                       />
@@ -302,6 +301,11 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
+
+
+
+
+
 
 
 

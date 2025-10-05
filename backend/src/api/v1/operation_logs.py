@@ -18,7 +18,7 @@ from ...models.user import User
 from ...models.operation_log import OperationLog
 from ...schemas.operation_log import OperationLogResponse, OperationLogListResponse
 from ...dependencies import get_current_user
-# from ...utils.security import require_permissions # 暂时注释，避免导入错误
+from ...utils.security import require_permissions
 
 router = APIRouter()
 
