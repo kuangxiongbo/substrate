@@ -326,6 +326,31 @@ const BasicConfigPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* Logo预览区 */}
+              <div className="logo-preview-section">
+                <Text strong>Logo预览：</Text>
+                <div className="logo-preview-container">
+                  {currentLogo && currentLogo !== '/assets/logo.png' ? (
+                    <img 
+                      src={currentLogo} 
+                      alt="当前Logo" 
+                      className="logo-preview-image"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling!.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className="logo-preview-placeholder"
+                    style={{ display: currentLogo && currentLogo !== '/assets/logo.png' ? 'none' : 'flex' }}
+                  >
+                    <PictureOutlined />
+                    <span>暂无Logo预览</span>
+                  </div>
+                </div>
+              </div>
+
               <Form.Item
                 name="logo"
                 label="Logo"

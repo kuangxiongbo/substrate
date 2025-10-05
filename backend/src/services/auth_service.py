@@ -82,6 +82,59 @@ class AuthService:
     # Login (FR-008 to FR-014)
     # ========================================================================
     
+    def authenticate_user(
+        self,
+        email: str,
+        password: str,
+        ip_address: Optional[str] = None
+    ) -> Tuple[Optional[Dict], Optional[str], Optional[str]]:
+        """
+        Authenticate user and return user info with tokens
+        
+        Returns:
+            Tuple of (user_dict, access_token, refresh_token) or (None, None, None) if failed
+        """
+        # Get user
+        user = self.user_service.get_user_by_email(email)
+        
+        if not user:
+            return None, None, None
+            
+        # Check password
+        if not self.password_service.verify_password(password, user.password_hash):
+            return None, None, None
+            
+        # Check account status
+        if user.account_status != AccountStatus.ACTIVE:
+            return None, None, None
+            
+        # Generate tokens
+        token_pair = self.token_service.generate_token_pair(user.id)
+        access_token = token_pair['access_token']
+        refresh_token = token_pair['refresh_token']
+        
+        # Build user dict
+        user_dict = {
+            "id": str(user.id),
+            "email": user.email,
+            "name": user.email.split('@')[0],  # Use email prefix as name
+            "role": user.roles[0].name if user.roles else "user",
+            "avatar": None,
+            "email_verified": user.email_verified,
+            "account_status": user.account_status.value,
+            "failed_login_attempts": user.failed_login_attempts,
+            "account_locked_until": user.account_locked_until.isoformat() if user.account_locked_until else None,
+            "registration_timestamp": user.registration_timestamp.isoformat(),
+            "last_login_timestamp": user.last_login_timestamp.isoformat() if user.last_login_timestamp else None,
+            "last_password_change": user.last_password_change.isoformat() if user.last_password_change else None,
+            "consent_timestamp": user.consent_timestamp.isoformat() if user.consent_timestamp else None,
+            "consent_status": user.consent_status,
+            "created_at": user.created_at.isoformat(),
+            "updated_at": user.updated_at.isoformat()
+        }
+        
+        return user_dict, access_token, refresh_token
+
     async def login(
         self,
         email: str,
@@ -493,6 +546,7 @@ class AuthService:
             Strength analysis dict
         """
         return self.password_service.get_password_strength(password)
+
 
 
 

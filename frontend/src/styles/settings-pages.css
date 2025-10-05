@@ -156,6 +156,48 @@
   margin-bottom: 0;
 }
 
+/* Logo预览区样式 */
+.logo-preview-section {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-fill-quaternary);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.logo-preview-container {
+  margin-top: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  background: var(--color-bg-container);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--border-radius-sm);
+  position: relative;
+}
+
+.logo-preview-image {
+  max-width: 200px;
+  max-height: 60px;
+  object-fit: contain;
+  border-radius: var(--border-radius-sm);
+}
+
+.logo-preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  gap: var(--spacing-xs);
+}
+
+.logo-preview-placeholder .anticon {
+  font-size: 24px;
+  color: var(--color-text-quaternary);
+}
+
 /* 通用页面样式 */
 .page-title {
   margin-bottom: var(--spacing-md);

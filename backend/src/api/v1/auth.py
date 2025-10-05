@@ -44,8 +44,12 @@ async def register(request: RegisterRequest):
 # Login (FR-008 to FR-014)
 # ============================================================================
 
-@router.post("/login")
-async def login(request: LoginRequest):
+@router.post("/login", response_model=LoginResponse)
+async def login(
+    request: LoginRequest,
+    db: Session = Depends(get_db),
+    client_ip: str = Depends(get_client_ip)
+):
     """
     Authenticate user and issue JWT tokens (FR-008 to FR-014)
     
@@ -56,19 +60,74 @@ async def login(request: LoginRequest):
     - Account lockout after 5 failures (FR-012)
     - Token validation (FR-013, FR-014)
     """
-    # 简化的登录逻辑，返回模拟token
-    return {
-        "access_token": "mock-access-token-123",
-        "refresh_token": "mock-refresh-token-123", 
-        "token_type": "bearer",
-        "expires_in": 3600,
-        "user": {
-            "id": "user-123",
-            "email": request.email,
-            "name": "测试用户",
-            "role": "user"
+    # 简化的登录逻辑，根据邮箱返回不同的用户信息
+    if request.email == "demo@example.com":
+        user_info = {
+            "id": "demo-user-123",
+            "email": "demo@example.com",
+            "name": "演示用户",
+            "role": "super_admin",
+            "avatar": None,
+            "email_verified": True,
+            "account_status": "ACTIVE",
+            "failed_login_attempts": 0,
+            "account_locked_until": None,
+            "registration_timestamp": "2024-01-01T00:00:00",
+            "last_login_timestamp": "2024-01-01T00:00:00",
+            "last_password_change": None,
+            "consent_timestamp": "2024-01-01T00:00:00",
+            "consent_status": True,
+            "created_at": "2024-01-01T00:00:00",
+            "updated_at": "2024-01-01T00:00:00"
         }
-    }
+    elif request.email == "admin@system.com":
+        user_info = {
+            "id": "admin-user-123",
+            "email": "admin@system.com",
+            "name": "系统管理员",
+            "role": "admin",
+            "avatar": None,
+            "email_verified": True,
+            "account_status": "ACTIVE",
+            "failed_login_attempts": 0,
+            "account_locked_until": None,
+            "registration_timestamp": "2024-01-01T00:00:00",
+            "last_login_timestamp": "2024-01-01T00:00:00",
+            "last_password_change": None,
+            "consent_timestamp": "2024-01-01T00:00:00",
+            "consent_status": True,
+            "created_at": "2024-01-01T00:00:00",
+            "updated_at": "2024-01-01T00:00:00"
+        }
+    else:
+        # 其他用户，使用邮箱前缀作为用户名
+        email_prefix = request.email.split('@')[0]
+        user_info = {
+            "id": f"user-{hash(request.email) % 10000}",
+            "email": request.email,
+            "name": email_prefix,
+            "role": "user",
+            "avatar": None,
+            "email_verified": True,
+            "account_status": "ACTIVE",
+            "failed_login_attempts": 0,
+            "account_locked_until": None,
+            "registration_timestamp": "2024-01-01T00:00:00",
+            "last_login_timestamp": "2024-01-01T00:00:00",
+            "last_password_change": None,
+            "consent_timestamp": "2024-01-01T00:00:00",
+            "consent_status": True,
+            "created_at": "2024-01-01T00:00:00",
+            "updated_at": "2024-01-01T00:00:00"
+        }
+    
+    return LoginResponse(
+        access_token="mock-access-token-123",
+        refresh_token="mock-refresh-token-123",
+        token_type="bearer",
+        expires_in=3600,
+        user=user_info
+    )
 
 
 # ============================================================================

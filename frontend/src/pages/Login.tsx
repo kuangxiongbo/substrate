@@ -24,6 +24,8 @@ const Login: React.FC = () => {
   });
   
   const [formErrors, setFormErrors] = useState<Partial<LoginCredentials>>({});
+  const [systemTitle, setSystemTitle] = useState('Spec-Kit');
+  const [systemLogo, setSystemLogo] = useState('/assets/logo.png');
   
   // 如果已经登录，重定向到仪表板
   useEffect(() => {
@@ -39,6 +41,57 @@ const Login: React.FC = () => {
       clearError();
     };
   }, [clearError]);
+
+  // 加载系统配置
+  useEffect(() => {
+    const loadSystemConfig = () => {
+      const savedTitle = localStorage.getItem('systemTitle');
+      const savedLogo = localStorage.getItem('systemLogo');
+      
+      if (savedTitle) {
+        setSystemTitle(savedTitle);
+        document.title = savedTitle;
+      }
+      if (savedLogo) {
+        setSystemLogo(savedLogo);
+      }
+    };
+
+    loadSystemConfig();
+
+    // 监听系统配置更改事件
+    const handleConfigChange = (event: CustomEvent) => {
+      const { systemTitle: title, logo } = event.detail || {};
+      if (title) {
+        setSystemTitle(title);
+        document.title = title;
+      }
+      if (logo) {
+        setSystemLogo(logo);
+      }
+    };
+
+    // 监听localStorage变化
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'systemTitle' && event.newValue) {
+        setSystemTitle(event.newValue);
+        document.title = event.newValue;
+      }
+      if (event.key === 'systemLogo' && event.newValue) {
+        setSystemLogo(event.newValue);
+      }
+    };
+
+    window.addEventListener('systemTitleChanged', handleConfigChange as EventListener);
+    window.addEventListener('logoChanged', handleConfigChange as EventListener);
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('systemTitleChanged', handleConfigChange as EventListener);
+      window.removeEventListener('logoChanged', handleConfigChange as EventListener);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -91,8 +144,38 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Logo和系统标题区域 */}
+        <div className="text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
+              {systemLogo && systemLogo !== '/assets/logo.png' ? (
+                <img 
+                  src={systemLogo} 
+                  alt="系统Logo" 
+                  className="w-12 h-12 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling!.style.display = 'block';
+                  }}
+                />
+              ) : null}
+              <svg 
+                className="w-8 h-8 text-white" 
+                style={{ display: systemLogo && systemLogo !== '/assets/logo.png' ? 'none' : 'block' }}
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{systemTitle}</h1>
+          <p className="text-sm text-gray-600">多用户管理系统</p>
+        </div>
+
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="text-center text-2xl font-bold text-gray-900">
             登录您的账户
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
@@ -216,6 +299,7 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
 
 
 
