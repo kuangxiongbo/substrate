@@ -41,41 +41,82 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const { currentTheme } = useTheme(); // Added theme context
   const [quickSettingsVisible, setQuickSettingsVisible] = React.useState(false);
   const [systemTitle, setSystemTitle] = React.useState('Spec-Kit');
+  const [systemLogo, setSystemLogo] = React.useState<string | null>(null);
 
-  // 加载系统标题
+  // 加载系统配置
   React.useEffect(() => {
-    const loadSystemTitle = () => {
-      const savedTitle = localStorage.getItem('systemTitle');
+    const loadSystemConfig = async () => {
+      // 先从后端数据库加载
+      let backendConfigs = {};
+      try {
+        const response = await fetch('/api/v1/admin/configs?category=basic', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        
+        if (response.ok) {
+          const configs = await response.json();
+          backendConfigs = configs.reduce((acc: any, config: any) => {
+            acc[config.key] = config.value;
+            return acc;
+          }, {});
+          console.log('SidebarLayout: 从数据库加载配置', backendConfigs);
+        }
+      } catch (error) {
+        console.warn('SidebarLayout: 从数据库加载配置失败', error);
+      }
+
+      // 从localStorage加载（作为备用）
+      const savedTitle = backendConfigs.systemTitle || localStorage.getItem('systemTitle');
+      const savedLogo = backendConfigs.logo || localStorage.getItem('systemLogo');
+      
+      console.log('SidebarLayout: 加载系统配置', { savedTitle, savedLogo });
+      
       if (savedTitle) {
         setSystemTitle(savedTitle);
         document.title = savedTitle;
       }
+      if (savedLogo) {
+        setSystemLogo(savedLogo);
+      }
     };
 
-    loadSystemTitle();
+    loadSystemConfig();
 
-    // 监听系统标题更改事件
-    const handleTitleChange = (event: any) => {
-      const title = event.detail?.systemTitle;
+    // 监听系统配置更改事件
+    const handleConfigChange = (event: any) => {
+      const { systemTitle: title, logo } = event.detail || {};
+      console.log('SidebarLayout: 收到配置更改事件', { title, logo, detail: event.detail });
       if (title) {
         setSystemTitle(title);
         document.title = title;
+        console.log('SidebarLayout: 更新系统标题', title);
+      }
+      if (logo) {
+        setSystemLogo(logo);
+        console.log('SidebarLayout: 更新Logo', logo);
       }
     };
 
-    // 监听localStorage变化
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'systemTitle' && event.newValue) {
-        setSystemTitle(event.newValue);
-        document.title = event.newValue;
-      }
-    };
+              // 监听localStorage变化
+              const handleStorageChange = (event: StorageEvent) => {
+                if (event.key === 'systemTitle' && event.newValue) {
+                  setSystemTitle(event.newValue);
+                  document.title = event.newValue;
+                }
+                if (event.key === 'systemLogo' && event.newValue) {
+                  setSystemLogo(event.newValue);
+                }
+              };
 
-    window.addEventListener('systemTitleChanged', handleTitleChange);
+    window.addEventListener('systemTitleChanged', handleConfigChange);
+    window.addEventListener('logoChanged', handleConfigChange);
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
-      window.removeEventListener('systemTitleChanged', handleTitleChange);
+      window.removeEventListener('systemTitleChanged', handleConfigChange);
+      window.removeEventListener('logoChanged', handleConfigChange);
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
@@ -136,9 +177,45 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         <div className="sidebar-header">
           <div className="logo">
             {isCollapsed ? (
-              <div className="logo-icon">{systemTitle.charAt(0).toUpperCase()}</div>
+              systemLogo && systemLogo.length > 0 ? (
+                <img 
+                  src={systemLogo} 
+                  alt="系统Logo" 
+                  className="logo-image-collapsed"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex';
+                  }}
+                />
+              ) : null
             ) : (
-              <div className="logo-text">{systemTitle}</div>
+              <>
+                {systemLogo && systemLogo.length > 0 ? (
+                  <img 
+                    src={systemLogo} 
+                    alt="系统Logo" 
+                    className="logo-image"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'block';
+                    }}
+                  />
+                ) : null}
+                <div 
+                  className={`logo-text ${systemLogo && systemLogo.length > 0 ? 'hidden' : 'visible'}`}
+                >
+                  {systemTitle}
+                </div>
+                {systemLogo && systemLogo.length > 0 && (
+                  <div className="logo-text-with-image">
+                    {systemTitle}
+                  </div>
+                )}
+              </>
+            )}
+            {/* 折叠时的后备显示 */}
+            {isCollapsed && (!systemLogo || systemLogo === '/assets/logo.png') && (
+              <div className="logo-icon">{systemTitle.charAt(0).toUpperCase()}</div>
             )}
           </div>
         </div>
@@ -257,6 +334,13 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
 };
 
 export default SidebarLayout;
+
+
+
+
+
+
+
 
 
 

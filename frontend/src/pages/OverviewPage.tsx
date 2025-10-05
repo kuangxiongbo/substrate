@@ -6,7 +6,6 @@ import {
   Row,
   Col,
   Card,
-  Statistic,
   Progress,
   Space,
   Typography,
@@ -14,11 +13,6 @@ import {
   message,
 } from 'antd';
 import {
-  UserOutlined,
-  SafetyCertificateOutlined,
-  FileTextOutlined,
-  ArrowUpOutlined,
-  ArrowDownOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
@@ -27,7 +21,7 @@ import { useAuthStore } from '../stores/authStore';
 import { useTheme } from '../contexts/ThemeContext';
 import '../styles/settings-pages.css';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface SystemStats {
   total_users: number;
@@ -45,8 +39,8 @@ interface RecentActivity {
 }
 
 const OverviewPage: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<SystemStats | null>(null);
+  const [, setLoading] = useState(true);
+  const [, setStats] = useState<SystemStats | null>(null);
   const { user } = useAuthStore();
   const { currentTheme } = useTheme();
 
@@ -79,36 +73,36 @@ const OverviewPage: React.FC = () => {
   };
 
   // 基于真实数据构建统计信息
-  const systemStats = [
-    {
-      title: '总用户数',
-      value: stats?.total_users || 0,
-      icon: <UserOutlined className="overview-stat-icon-blue" />,
-      trend: '+12%',
-      trendUp: true,
-    },
-    {
-      title: '活跃用户',
-      value: stats?.active_users || 0,
-      icon: <CheckCircleOutlined className="overview-stat-icon-green" />,
-      trend: '+8%',
-      trendUp: true,
-    },
-    {
-      title: '系统角色',
-      value: stats?.total_roles || 0,
-      icon: <SafetyCertificateOutlined className="overview-stat-icon-orange" />,
-      trend: '0%',
-      trendUp: true,
-    },
-    {
-      title: '系统配置',
-      value: stats?.total_configs || 0,
-      icon: <FileTextOutlined className="overview-stat-icon-purple" />,
-      trend: '+5%',
-      trendUp: true,
-    },
-  ];
+  // const systemStatsData = [
+  //   {
+  //     title: '总用户数',
+  //     value: 0,
+  //     icon: <UserOutlined className="overview-stat-icon-blue" />,
+  //     trend: '+12%',
+  //     trendUp: true,
+  //   },
+  //   {
+  //     title: '活跃用户',
+  //     value: 0,
+  //     icon: <CheckCircleOutlined className="overview-stat-icon-green" />,
+  //     trend: '+8%',
+  //     trendUp: true,
+  //   },
+  //   {
+  //     title: '系统角色',
+  //     value: 0,
+  //     icon: <SafetyCertificateOutlined className="overview-stat-icon-orange" />,
+  //     trend: '0%',
+  //     trendUp: true,
+  //   },
+  //   {
+  //     title: '系统配置',
+  //     value: 0,
+  //     icon: <FileTextOutlined className="overview-stat-icon-purple" />,
+  //     trend: '+5%',
+  //     trendUp: true,
+  //   },
+  // ];
 
   // 模拟最近活动（暂时使用模拟数据，因为需要专门的日志API）
   const recentActivities: RecentActivity[] = [
@@ -233,6 +227,10 @@ const OverviewPage: React.FC = () => {
 };
 
 export default OverviewPage;
+
+
+
+
 
 
 

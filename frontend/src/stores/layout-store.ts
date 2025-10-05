@@ -123,7 +123,19 @@ export const useLayoutStore = create<LayoutStore>()(
     }),
     {
       name: STORAGE_KEYS.LAYOUT_CONFIG,
-      getStorage: () => localStorage,
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          if (!str) return null;
+          return JSON.parse(str);
+        },
+        setItem: (name, value) => {
+          localStorage.setItem(name, JSON.stringify(value));
+        },
+        removeItem: (name) => {
+          localStorage.removeItem(name);
+        },
+      },
       onRehydrateStorage: () => (state) => {
         if (state) {
           state.setLoading(false);

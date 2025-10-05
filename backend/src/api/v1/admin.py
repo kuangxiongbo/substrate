@@ -167,19 +167,66 @@ async def get_roles():
 
 # 系统配置保存
 @router.post("/configs")
-async def save_system_configs(config_data: dict):
+async def save_system_configs(
+    config_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     """保存系统配置"""
+    if not current_user or not hasattr(current_user, 'has_permission') or not current_user.has_permission("system.config.update"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="需要系统配置修改权限"
+        )
+    
     category = config_data.get('category', 'basic')
     configs = config_data.get('configs', {})
     
-    # 模拟保存配置
-    result = {
-        "success": True,
-        "message": f"{category}配置保存成功",
-        "saved_configs": list(configs.keys()),
-        "category": category
-    }
-    return result
+    saved_configs = []
+    
+    try:
+        for key, value in configs.items():
+            if value is not None:  # 只保存非空值
+                # 查找是否已存在
+                existing_config = db.query(SystemConfig).filter(
+                    SystemConfig.key == key,
+                    SystemConfig.category == category
+                ).first()
+                
+                if existing_config:
+                    # 更新现有配置
+                    existing_config.value = str(value)
+                    existing_config.value_type = 'string'
+                    existing_config.updated_at = func.now()
+                else:
+                    # 创建新配置
+                    new_config = SystemConfig(
+                        key=key,
+                        value=str(value),
+                        value_type='string',
+                        category=category,
+                        description=f"系统{key}配置",
+                        is_public=True
+                    )
+                    db.add(new_config)
+                
+                saved_configs.append(key)
+        
+        db.commit()
+        
+        return {
+            "success": True,
+            "message": f"{category}配置保存成功",
+            "saved_configs": saved_configs,
+            "category": category
+        }
+    
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"保存配置失败: {str(e)}"
+        )
 
 @router.get("/configs/{config_key}", response_model=SystemConfigResponse)
 async def get_system_config(

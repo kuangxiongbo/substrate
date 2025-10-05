@@ -25,7 +25,7 @@ const Login: React.FC = () => {
   
   const [formErrors, setFormErrors] = useState<Partial<LoginCredentials>>({});
   const [systemTitle, setSystemTitle] = useState('Spec-Kit');
-  const [systemLogo, setSystemLogo] = useState('/assets/logo.png');
+  const [systemLogo, setSystemLogo] = useState<string | null>(null);
   
   // 如果已经登录，重定向到仪表板
   useEffect(() => {
@@ -44,9 +44,34 @@ const Login: React.FC = () => {
 
   // 加载系统配置
   useEffect(() => {
-    const loadSystemConfig = () => {
-      const savedTitle = localStorage.getItem('systemTitle');
-      const savedLogo = localStorage.getItem('systemLogo');
+    const loadSystemConfig = async () => {
+      // 先从后端数据库加载
+      let backendConfigs = {};
+      try {
+        const response = await fetch('/api/v1/admin/configs?category=basic', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        
+        if (response.ok) {
+          const configs = await response.json();
+          backendConfigs = configs.reduce((acc: any, config: any) => {
+            acc[config.key] = config.value;
+            return acc;
+          }, {});
+          console.log('Login: 从数据库加载配置', backendConfigs);
+        }
+      } catch (error) {
+        console.warn('Login: 从数据库加载配置失败', error);
+      }
+
+      // 从localStorage加载（作为备用）
+      const savedTitle = backendConfigs.systemTitle || localStorage.getItem('systemTitle');
+      const savedLogo = backendConfigs.logo || localStorage.getItem('systemLogo');
+      
+      console.log('Login: 加载系统配置', { savedTitle, savedLogo });
+      console.log('Login: localStorage所有项', Object.keys(localStorage));
       
       if (savedTitle) {
         setSystemTitle(savedTitle);
@@ -54,6 +79,9 @@ const Login: React.FC = () => {
       }
       if (savedLogo) {
         setSystemLogo(savedLogo);
+        console.log('Login: 设置Logo', savedLogo);
+      } else {
+        console.log('Login: 未找到logo，保持默认状态');
       }
     };
 
@@ -62,25 +90,29 @@ const Login: React.FC = () => {
     // 监听系统配置更改事件
     const handleConfigChange = (event: CustomEvent) => {
       const { systemTitle: title, logo } = event.detail || {};
+      console.log('Login: 收到配置更改事件', { title, logo, detail: event.detail });
       if (title) {
         setSystemTitle(title);
         document.title = title;
       }
       if (logo) {
         setSystemLogo(logo);
+        console.log('Login: 更新Logo', logo);
       }
     };
 
-    // 监听localStorage变化
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'systemTitle' && event.newValue) {
-        setSystemTitle(event.newValue);
-        document.title = event.newValue;
-      }
-      if (event.key === 'systemLogo' && event.newValue) {
-        setSystemLogo(event.newValue);
-      }
-    };
+      // 监听localStorage变化
+      const handleStorageChange = (event: StorageEvent) => {
+        // console.log('Login: 收到storage事件', { key: event.key, newValue: event.newValue });
+        if (event.key === 'systemTitle' && event.newValue) {
+          setSystemTitle(event.newValue);
+          document.title = event.newValue;
+        }
+        if (event.key === 'systemLogo' && event.newValue) {
+          setSystemLogo(event.newValue);
+          // console.log('Login: storage更新Logo', event.newValue);
+        }
+      };
 
     window.addEventListener('systemTitleChanged', handleConfigChange as EventListener);
     window.addEventListener('logoChanged', handleConfigChange as EventListener);
@@ -148,20 +180,27 @@ const Login: React.FC = () => {
         <div className="text-center">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-              {systemLogo && systemLogo !== '/assets/logo.png' ? (
+              {(() => {
+                const shouldShowLogo = systemLogo && typeof systemLogo === 'string' && systemLogo.length > 0;
+                console.log('Login: Logo显示判断', { systemLogo, shouldShowLogo, type: typeof systemLogo });
+                return shouldShowLogo;
+              })() ? (
                 <img 
                   src={systemLogo} 
                   alt="系统Logo" 
                   className="w-12 h-12 object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling!.style.display = 'block';
-                  }}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.display = 'none';
+                          (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'block';
+                        }}
                 />
               ) : null}
               <svg 
                 className="w-8 h-8 text-white" 
-                style={{ display: systemLogo && systemLogo !== '/assets/logo.png' ? 'none' : 'block' }}
+                style={{ display: (() => {
+                  const shouldShowLogo = systemLogo && typeof systemLogo === 'string' && systemLogo.length > 0;
+                  return shouldShowLogo ? 'none' : 'block';
+                })() }}
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -299,6 +338,14 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
+
+
+
+
+
+
+
 
 
 

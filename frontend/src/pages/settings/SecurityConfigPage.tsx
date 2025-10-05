@@ -28,7 +28,7 @@ import {
 import { motion } from 'framer-motion';
 import '../../styles/settings-pages.css';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { Option } = Select;
 
 const SecurityConfigPage: React.FC = () => {

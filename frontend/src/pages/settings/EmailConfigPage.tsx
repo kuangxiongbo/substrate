@@ -30,7 +30,7 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
 import '../../styles/settings-pages.css';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 // const { Option } = Select;
 // const { Step } = Steps;
 

@@ -137,6 +137,12 @@ def create_default_system_configs(db: Session):
         # UI配置
         {"key": "ui.theme", "value": "light", "value_type": "string", "category": "ui", "description": "默认主题", "is_public": True},
         {"key": "ui.language", "value": "zh-CN", "value_type": "string", "category": "ui", "description": "默认语言", "is_public": True},
+        
+        # 基础配置
+        {"key": "systemTitle", "value": "Spec-Kit", "value_type": "string", "category": "basic", "description": "系统名称", "is_public": True},
+        {"key": "systemLanguage", "value": "zh-CN", "value_type": "string", "category": "basic", "description": "默认语言", "is_public": True},
+        {"key": "dateFormat", "value": "YYYY-MM-DD", "value_type": "string", "category": "basic", "description": "日期格式", "is_public": True},
+        {"key": "systemTimezone", "value": "Asia/Shanghai", "value_type": "string", "category": "basic", "description": "系统时区", "is_public": True},
     ]
     
     for config_data in configs:

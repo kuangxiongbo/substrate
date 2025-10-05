@@ -136,30 +136,27 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       // 登出
-      logout: async () => {
+      logout: () => {
         set({ isLoading: true });
         
-        try {
-          const refreshToken = get().refreshTokenValue;
-          if (refreshToken) {
-            await authApi.logout(refreshToken);
-          }
-        } catch (error) {
-          // 即使API调用失败也要清除本地状态
-          console.error('Logout API error:', error);
-        } finally {
-          // 清除本地存储
-          clearAuthTokens();
-          
-          set({
-            user: null,
-            token: null,
-            refreshTokenValue: null,
-            isAuthenticated: false,
-            isLoading: false,
-            error: null,
+        const refreshToken = get().refreshTokenValue;
+        if (refreshToken) {
+          authApi.logout(refreshToken).catch(error => {
+            console.error('Logout API error:', error);
           });
         }
+        
+        // 清除本地存储
+        clearAuthTokens();
+        
+        set({
+          user: null,
+          token: null,
+          refreshTokenValue: null,
+          isAuthenticated: false,
+          isLoading: false,
+          error: null,
+        });
       },
 
       // 刷新token
@@ -187,10 +184,9 @@ export const useAuthStore = create<AuthStore>()(
           set({
             user: null,
             token: null,
-            refreshToken: null,
+            refreshTokenValue: null,
             isAuthenticated: false,
             error: '登录已过期，请重新登录',
-            // refreshTokenFn: undefined,
           });
           throw error;
         }

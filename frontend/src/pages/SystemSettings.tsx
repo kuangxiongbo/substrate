@@ -5,7 +5,6 @@ import {
   Typography, 
   Row, 
   Col, 
-  Statistic, 
   Progress, 
   Table, 
   Tag, 
@@ -25,7 +24,6 @@ import {
   ReloadOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  ClockCircleOutlined
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';

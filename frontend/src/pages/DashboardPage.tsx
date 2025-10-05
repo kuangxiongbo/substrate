@@ -22,8 +22,6 @@ import {
 import {
   UserOutlined,
   TeamOutlined,
-  SafetyCertificateOutlined,
-  MailOutlined,
   BarChartOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -70,7 +68,8 @@ interface StatCardProps {
   loading?: boolean;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, loading }) => (
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend }) => {
+  return (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -87,7 +86,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, l
             className={`stat-icon ${getStatIconClass(color)}`}
           />
         }
-        loading={loading}
+        loading={false}
         valueStyle={{ color: color, fontSize: 24, fontWeight: 600 }}
       />
       {trend && (
@@ -111,7 +110,8 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, l
       )}
     </Card>
   </motion.div>
-);
+  );
+};
 
 interface DashboardStats {
   total_users: number;
@@ -142,8 +142,8 @@ interface SystemLog {
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuthStore();
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [, setLoading] = useState(true);
+  const [, setStats] = useState<DashboardStats | null>(null);
   const [recentUsers, setRecentUsers] = useState<RecentUser[]>([]);
   const [systemLogs, setSystemLogs] = useState<SystemLog[]>([]);
 
@@ -152,7 +152,7 @@ const DashboardPage: React.FC = () => {
   }, []);
 
   const loadDashboardData = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       // 并行加载多个API
       const [statsResponse, usersResponse] = await Promise.all([
@@ -212,7 +212,7 @@ const DashboardPage: React.FC = () => {
     } catch (error) {
       console.error('加载仪表板数据失败:', error);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -431,6 +431,8 @@ const DashboardPage: React.FC = () => {
 };
 
 export default DashboardPage;
+
+
 
 
 

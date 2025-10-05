@@ -51,6 +51,21 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  gap: 8px;
+}
+
+.logo-image {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.logo-image-collapsed {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+  border-radius: 4px;
 }
 
 .logo-icon {
@@ -85,13 +100,37 @@
   white-space: nowrap;
 }
 
+.logo-text-with-image {
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+.logo-text.hidden {
+  display: none;
+}
+
+.logo-text.visible {
+  display: block;
+}
+
 /* 浅色主题下的Logo文字 */
 .sidebar.light-theme .logo-text {
   color: var(--color-text);
 }
 
+.sidebar.light-theme .logo-text-with-image {
+  color: var(--color-text);
+}
+
 /* 深色主题下的Logo文字 */
 .sidebar.dark-theme .logo-text {
+  color: var(--color-text);
+}
+
+.sidebar.dark-theme .logo-text-with-image {
   color: var(--color-text);
 }
 
