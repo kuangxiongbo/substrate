@@ -22,7 +22,7 @@ import {
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
-import { processFavicon, validateImageFile, validateImageDimensions } from '../../utils/imageProcessor';
+import { validateImageFile, validateImageDimensions } from '../../utils/imageProcessor';
 import ImageCropper from '../../components/ImageCropper';
 import '../../styles/settings-pages.css';
 
@@ -47,7 +47,6 @@ const BasicConfigPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [configs, setConfigs] = useState<ConfigItem[]>([]);
   const [currentLogo, setCurrentLogo] = useState<string | null>(null);
-  const [currentFavicon, setCurrentFavicon] = useState<string>('/assets/favicon.ico');
   const [cropperVisible, setCropperVisible] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const { currentTheme } = useTheme();
@@ -87,8 +86,6 @@ const BasicConfigPage: React.FC = () => {
       const dateFormat = backendConfigs.dateFormat || localStorage.getItem('dateFormat');
       const timezone = backendConfigs.systemTimezone || localStorage.getItem('systemTimezone');
       const systemLogo = backendConfigs.logo || localStorage.getItem('systemLogo');
-      const systemFavicon = backendConfigs.systemFavicon || localStorage.getItem('systemFavicon');
-
       // 设置默认值
       const defaultValues: any = {};
       if (systemTitle) defaultValues.systemTitle = systemTitle;
@@ -96,11 +93,9 @@ const BasicConfigPage: React.FC = () => {
       if (dateFormat) defaultValues.dateFormat = dateFormat;
       if (timezone) defaultValues.timezone = timezone;
       if (systemLogo) defaultValues.logo = systemLogo;
-      if (systemFavicon) defaultValues.favicon = systemFavicon;
 
-      // 更新当前Logo和Favicon状态
+      // 更新当前Logo状态
       if (systemLogo) setCurrentLogo(systemLogo);
-      if (systemFavicon) setCurrentFavicon(systemFavicon);
 
       // 设置表单默认值
       if (Object.keys(defaultValues).length > 0) {
@@ -137,12 +132,9 @@ const BasicConfigPage: React.FC = () => {
           formValues[config.key] = config.value;
         }
         
-        // 更新当前Logo和Favicon状态
+        // 更新当前Logo状态
         if (config.key === 'logo') {
           setCurrentLogo(config.value);
-        }
-        if (config.key === 'favicon') {
-          setCurrentFavicon(config.value);
         }
       });
       form.setFieldsValue(formValues);
@@ -211,7 +203,6 @@ const BasicConfigPage: React.FC = () => {
         configs: {
           systemTitle: values.systemTitle,
           systemLogo: values.logo,
-          systemFavicon: values.favicon,
           systemLanguage: values.language,
           dateFormat: values.dateFormat,
           systemTimezone: values.timezone
@@ -277,21 +268,15 @@ const BasicConfigPage: React.FC = () => {
         }));
       }
 
-      // 更新Logo和Favicon
-      if (values.logo || values.favicon) {
+      // 更新Logo
+      if (values.logo) {
         // 更新本地状态
-        if (values.logo) {
-          setCurrentLogo(values.logo);
-          localStorage.setItem('systemLogo', values.logo);
-        }
-        if (values.favicon) {
-          setCurrentFavicon(values.favicon);
-          localStorage.setItem('systemFavicon', values.favicon);
-        }
+        setCurrentLogo(values.logo);
+        localStorage.setItem('systemLogo', values.logo);
         
         // 触发Logo更新事件
         window.dispatchEvent(new CustomEvent('logoChanged', { 
-          detail: { logo: values.logo, favicon: values.favicon } 
+          detail: { logo: values.logo } 
         }));
       }
 
@@ -386,42 +371,6 @@ const BasicConfigPage: React.FC = () => {
     setUploadedFile(null);
   };
 
-  // 处理Favicon上传
-  const handleFaviconUpload = async (file: File) => {
-    try {
-      // 验证文件
-      const validation = validateImageFile(file);
-      if (!validation.valid) {
-        message.error(validation.message);
-        return false;
-      }
-
-      // 显示处理中状态
-      message.loading({ content: '正在处理图标...', key: 'favicon-upload' });
-
-      // 处理图片
-      const processed = await processFavicon(file);
-      
-      // 更新状态
-      setCurrentFavicon(processed.dataUrl);
-      form.setFieldValue('favicon', processed.dataUrl);
-      
-      // 保存到localStorage
-      localStorage.setItem('systemFavicon', processed.dataUrl);
-      
-      // 触发Favicon更新事件
-      window.dispatchEvent(new CustomEvent('faviconChanged', { 
-        detail: { favicon: processed.dataUrl } 
-      }));
-
-      message.success({ content: '图标上传成功', key: 'favicon-upload' });
-      return true;
-    } catch (error) {
-      console.error('图标处理失败:', error);
-      message.error({ content: '图标处理失败', key: 'favicon-upload' });
-      return false;
-    }
-  };
 
   // Logo上传配置
   const logoUploadProps = {
@@ -435,17 +384,6 @@ const BasicConfigPage: React.FC = () => {
     },
   };
 
-  // Favicon上传配置
-  const faviconUploadProps = {
-    name: 'favicon',
-    accept: 'image/*',
-    fileList: [],
-    showUploadList: false,
-    beforeUpload: (file: File) => {
-      handleFaviconUpload(file);
-      return false; // 阻止默认上传
-    },
-  };
 
   return (
     <div className={`settings-page ${currentTheme?.meta.id || 'light'}-theme`}>
@@ -482,23 +420,6 @@ const BasicConfigPage: React.FC = () => {
                 <Input placeholder="请输入系统名称" />
               </Form.Item>
 
-              {/* 当前系统信息显示 */}
-              <div className="current-system-info">
-                <div className="info-item">
-                  <Text strong>当前系统名称：</Text>
-                  <Text>{form.getFieldValue('systemTitle') || 'Spec-Kit'}</Text>
-                </div>
-                <div className="info-item">
-                  <Text strong>当前Logo：</Text>
-                  <Text type="secondary">
-                    {currentLogo && currentLogo.startsWith('data:') ? '已上传 (Base64格式)' : currentLogo}
-                  </Text>
-                </div>
-                <div className="info-item">
-                  <Text strong>当前图标：</Text>
-                  <Text type="secondary">{currentFavicon}</Text>
-                </div>
-              </div>
 
             {/* Logo预览区 */}
             <div className="logo-preview-section">
@@ -540,17 +461,6 @@ const BasicConfigPage: React.FC = () => {
                 </Upload>
               </Form.Item>
 
-              <Form.Item
-                name="favicon"
-                label="图标 (Favicon)"
-                tooltip="网站图标，自动处理为 32x32 像素"
-              >
-                <Upload {...faviconUploadProps}>
-                  <Button icon={<UploadOutlined />}>
-                    点击更换Favicon
-                  </Button>
-                </Upload>
-              </Form.Item>
             </Card>
           </Col>
 

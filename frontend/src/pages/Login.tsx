@@ -45,14 +45,10 @@ const Login: React.FC = () => {
   // 加载系统配置
   useEffect(() => {
     const loadSystemConfig = async () => {
-      // 先从后端数据库加载
+      // 先从后端数据库加载（无需认证）
       let backendConfigs = {};
       try {
-        const response = await fetch('/api/v1/admin/configs?category=basic', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
+        const response = await fetch('/api/v1/admin/configs?category=basic');
         
         if (response.ok) {
           const configs = await response.json();
@@ -182,23 +178,35 @@ const Login: React.FC = () => {
             <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
               {(() => {
                 const shouldShowLogo = systemLogo && typeof systemLogo === 'string' && systemLogo.length > 0;
-                console.log('Login: Logo显示判断', { systemLogo, shouldShowLogo, type: typeof systemLogo });
+                console.log('Login: Logo显示判断', { 
+                  systemLogo: systemLogo ? `${systemLogo.substring(0, 50)}...` : systemLogo, 
+                  shouldShowLogo, 
+                  type: typeof systemLogo,
+                  length: systemLogo ? systemLogo.length : 0
+                });
                 return shouldShowLogo;
               })() ? (
                 <img 
                   src={systemLogo} 
                   alt="系统Logo" 
-                  className="w-12 h-12 object-contain"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).style.display = 'none';
-                          (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'block';
-                        }}
+                  className="w-8 h-8 object-contain rounded"
+                  onLoad={() => console.log('Login: Logo图片加载成功')}
+                  onError={(e) => {
+                    console.log('Login: Logo图片加载失败', e);
+                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'block';
+                  }}
                 />
-              ) : null}
+              ) : (
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <span className="text-white text-xs">无Logo</span>
+                </div>
+              )}
               <svg 
                 className="w-8 h-8 text-white" 
                 style={{ display: (() => {
                   const shouldShowLogo = systemLogo && typeof systemLogo === 'string' && systemLogo.length > 0;
+                  console.log('Login: SVG显示判断', { shouldShowLogo, systemLogo: systemLogo ? 'exists' : 'null' });
                   return shouldShowLogo ? 'none' : 'block';
                 })() }}
                 fill="none" 
@@ -338,6 +346,7 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
 
 
 

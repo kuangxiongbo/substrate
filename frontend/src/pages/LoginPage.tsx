@@ -52,6 +52,10 @@ const LoginPage: React.FC = () => {
   const { login, isLoading, clearError, isAuthenticated } = useAuthStore();
   const [form] = Form.useForm();
   const [showCaptcha, setShowCaptcha] = useState(false);
+  
+  // 系统配置状态
+  const [systemTitle, setSystemTitle] = useState('Spec-Kit');
+  const [systemLogo, setSystemLogo] = useState<string | null>(null);
 
   useEffect(() => {
     clearError();
@@ -60,6 +64,84 @@ const LoginPage: React.FC = () => {
       navigate(from, { replace: true });
     }
   }, [isAuthenticated, navigate, location.state, clearError]);
+
+  // 加载系统配置
+  useEffect(() => {
+    const loadSystemConfig = async () => {
+      // 先从后端数据库加载（无需认证）
+      let backendConfigs = {};
+      try {
+        const response = await fetch('/api/v1/admin/configs?category=basic');
+        
+        if (response.ok) {
+          const configs = await response.json();
+          backendConfigs = configs.reduce((acc: any, config: any) => {
+            acc[config.key] = config.value;
+            return acc;
+          }, {});
+          console.log('LoginPage: 从数据库加载配置', backendConfigs);
+        }
+      } catch (error) {
+        console.warn('LoginPage: 从数据库加载配置失败', error);
+      }
+
+      // 从localStorage加载（作为备用）
+      const savedTitle = backendConfigs.systemTitle || localStorage.getItem('systemTitle');
+      const savedLogo = backendConfigs.logo || localStorage.getItem('systemLogo');
+      
+      console.log('LoginPage: 加载系统配置', { savedTitle, savedLogo });
+      
+      if (savedTitle) {
+        setSystemTitle(savedTitle);
+        document.title = savedTitle;
+      }
+      if (savedLogo) {
+        setSystemLogo(savedLogo);
+        console.log('LoginPage: 设置Logo', savedLogo);
+      } else {
+        console.log('LoginPage: 未找到logo，保持默认状态');
+      }
+    };
+
+    loadSystemConfig();
+
+    // 监听系统配置更改事件
+    const handleConfigChange = (event: CustomEvent) => {
+      const { systemTitle: title, logo } = event.detail || {};
+      console.log('LoginPage: 收到配置更改事件', { title, logo, detail: event.detail });
+      if (title) {
+        setSystemTitle(title);
+        document.title = title;
+      }
+      if (logo) {
+        setSystemLogo(logo);
+        console.log('LoginPage: 更新Logo', logo);
+      }
+    };
+
+    // 监听localStorage变化
+    const handleStorageChange = (event: StorageEvent) => {
+      console.log('LoginPage: 收到storage事件', { key: event.key, newValue: event.newValue });
+      if (event.key === 'systemTitle' && event.newValue) {
+        setSystemTitle(event.newValue);
+        document.title = event.newValue;
+      }
+      if (event.key === 'systemLogo' && event.newValue) {
+        setSystemLogo(event.newValue);
+        console.log('LoginPage: storage更新Logo', event.newValue);
+      }
+    };
+
+    window.addEventListener('systemTitleChanged', handleConfigChange as EventListener);
+    window.addEventListener('logoChanged', handleConfigChange as EventListener);
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('systemTitleChanged', handleConfigChange as EventListener);
+      window.removeEventListener('logoChanged', handleConfigChange as EventListener);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   const handleSubmit = async (values: LoginCredentials) => {
     try {
@@ -107,11 +189,13 @@ const LoginPage: React.FC = () => {
               <div className="mb-8">
                 <Avatar
                   size={80}
+                  src={systemLogo}
                   icon={<SafetyCertificateOutlined />}
                   className="login-hero-avatar"
+                  onError={() => console.log('LoginPage: Avatar Logo加载失败')}
                 />
                 <Title level={1} className="login-hero-title">
-                  多用户管理系统
+                  {systemTitle || '多用户管理系统'}
                 </Title>
                 <Paragraph className="login-hero-description">
                   安全、高效、现代化的企业级用户管理解决方案
