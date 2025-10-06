@@ -1,0 +1,247 @@
+/**
+ * 顶部菜单布局样式
+ * 基于Spec-Kit方法重构的顶部菜单布局样式
+ */
+
+.top-menu-layout {
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-bg-layout);
+}
+
+.top-header {
+  background: var(--color-bg-container);
+  padding: 0;
+  box-shadow: var(--box-shadow);
+  z-index: 100;
+  height: 64px;
+  line-height: 64px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.logo-image {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.logo-text {
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.logo-text-with-image {
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: bold;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+.logo-text.hidden {
+  display: none;
+}
+
+.logo-text.visible {
+  display: block;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin: 0 16px;
+  min-width: 0;
+}
+
+.top-menu {
+  background: transparent;
+  border-bottom: none;
+  line-height: 64px;
+  min-width: 0;
+}
+
+/* 顶部菜单样式已移至 menu-theme.css */
+
+/* 顶部菜单项样式已移至 menu-theme.css - 基于主题包配置 */
+
+/* 顶部菜单项悬停和选中状态样式已移至 menu-theme.css - 基于主题包配置 */
+
+/* 浅色主题下的顶部菜单样式已移至 menu-theme.css */
+
+/* 顶部子菜单标题样式已移至 menu-theme.css - 基于主题包配置 */
+
+/* 浅色主题下的顶部子菜单样式已移至 menu-theme.css */
+
+/* 头部右侧样式已移至 menu-theme.css */
+
+.top-content {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden; /* 防止整体滚动 */
+  height: calc(100vh - 64px); /* 固定高度 */
+  border: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .header-content {
+    padding: 0 12px;
+  }
+  
+  .header-center {
+    margin: 0 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 8px;
+  }
+  
+  .header-center {
+    display: none;
+  }
+  
+  .top-content {
+    margin: 0;
+    padding: 0;
+    height: calc(100vh - 64px);
+  }
+  
+  .user-details {
+    display: none;
+  }
+  
+  .logo-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 0 8px;
+  }
+  
+  .top-content {
+    margin: 8px;
+    padding: 12px;
+    min-height: calc(100vh - 64px);
+  }
+}
+
+/* 菜单项溢出处理 */
+.top-menu {
+  overflow: hidden;
+}
+
+.top-menu .ant-menu-item,
+.top-menu .ant-menu-submenu-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 下拉菜单样式 */
+.ant-dropdown-menu {
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  background: var(--color-bg-container);
+  border: 1px solid var(--color-border);
+}
+
+.ant-dropdown-menu-item {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  margin: 2px 4px;
+  color: var(--color-text);
+}
+
+.ant-dropdown-menu-item:hover {
+  background: var(--color-fill-quaternary);
+  color: var(--color-primary);
+}
+
+/* 滚动条样式 */
+.top-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.top-content::-webkit-scrollbar-track {
+  background: var(--color-fill-quaternary);
+  border-radius: 3px;
+}
+
+.top-content::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+.top-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* 动画效果 */
+.top-menu .ant-menu-item,
+.top-menu .ant-menu-submenu-title {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.user-info {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.notification-btn {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

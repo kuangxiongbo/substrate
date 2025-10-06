@@ -1,0 +1,19 @@
+/**
+ * 语言切换器样式
+ */
+.language-switcher-btn {
+  color: inherit !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.language-switcher-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.language-switcher-btn:focus {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+
+

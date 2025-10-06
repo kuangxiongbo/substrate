@@ -1,0 +1,316 @@
+/* 登录页面样式 - 使用主题变量替代内联样式 */
+
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-hero-section {
+  flex: 1;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.login-hero-avatar {
+  background-color: var(--color-primary);
+  margin-bottom: 24px;
+}
+
+.login-hero-title {
+  color: white;
+  margin-bottom: 16px;
+}
+
+.login-hero-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  margin-bottom: 32px;
+}
+
+.login-feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.login-feature-dot {
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.login-feature-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.login-form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: none;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card-title {
+  margin-bottom: 8px;
+}
+
+.login-input {
+  border-radius: 8px;
+}
+
+.login-input-icon {
+  color: var(--color-text-tertiary);
+}
+
+.login-submit-button {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.login-demo-button {
+  height: 44px;
+  border-radius: 8px;
+}
+
+.login-admin-button {
+  height: 44px;
+  border-radius: 8px;
+}
+
+.login-link {
+  color: var(--color-primary);
+}
+
+.login-link-bold {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.login-forgot-link {
+  color: var(--color-primary);
+}
+
+/* 注册页面特有样式 */
+.register-hero-avatar {
+  background-color: var(--color-success);
+  margin-bottom: 24px;
+}
+
+.register-feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.register-feature-icon {
+  color: var(--color-success);
+  margin-right: 12px;
+}
+
+.register-feature-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.password-strength-text {
+  font-weight: 500;
+}
+
+.password-requirement-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.password-requirement-icon {
+  margin-right: 8px;
+}
+
+.password-requirement-text {
+  font-size: 12px;
+}
+
+.password-requirement-met {
+  color: var(--color-success);
+}
+
+.password-requirement-unmet {
+  color: var(--color-error);
+}
+
+.register-terms-link {
+  color: var(--color-primary);
+}
+
+.register-disclaimer-text {
+  font-size: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+    padding: 16px;
+  }
+  
+  .login-hero-section {
+    padding: 24px;
+    text-align: center;
+  }
+  
+  .login-hero-title {
+    font-size: 24px;
+  }
+  
+  .login-hero-description {
+    font-size: 16px;
+  }
+}
+
+.password-strength-bar {
+  /* 动态宽度通过内联样式控制 */
+  transition: width 0.3s ease;
+}
+
+/* 密码强度文字颜色 */
+.password-strength-text.strength-very-weak {
+  color: var(--color-error);
+}
+
+.password-strength-text.strength-weak {
+  color: var(--color-warning);
+}
+
+.password-strength-text.strength-medium {
+  color: var(--color-warning);
+}
+
+.password-strength-text.strength-strong {
+  color: var(--color-success);
+}
+
+.password-strength-text.strength-very-strong {
+  color: var(--color-success);
+}
+
+/* 密码强度条背景色 */
+.password-strength-bar.strength-very-weak {
+  background-color: var(--color-error) !important;
+}
+
+.password-strength-bar.strength-weak {
+  background-color: var(--color-warning) !important;
+}
+
+.password-strength-bar.strength-medium {
+  background-color: var(--color-warning) !important;
+}
+
+.password-strength-bar.strength-strong {
+  background-color: var(--color-success) !important;
+}
+
+.password-strength-bar.strength-very-strong {
+  background-color: var(--color-success) !important;
+}
+
+/* 404页面样式 */
+.not-found-page {
+  background-color: var(--color-bg-container);
+}
+
+.not-found-page .max-w-md {
+  background-color: var(--color-bg-container);
+  color: var(--color-text);
+}
+
+.not-found-page .bg-gray-100 {
+  background-color: var(--color-fill-quaternary);
+}
+
+.not-found-page .text-gray-400 {
+  color: var(--color-text-tertiary);
+}
+
+.not-found-page .text-gray-900 {
+  color: var(--color-text);
+}
+
+.not-found-page .text-gray-600 {
+  color: var(--color-text-secondary);
+}
+
+.not-found-page .text-gray-500 {
+  color: var(--color-text-tertiary);
+}
+
+/* 验证码组件样式 */
+.captcha-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.captcha-input-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+}
+
+.captcha-input {
+  flex: 1;
+  min-width: 120px;
+}
+
+.captcha-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.captcha-image-container {
+  width: 120px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--color-bg-container);
+}
+
+.captcha-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.captcha-refresh-btn {
+  width: 120px;
+  font-size: var(--font-size-xs);
+}
+
+.captcha-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  text-align: center;
+}

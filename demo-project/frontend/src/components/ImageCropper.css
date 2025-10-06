@@ -1,0 +1,22 @@
+/**
+ * 图片裁剪器样式
+ */
+.crop-scale-slider {
+  width: 150px;
+}
+
+.crop-canvas-container {
+  cursor: grab;
+  user-select: none;
+}
+
+.crop-canvas-container.crop-dragging {
+  cursor: grabbing;
+}
+
+/* CSS变量定义 */
+:root {
+  --cropper-bg: #f5f5f5;
+  --cropper-crop-border: #1890ff;
+  --cropper-corners: #1890ff;
+}

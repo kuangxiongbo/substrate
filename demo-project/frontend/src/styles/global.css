@@ -1,0 +1,216 @@
+/**
+ * 全局样式 - 专业UI设计师定制
+ * 基于Ant Design设计语言
+ */
+
+/* 导入Ant Design样式 */
+@import 'antd/dist/reset.css';
+
+/* 导入Google字体 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* 全局重置和基础样式 */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  line-height: 1.5715;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.5715;
+  color: #262626;
+  /* 背景色由主题包控制，不在此处硬编码 */
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 滚动条样式 - 由主题包控制 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* 浅色主题滚动条 - 使用主题包变量 */
+.light-theme ::-webkit-scrollbar-track {
+  background: var(--color-border-tertiary);
+  border-radius: var(--border-radius-sm);
+}
+
+.light-theme ::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--border-radius-sm);
+}
+
+.light-theme ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* 深色主题滚动条 - 使用主题包变量 */
+.dark-theme ::-webkit-scrollbar-track {
+  background: var(--color-border-tertiary);
+  border-radius: var(--border-radius-sm);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--border-radius-sm);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* 链接样式 - 由主题包控制 */
+.light-theme a {
+  color: #1890ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.light-theme a:hover {
+  color: #40a9ff;
+}
+
+.light-theme a:active {
+  color: #096dd9;
+}
+
+.dark-theme a {
+  color: #177ddc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.dark-theme a:hover {
+  color: #40a9ff;
+}
+
+.dark-theme a:active {
+  color: #096dd9;
+}
+
+/* 按钮基础样式 */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 输入框基础样式 */
+input, textarea, select {
+  font-family: inherit;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* 卡片阴影效果 */
+.ant-card {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  transition: box-shadow 0.3s ease;
+}
+
+.ant-card:hover {
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* 按钮样式已移至主题包控制 */
+
+/* 输入框样式已移至主题包控制 */
+
+/* 表单标签样式已移至主题包控制 */
+
+/* 菜单样式已移至 menu-theme.css，由主题包控制 */
+
+/* 菜单选中样式已移至 menu-theme.css */
+
+/* 表格、消息、模态框、抽屉样式已移至主题包控制 */
+
+/* 页面布局、登录页面、管理面板样式已移至主题包控制 */
+
+/* 管理面板组件样式已移至主题包控制 */
+
+/* 移动端菜单按钮 */
+.mobile-menu-btn {
+  display: none !important;
+}
+
+/* 响应式设计、动画效果、加载状态、空状态样式已移至主题包控制 */
+
+/* 工具类已移至主题包控制 */
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+/* ===== 主题背景色控制 ===== */
+
+/* 浅色主题背景 */
+.light-theme body {
+  background-color: #f5f5f5 !important;
+  color: #262626 !important;
+}
+
+.light-theme html {
+  background-color: #f5f5f5 !important;
+}
+
+/* 强制浅色主题背景色应用到所有元素 */
+.light-theme #root,
+.light-theme .app,
+.light-theme .main-container {
+  background-color: #f5f5f5 !important;
+  min-height: 100vh !important;
+}
+
+.light-theme .ant-layout {
+  background-color: #f5f5f5 !important;
+}
+
+.light-theme .ant-layout-content {
+  background-color: #ffffff !important;
+}
+
+/* 所有主题样式由主题包控制，此处只保留基础样式 */
+
+/* 确保主题切换时背景色立即生效 */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+html {
+  transition: background-color 0.3s ease !important;
+}
+
+/* 工具类已移至主题包控制 */
+
+
+
+
+
+

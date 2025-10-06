@@ -1,0 +1,789 @@
+/* 设置页面通用样式 - 使用主题变量替代内联样式 */
+
+.settings-page {
+  padding: 0;
+}
+
+.settings-page-title {
+  margin-bottom: 16px;
+}
+
+.settings-page-title-icon {
+  margin-right: 8px;
+}
+
+.settings-card {
+  height: 100%;
+  background: var(--color-bg-container);
+  border: 1px solid var(--color-border);
+}
+
+/* 减少Card内部间距 */
+.settings-card .ant-card-body {
+  padding: 8px !important;
+}
+
+.settings-input-full-width {
+  width: 100%;
+}
+
+.settings-tag-large {
+  font-size: 16px;
+  padding: 8px 16px;
+}
+
+.settings-status-container {
+  width: 100%;
+}
+
+.settings-avatar-primary {
+  background-color: var(--color-primary);
+}
+
+.settings-save-section {
+  margin-top: 32px;
+}
+
+.settings-status-section {
+  margin-top: 24px;
+}
+
+/* 概览页面特有样式 */
+.overview-page {
+  padding: 0;
+}
+
+.overview-page-title {
+  margin-bottom: 24px;
+}
+
+.overview-stats-section {
+  margin-bottom: 24px;
+}
+
+.overview-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.overview-stat-icon-blue {
+  color: var(--color-primary);
+}
+
+.overview-stat-icon-green {
+  color: var(--color-success);
+}
+
+.overview-stat-icon-orange {
+  color: var(--color-warning);
+}
+
+.overview-stat-icon-purple {
+  color: var(--color-purple, #722ed1);
+}
+
+.overview-trend-up {
+  color: var(--color-success);
+}
+
+.overview-trend-down {
+  color: var(--color-error);
+}
+
+.overview-trend-text {
+  font-size: 12px;
+}
+
+.overview-health-container {
+  width: 100%;
+}
+
+.overview-health-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.overview-activity-time {
+  font-size: 12px;
+}
+
+/* 仪表板页面特有样式 */
+.dashboard-page {
+  padding: 0;
+}
+
+.dashboard-page-title {
+  margin-bottom: 8px;
+}
+
+/* 操作日志页面样式 */
+.operation-logs-search-input {
+  width: 300px;
+}
+
+.operation-logs-filter-select {
+  width: 120px;
+}
+
+.operation-logs-date-picker {
+  width: 240px;
+}
+
+.operation-logs-count {
+  margin-bottom: 16px;
+  color: var(--color-text-tertiary);
+  font-size: 14px;
+}
+
+/* 基础配置页面样式 */
+.current-system-info {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-fill-quaternary);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.current-system-info .info-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.current-system-info .info-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Logo预览区样式 */
+.logo-preview-section {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-fill-quaternary);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.logo-preview-item {
+  margin-bottom: var(--spacing-md);
+}
+
+.logo-preview-item:last-child {
+  margin-bottom: 0;
+}
+
+.logo-preview-item .ant-typography {
+  margin-bottom: var(--spacing-xs);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.logo-preview-container {
+  margin-top: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-container);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--border-radius-sm);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.logo-preview-container.small {
+  min-height: 60px;
+  width: 80px;
+}
+
+.logo-preview-container.medium {
+  min-height: 100px;
+  width: 120px;
+}
+
+.logo-preview-container.large {
+  min-height: 140px;
+  width: 160px;
+}
+
+.logo-preview-container.xlarge {
+  min-height: 180px;
+  width: 200px;
+}
+
+.logo-preview-container:hover {
+  border-color: var(--color-primary);
+  background: var(--color-fill-quaternary);
+}
+
+.logo-preview-image {
+  object-fit: contain;
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.logo-preview-image.small {
+  max-width: 48px;
+  max-height: 48px;
+}
+
+.logo-preview-image.medium {
+  max-width: 80px;
+  max-height: 80px;
+}
+
+.logo-preview-image.large {
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.logo-preview-image.xlarge {
+  max-width: 160px;
+  max-height: 160px;
+}
+
+.logo-preview-image:hover {
+  transform: scale(1.05);
+}
+
+.logo-preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+}
+
+.logo-preview-placeholder.hidden {
+  display: none;
+}
+
+.logo-preview-placeholder.visible {
+  display: flex;
+}
+
+.logo-preview-placeholder .anticon {
+  font-size: 28px;
+  color: var(--color-text-quaternary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.logo-preview-placeholder span {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+/* 当前Logo信息显示 */
+.current-logo-info {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--color-fill-quaternary);
+  border-radius: var(--border-radius-sm);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.current-logo-info .current-logo-title {
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.current-logo-info .logo-specs {
+  display: flex;
+  justify-content: space-around;
+  gap: var(--spacing-sm);
+}
+
+.current-logo-info .spec-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.current-logo-info .spec-label {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  margin-bottom: 2px;
+}
+
+.current-logo-info .spec-value {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* 通用页面样式 */
+.page-title {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+/* 主题演示页面样式 */
+.demo-alert {
+  margin-bottom: var(--spacing-lg);
+}
+
+.demo-space {
+  width: 100%;
+}
+
+.demo-select {
+  width: 100%;
+}
+
+.demo-theme-card {
+  margin-top: var(--spacing-lg);
+}
+
+.demo-theme-info {
+  margin-top: var(--spacing-md);
+}
+
+/* 重置密码页面样式 */
+.reset-password-actions {
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.stat-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+.stat-icon {
+  /* 背景色通过内联样式控制，这里只定义基础样式 */
+}
+
+.stat-trend-up {
+  color: var(--color-success);
+}
+
+.stat-trend-down {
+  color: var(--color-error);
+}
+
+.stat-trend-text {
+  font-size: 12px;
+}
+
+.stat-trend-label {
+  font-size: 12px;
+}
+
+.dashboard-card {
+  border-radius: 12px;
+  height: 100%;
+}
+
+.dashboard-timeline-success {
+  color: var(--color-success);
+}
+
+.dashboard-timeline-error {
+  color: var(--color-error);
+}
+
+.dashboard-timeline-text {
+  font-size: 12px;
+}
+
+.user-list-text {
+  font-size: 12px;
+}
+
+.dashboard-table-card {
+  border-radius: 12px;
+}
+
+/* 管理员管理页面特有样式 */
+.admin-name {
+  font-weight: 500;
+}
+
+.admin-email {
+  font-size: 12px;
+}
+
+.admin-stat-icon-blue {
+  color: var(--color-primary);
+}
+
+.admin-stat-icon-green {
+  color: var(--color-success);
+}
+
+.admin-stat-icon-red {
+  color: var(--color-error);
+}
+
+.settings-stats-section {
+  margin-bottom: 24px;
+}
+
+/* 系统设置页面特有样式 */
+.settings-header-card {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.settings-back-button {
+  margin-right: 16px;
+}
+
+.settings-page-main-title {
+  margin: 0;
+}
+
+.settings-layout {
+  background: transparent;
+  min-height: calc(100vh - 200px);
+}
+
+.settings-sider {
+  background: var(--color-bg-container);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-right: 24px;
+}
+
+.settings-menu {
+  border: none;
+  background: transparent;
+  padding: 16px 0;
+}
+
+.settings-content {
+  background: var(--color-bg-container);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+}
+
+/* 用户管理页面特有样式 */
+.user-search-input {
+  width: 200px;
+}
+
+.user-filter-select {
+  width: 120px;
+}
+
+/* 系统配置页面特有样式 */
+.config-encrypted-icon {
+  color: var(--color-primary);
+}
+
+.config-public-icon {
+  color: var(--color-success);
+}
+
+.config-input-full-width {
+  width: 100%;
+}
+
+/* 操作日志页面样式 */
+.logs-filter-select {
+  width: 100%;
+}
+
+.logs-date-range-picker {
+  width: 100%;
+}
+
+.logs-reset-button {
+  width: 100%;
+}
+
+/* 统计图标背景色 */
+.stat-icon.stat-icon-blue {
+  background-color: #1890ff !important;
+}
+
+.stat-icon.stat-icon-green {
+  background-color: #52c41a !important;
+}
+
+.stat-icon.stat-icon-orange {
+  background-color: #faad14 !important;
+}
+
+.stat-icon.stat-icon-red {
+  background-color: #f5222d !important;
+}
+
+.stat-icon.stat-icon-purple {
+  background-color: #722ed1 !important;
+}
+
+.stat-icon.stat-icon-default {
+  background-color: var(--color-primary) !important;
+}
+
+/* 监控页面样式 */
+.monitoring-description {
+  font-size: var(--font-size-xs);
+}
+
+.monitoring-space-full-width {
+  width: 100%;
+}
+
+/* 备份页面样式 */
+.backup-description {
+  font-size: var(--font-size-xs);
+}
+
+/* 日志页面样式 */
+.logs-filter-full-width {
+  width: 100%;
+}
+
+/* 个人资料页面样式 */
+.profile-date-picker {
+  width: 100%;
+}
+
+.profile-space-full-width {
+  width: 100%;
+}
+
+.profile-input-full-width {
+  width: 100%;
+}
+
+/* 文件管理页面样式 */
+.file-manager-upload-width {
+  width: 200px;
+}
+
+/* 通知中心页面样式 */
+.notification-icon-info {
+  color: var(--color-primary);
+}
+
+.notification-icon-warning {
+  color: var(--color-warning);
+}
+
+.notification-icon-error {
+  color: var(--color-error);
+}
+
+.notification-icon-success {
+  color: var(--color-success);
+}
+
+.notification-input-full-width {
+  width: 100%;
+}
+
+.notification-item-transparent {
+  background-color: transparent;
+}
+
+.notification-timestamp {
+  font-size: var(--font-size-xs);
+}
+
+.config-card-spacing {
+  margin-bottom: 16px;
+}
+
+.config-page-title {
+  margin-bottom: 8px;
+}
+
+.config-main-card {
+  border-radius: 12px;
+}
+
+.config-alert {
+  margin-bottom: 24px;
+}
+
+/* 监控页面特有样式 */
+.monitoring-header-icon {
+  font-size: 24px;
+  color: var(--color-primary);
+}
+
+.monitoring-title {
+  margin: 0;
+}
+
+.monitoring-description {
+  margin: 0;
+}
+
+.monitoring-feature-card {
+  margin-bottom: 24px;
+}
+
+.monitoring-usage-card {
+  margin-top: 24px;
+}
+
+/* 系统设置页面特有样式 */
+.system-threat-text {
+  color: var(--color-error);
+}
+
+/* 主题切换器组件样式 */
+.theme-switcher-container {
+  /* 容器样式 */
+}
+
+.theme-switcher-label {
+  font-size: 14px;
+}
+
+.theme-switcher-select {
+  min-width: 120px;
+}
+
+.theme-switcher-description {
+  font-size: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 0;
+  }
+  
+  .settings-page-title {
+    font-size: 18px;
+  }
+  
+  .settings-save-section {
+    margin-top: 24px;
+  }
+  
+  .overview-page {
+    padding: 16px;
+  }
+  
+  .overview-page-title {
+    font-size: 18px;
+  }
+}
+
+/* 操作日志页面样式 */
+.operation-logs-page {
+  padding: 0;
+}
+
+.logs-header-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow-card);
+}
+
+.logs-page-title {
+  margin: 0 !important;
+  color: var(--color-text-heading);
+}
+
+.logs-filter-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow-card);
+}
+
+.logs-table-card {
+  border-radius: 8px;
+  box-shadow: var(--box-shadow-card);
+}
+
+.logs-table-card .ant-card-body {
+  padding: 24px;
+}
+
+.logs-table-card .ant-table-thead > tr > th {
+  background: var(--color-bg-container);
+  color: var(--color-text-heading);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.logs-table-card .ant-table-tbody > tr:hover > td {
+  background: var(--color-bg-elevated);
+}
+
+.logs-table-card .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--color-border-secondary);
+  color: var(--color-text);
+}
+
+.logs-table-card .ant-pagination {
+  margin-top: 16px;
+}
+
+.logs-table-card .ant-pagination-item {
+  border-color: var(--color-border);
+}
+
+.logs-table-card .ant-pagination-item:hover {
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-pagination-item-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-pagination-item-active a {
+  color: #ffffff;
+}
+
+.logs-table-card .ant-tag {
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.logs-table-card .ant-input-affix-wrapper {
+  border-color: var(--color-border);
+}
+
+.logs-table-card .ant-input-affix-wrapper:hover {
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-input-affix-wrapper:focus,
+.logs-table-card .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-outline);
+}
+
+.logs-table-card .ant-select {
+  border-color: var(--color-border);
+}
+
+.logs-table-card .ant-select:hover {
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-select-focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-outline);
+}
+
+.logs-table-card .ant-picker {
+  border-color: var(--color-border);
+}
+
+.logs-table-card .ant-picker:hover {
+  border-color: var(--color-primary);
+}
+
+.logs-table-card .ant-picker-focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-outline);
+}
