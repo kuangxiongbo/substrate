@@ -14,7 +14,7 @@ import {
   SkinOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../contexts/ThemeContext';
-import { useLayout } from '../contexts/LayoutContext';
+import { useLayout } from './layout/LayoutProvider';
 import '../styles/menu-theme.css';
 
 const { Text } = Typography;
@@ -64,11 +64,11 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
     setShouldAutoClose(true);
   };
 
-  const handleLayoutChange = (layoutType: 'sidebar' | 'top_menu') => {
+  const handleLayoutChange = (layoutType: 'sidebar' | 'top') => {
     console.log('QuickSettingsPanel: handleLayoutChange called with:', layoutType);
     
-    // 立即设置布局
-    switchLayoutType(layoutType as any);
+    // 使用setLayout而不是switchLayoutType
+    setLayout({ ...layout, type: layoutType });
     
     if (previewMode) {
       setPreviewMode(false);
@@ -265,11 +265,11 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
                         />
                       </Tooltip>
                       <Button
-                        type={layout.type === 'top_menu' ? 'primary' : 'default'}
+                        type={layout.type === 'top' ? 'primary' : 'default'}
                         size="small"
-                        onClick={() => handleLayoutChange('top_menu')}
+                        onClick={() => handleLayoutChange('top')}
                       >
-                        {layout.type === 'top_menu' ? '当前' : '应用'}
+                        {layout.type === 'top' ? '当前' : '应用'}
                       </Button>
                     </Space>
                   </div>
@@ -283,12 +283,12 @@ const QuickSettingsPanel: React.FC<QuickSettingsPanelProps> = ({ visible, onClos
               <Space>
                 <Text>快速切换</Text>
                 <Switch
-                  checked={layout.type === 'top_menu'}
-                  onChange={() => switchLayoutType(layout.type === 'top_menu' ? 'sidebar' : 'top_menu')}
+                  checked={layout.type === 'top'}
+                  onChange={() => setLayout({ ...layout, type: layout.type === 'top' ? 'sidebar' : 'top' })}
                   checkedChildren={<AppstoreOutlined />}
                   unCheckedChildren={<MenuOutlined />}
                 />
-                <Text type="secondary">{layout.type === 'top_menu' ? '顶部菜单' : '侧边栏'}</Text>
+                <Text type="secondary">{layout.type === 'top' ? '顶部菜单' : '侧边栏'}</Text>
               </Space>
             </div>
           </Space>

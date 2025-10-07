@@ -21,7 +21,7 @@ import {
   // FileTextOutlined,
   // FolderOutlined,
 } from '@ant-design/icons';
-import { useLayout } from '../../contexts/LayoutContext';
+import { useLayout } from './LayoutProvider';
 import { useAuthStore } from '../../stores/authStore';
 import { useTheme } from '../../contexts/ThemeContext'; // Added theme context
 import LanguageSwitcher from '../LanguageSwitcher';

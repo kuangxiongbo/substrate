@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { LayoutProvider, useLayout } from '../../contexts/LayoutContext';
+import { LayoutProvider, useLayout } from './LayoutProvider';
 import SidebarLayout from './SidebarLayout';
 import TopMenuLayout from './TopMenuLayout';
 
@@ -20,7 +20,7 @@ const LayoutContent: React.FC<LayoutWrapperProps> = ({ children }) => {
     return <SidebarLayout>{children}</SidebarLayout>;
   }
 
-  if (layout.type === 'top_menu') {
+  if (layout.type === 'top') {
     return <TopMenuLayout>{children}</TopMenuLayout>;
   }
 
