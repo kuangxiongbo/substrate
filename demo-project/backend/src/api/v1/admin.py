@@ -460,6 +460,98 @@ async def update_user(
         updated_at=user.updated_at.isoformat() if user.updated_at else None
     )
 
+@router.delete("/users/{user_id}")
+async def delete_user(
+    user_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """删除用户"""
+    if not current_user or not hasattr(current_user, 'has_permission') or not current_user.has_permission("user.delete"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="需要用户删除权限"
+        )
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="用户不存在"
+        )
+    
+    # 软删除：将账户状态设置为deleted
+    from src.models.user import AccountStatus
+    user.account_status = AccountStatus.DELETED
+    user.updated_at = datetime.utcnow()
+    
+    db.commit()
+    
+    return {"message": "用户删除成功"}
+
+@router.post("/users", response_model=UserResponse)
+async def create_user(
+    user_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """创建新用户"""
+    if not current_user or not hasattr(current_user, 'has_permission') or not current_user.has_permission("user.create"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="需要用户创建权限"
+        )
+    
+    # 检查邮箱是否已存在
+    existing_user = db.query(User).filter(User.email == user_data.get('email')).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="邮箱已存在"
+        )
+    
+    # 创建新用户
+    from src.models.user import AccountStatus
+    from src.utils.security import hash_password
+    
+    new_user = User(
+        email=user_data.get('email'),
+        password_hash=hash_password(user_data.get('password')),
+        email_verified=user_data.get('email_verified', False),
+        account_status=AccountStatus(user_data.get('account_status', 'active')),
+        registration_timestamp=datetime.utcnow(),
+        created_at=datetime.utcnow()
+    )
+    
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    
+    # 分配角色
+    if user_data.get('roles'):
+        from src.models.role import Role
+        for role_name in user_data.get('roles', []):
+            role = db.query(Role).filter(Role.name == role_name).first()
+            if role:
+                new_user.roles.append(role)
+        
+        db.commit()
+        db.refresh(new_user)
+    
+    return UserResponse(
+        id=str(new_user.id),
+        email=new_user.email,
+        email_verified=new_user.email_verified,
+        account_status=new_user.account_status.value,
+        failed_login_attempts=new_user.failed_login_attempts,
+        account_locked_until=new_user.account_locked_until.isoformat() if new_user.account_locked_until else None,
+        registration_timestamp=new_user.registration_timestamp.isoformat(),
+        last_login_timestamp=new_user.last_login_timestamp.isoformat() if new_user.last_login_timestamp else None,
+        roles=[role.name for role in new_user.roles],
+        created_at=new_user.created_at.isoformat(),
+        updated_at=new_user.updated_at.isoformat() if new_user.updated_at else None
+    )
+
 # 角色管理
 @router.get("/roles", response_model=List[RoleResponse])
 async def get_roles(

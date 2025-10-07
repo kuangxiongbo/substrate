@@ -8,21 +8,21 @@ import {
   TeamOutlined,
   SecurityScanOutlined,
   MailOutlined,
-  LayoutOutlined,
   MonitorOutlined,
   DatabaseOutlined,
   FileTextOutlined,
   FolderOutlined,
   BellOutlined,
+  SafetyOutlined,
 } from '@ant-design/icons';
 // import { useTheme } from '../contexts/ThemeContext';
 import ContentPageLayout, { type TabItem } from '../components/layout/ContentPageLayout';
 import { useTranslation } from 'react-i18next';
 import BasicConfigPage from './settings/BasicConfigPage';
 import AdminManagementPage from './settings/AdminManagementPage';
+import RoleManagementPage from './settings/RoleManagementPage';
 import SecurityConfigPage from './settings/SecurityConfigPage';
 import EmailConfigPage from './settings/EmailConfigPage';
-import LayoutConfigPage from './settings/LayoutConfigPage';
 import MonitoringPage from './settings/MonitoringPage';
 import SystemMonitoringPage from './SystemMonitoringPage';
 import DataBackupPage from './DataBackupPage';
@@ -52,6 +52,12 @@ const SystemSettingsPage: React.FC = () => {
       content: <AdminManagementPage />,
     },
     {
+      key: 'roles',
+      icon: <SafetyOutlined />,
+      label: t('settings.roleManagement'),
+      content: <RoleManagementPage />,
+    },
+    {
       key: 'security',
       icon: <SecurityScanOutlined />,
       label: t('settings.securityConfig'),
@@ -62,12 +68,6 @@ const SystemSettingsPage: React.FC = () => {
       icon: <MailOutlined />,
       label: t('settings.emailConfig'),
       content: <EmailConfigPage />,
-    },
-    {
-      key: 'layout',
-      icon: <LayoutOutlined />,
-      label: t('settings.layoutConfig'),
-      content: <LayoutConfigPage />,
     },
     {
       key: 'monitoring',
@@ -124,9 +124,9 @@ const SystemSettingsPage: React.FC = () => {
       // 根据路径判断
       const path = location.pathname;
       if (path.includes('/admin')) setActiveTab('admin');
+      else if (path.includes('/roles')) setActiveTab('roles');
       else if (path.includes('/security')) setActiveTab('security');
       else if (path.includes('/email')) setActiveTab('email');
-      else if (path.includes('/layout')) setActiveTab('layout');
       else if (path.includes('/monitoring')) setActiveTab('monitoring');
       else if (path.includes('/system-monitoring')) setActiveTab('system-monitoring');
       else if (path.includes('/data-backup')) setActiveTab('data-backup');

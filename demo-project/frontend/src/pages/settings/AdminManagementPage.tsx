@@ -15,10 +15,17 @@ import {
   Typography,
   Card,
   Avatar,
+  Input,
+  Popconfirm,
+  Divider,
 } from 'antd';
 import {
   EditOutlined,
   UserOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+  LockOutlined,
+  UnlockOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -42,6 +49,21 @@ interface AdminUser {
   updated_at?: string;
 }
 
+interface AdminUserCreate {
+  email: string;
+  password: string;
+  roles: string[];
+  account_status: string;
+  email_verified: boolean;
+}
+
+interface AdminUserUpdate {
+  email?: string;
+  roles?: string[];
+  account_status?: string;
+  email_verified?: boolean;
+}
+
 // interface AdminStats {
 //   total_users: number;
 //   active_users: number;
@@ -56,6 +78,12 @@ const AdminManagementPage: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [availableRoles, setAvailableRoles] = useState([
+    { value: 'super_admin', label: '超级管理员' },
+    { value: 'admin', label: '管理员' },
+    { value: 'moderator', label: '内容管理员' },
+    { value: 'demo', label: '演示账号' },
+  ]);
   const { currentTheme } = useTheme();
   const { t } = useTranslation();
   // const [adminStats] = useState<AdminStats | null>(null);
@@ -65,10 +93,20 @@ const AdminManagementPage: React.FC = () => {
     loadStats();
   }, []);
 
+  useEffect(() => {
+    // 更新角色标签为国际化文本
+    setAvailableRoles([
+      { value: 'super_admin', label: t('admin.superAdmin') },
+      { value: 'admin', label: t('admin.admin') },
+      { value: 'moderator', label: t('admin.moderator') },
+      { value: 'demo', label: t('admin.demoAccount') },
+    ]);
+  }, [t]);
+
   const loadAdminUsers = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/v1/admin/users', {
+      const response = await fetch('http://localhost:8000/api/v1/admin/users', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -96,7 +134,7 @@ const AdminManagementPage: React.FC = () => {
 
   const loadStats = async () => {
     try {
-      const response = await fetch('/api/v1/admin/stats', {
+      const response = await fetch('http://localhost:8000/api/v1/admin/stats', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -191,21 +229,96 @@ const AdminManagementPage: React.FC = () => {
           >
             {t('admin.edit')}
           </Button>
+          <Button
+            type="link"
+            icon={record.account_status === 'locked' ? <UnlockOutlined /> : <LockOutlined />}
+            onClick={() => handleToggleLock(record)}
+          >
+            {record.account_status === 'locked' ? t('admin.unlock') : t('admin.lock')}
+          </Button>
+          <Popconfirm
+            title={t('admin.deleteConfirm')}
+            description={t('admin.deleteConfirmMessage')}
+            onConfirm={() => handleDelete(record.id)}
+            okText={t('common.ok')}
+            cancelText={t('common.cancel')}
+          >
+            <Button
+              type="link"
+              danger
+              icon={<DeleteOutlined />}
+            >
+              {t('admin.delete')}
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },
   ];
 
-  // const handleAdd = () => {
-  //   setEditingUser(null);
-  //   form.resetFields();
-  //   setModalVisible(true);
-  // };
+  const handleAdd = () => {
+    setEditingUser(null);
+    form.resetFields();
+    setModalVisible(true);
+  };
 
   const handleEdit = (user: AdminUser) => {
     setEditingUser(user);
-    form.setFieldsValue(user);
+    form.setFieldsValue({
+      ...user,
+      roles: user.roles,
+    });
     setModalVisible(true);
+  };
+
+  const handleToggleLock = async (user: AdminUser) => {
+    try {
+      const newStatus = user.account_status === 'locked' ? 'active' : 'locked';
+      const response = await fetch(`http://localhost:8000/api/v1/admin/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          account_status: newStatus
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setAdminUsers(adminUsers.map(u => 
+        u.id === user.id ? { ...u, account_status: newStatus } : u
+      ));
+      message.success(newStatus === 'locked' ? t('admin.lockSuccess') : t('admin.unlockSuccess'));
+    } catch (error) {
+      console.error('切换锁定状态失败:', error);
+      message.error(t('admin.toggleLockFailed'));
+    }
+  };
+
+  const handleDelete = async (userId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/admin/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setAdminUsers(adminUsers.filter(u => u.id !== userId));
+      message.success(t('admin.deleteSuccess'));
+    } catch (error) {
+      console.error('删除用户失败:', error);
+      message.error(t('admin.deleteFailed'));
+    }
   };
 
 
@@ -214,41 +327,51 @@ const AdminManagementPage: React.FC = () => {
       const values = await form.validateFields();
       setLoading(true);
       
-      // 真实API调用
-      const response = await fetch('/api/v1/admin/users', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(values)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
       if (editingUser) {
-        // 编辑
+        // 编辑用户
+        const response = await fetch(`http://localhost:8000/api/v1/admin/users/${editingUser.id}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(values)
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const updatedUser = await response.json();
         setAdminUsers(adminUsers.map(user => 
-          user.id === editingUser.id ? { ...user, ...values } : user
+          user.id === editingUser.id ? updatedUser : user
         ));
         message.success(t('admin.updateSuccess'));
       } else {
-        // 新增
-        const newUser: AdminUser = {
-          id: Date.now().toString(),
-          ...values,
-          lastLogin: t('admin.neverLoggedIn'),
-          createdAt: new Date().toLocaleString(),
-        };
+        // 新增用户
+        const response = await fetch('http://localhost:8000/api/v1/admin/users', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(values)
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const newUser = await response.json();
         setAdminUsers([...adminUsers, newUser]);
         message.success(t('admin.addSuccess'));
       }
       
       setModalVisible(false);
+      form.resetFields();
     } catch (error) {
-      console.error('Validation failed:', error);
+      console.error('操作失败:', error);
+      message.error(editingUser ? t('admin.updateFailed') : t('admin.addFailed'));
     } finally {
       setLoading(false);
     }
@@ -269,7 +392,8 @@ const AdminManagementPage: React.FC = () => {
         extra={
           <Button
             type="primary"
-            onClick={() => setModalVisible(true)}
+            icon={<PlusOutlined />}
+            onClick={handleAdd}
           >
             {t('admin.addAdmin')}
           </Button>
@@ -301,21 +425,51 @@ const AdminManagementPage: React.FC = () => {
           form={form}
           layout="vertical"
           initialValues={{
-            status: 'active',
-            role: 'admin',
+            account_status: 'active',
+            roles: ['admin'],
+            email_verified: false,
           }}
         >
           <Form.Item
-            name="email_verified"
-            label={t('admin.emailVerificationStatus')}
-            valuePropName="checked"
+            name="email"
+            label={t('admin.email')}
+            rules={[
+              { required: true, message: t('admin.emailRequired') },
+              { type: 'email', message: t('admin.emailInvalid') }
+            ]}
           >
-            <Switch checkedChildren={t('admin.verified')} unCheckedChildren={t('admin.unverified')} />
+            <Input placeholder={t('admin.emailPlaceholder')} />
+          </Form.Item>
+
+          {!editingUser && (
+            <Form.Item
+              name="password"
+              label={t('admin.password')}
+              rules={[
+                { required: true, message: t('admin.passwordRequired') },
+                { min: 6, message: t('admin.passwordMinLength') }
+              ]}
+            >
+              <Input.Password placeholder={t('admin.passwordPlaceholder')} />
+            </Form.Item>
+          )}
+
+          <Form.Item
+            name="roles"
+            label={t('admin.roles')}
+            rules={[{ required: true, message: t('admin.rolesRequired') }]}
+          >
+            <Select
+              mode="multiple"
+              placeholder={t('admin.rolesPlaceholder')}
+              options={availableRoles}
+            />
           </Form.Item>
 
           <Form.Item
             name="account_status"
             label={t('admin.accountStatus')}
+            rules={[{ required: true, message: t('admin.statusRequired') }]}
           >
             <Select>
               <Option value="active">{t('admin.active')}</Option>
@@ -324,7 +478,13 @@ const AdminManagementPage: React.FC = () => {
             </Select>
           </Form.Item>
 
-
+          <Form.Item
+            name="email_verified"
+            label={t('admin.emailVerificationStatus')}
+            valuePropName="checked"
+          >
+            <Switch checkedChildren={t('admin.verified')} unCheckedChildren={t('admin.unverified')} />
+          </Form.Item>
         </Form>
       </Modal>
     </motion.div>
