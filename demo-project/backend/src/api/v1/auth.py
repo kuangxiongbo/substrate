@@ -16,7 +16,7 @@ from src.schemas import (
 )
 from src.services import AuthService, UserService
 from src.dependencies import get_current_user, get_client_ip
-from src.models import User
+from src.models.user import User
 from src.utils.constants import ERROR_CODES, SUCCESS_MESSAGES
 
 router = APIRouter()
@@ -100,6 +100,7 @@ async def login(
     }
     
     # 更新最后登录时间
+    from datetime import datetime
     user.last_login_timestamp = datetime.utcnow()
     db.commit()
     
