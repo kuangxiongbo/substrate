@@ -87,7 +87,9 @@ export const useLayoutStore = create<LayoutStore>()(
       },
 
       setLayout: (config: Partial<LayoutConfig>) => {
-        set({ layout: { ...get().layout, ...config }, error: null });
+        const newLayout = { ...get().layout, ...config };
+        console.log('LayoutStore: setLayout called', { old: get().layout, new: newLayout });
+        set({ layout: newLayout, error: null });
       },
 
       toggleLayoutType: () => {
@@ -126,13 +128,16 @@ export const useLayoutStore = create<LayoutStore>()(
       storage: {
         getItem: (name) => {
           const str = localStorage.getItem(name);
+          console.log('LayoutStore: getItem', { name, value: str });
           if (!str) return null;
           return JSON.parse(str);
         },
         setItem: (name, value) => {
+          console.log('LayoutStore: setItem', { name, value });
           localStorage.setItem(name, JSON.stringify(value));
         },
         removeItem: (name) => {
+          console.log('LayoutStore: removeItem', { name });
           localStorage.removeItem(name);
         },
       },
