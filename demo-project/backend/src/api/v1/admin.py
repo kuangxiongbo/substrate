@@ -637,3 +637,142 @@ async def get_system_stats(
         "total_permissions": total_permissions,
         "total_configs": total_configs
     }
+
+# 用户偏好管理
+class UserPreferencesResponse(BaseModel):
+    id: str
+    user_id: str
+    theme_preference: str
+    layout_preference: str
+    follow_system_theme: bool
+    remember_preferences: bool
+    custom_theme_config: Optional[dict]
+    custom_layout_config: Optional[dict]
+    created_at: str
+    updated_at: str
+
+class UserPreferencesUpdate(BaseModel):
+    theme_preference: Optional[str] = None
+    layout_preference: Optional[str] = None
+    follow_system_theme: Optional[bool] = None
+    remember_preferences: Optional[bool] = None
+    custom_theme_config: Optional[dict] = None
+    custom_layout_config: Optional[dict] = None
+
+@router.get("/users/{user_id}/preferences", response_model=UserPreferencesResponse)
+async def get_user_preferences(
+    user_id: str,
+    db: Session = Depends(get_db)
+):
+    """获取用户偏好设置"""
+    from src.models.user_preferences import UserPreferences
+    import uuid
+    
+    # 转换user_id为UUID
+    try:
+        user_uuid = uuid.UUID(user_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID format"
+        )
+    
+    preferences = db.query(UserPreferences).filter(UserPreferences.user_id == user_uuid).first()
+    
+    if not preferences:
+        # 如果不存在，创建默认偏好
+        from src.models.user_preferences import ThemePreference, LayoutPreference
+        
+        preferences = UserPreferences(
+            user_id=user_uuid,
+            theme_preference=ThemePreference.AUTO,
+            layout_preference=LayoutPreference.SIDEBAR,
+            follow_system_theme=True,
+            remember_preferences=True
+        )
+        db.add(preferences)
+        db.commit()
+        db.refresh(preferences)
+    
+    return UserPreferencesResponse(
+        id=str(preferences.id),
+        user_id=str(preferences.user_id),
+        theme_preference=preferences.theme_preference.value,
+        layout_preference=preferences.layout_preference.value,
+        follow_system_theme=preferences.follow_system_theme,
+        remember_preferences=preferences.remember_preferences,
+        custom_theme_config=preferences.to_dict()['custom_theme_config'],
+        custom_layout_config=preferences.to_dict()['custom_layout_config'],
+        created_at=preferences.created_at.isoformat(),
+        updated_at=preferences.updated_at.isoformat()
+    )
+
+@router.put("/users/{user_id}/preferences", response_model=UserPreferencesResponse)
+async def update_user_preferences(
+    user_id: str,
+    preferences_update: UserPreferencesUpdate,
+    db: Session = Depends(get_db)
+):
+    """更新用户偏好设置"""
+    from src.models.user_preferences import UserPreferences, LayoutPreference, ThemePreference
+    import json
+    import uuid as uuid_module
+    
+    # 转换user_id为UUID
+    try:
+        user_uuid = uuid_module.UUID(user_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID format"
+        )
+    
+    preferences = db.query(UserPreferences).filter(UserPreferences.user_id == user_uuid).first()
+    
+    if not preferences:
+        # 如果不存在，创建新的偏好
+        preferences = UserPreferences(
+            user_id=user_uuid,
+            theme_preference=ThemePreference.AUTO,
+            layout_preference=LayoutPreference.SIDEBAR,
+            follow_system_theme=True,
+            remember_preferences=True
+        )
+        db.add(preferences)
+    
+    # 更新字段
+    if preferences_update.theme_preference is not None:
+        preferences.theme_preference = ThemePreference(preferences_update.theme_preference)
+    
+    if preferences_update.layout_preference is not None:
+        preferences.layout_preference = LayoutPreference(preferences_update.layout_preference)
+    
+    if preferences_update.follow_system_theme is not None:
+        preferences.follow_system_theme = preferences_update.follow_system_theme
+    
+    if preferences_update.remember_preferences is not None:
+        preferences.remember_preferences = preferences_update.remember_preferences
+    
+    if preferences_update.custom_theme_config is not None:
+        preferences.custom_theme_config = json.dumps(preferences_update.custom_theme_config)
+    
+    if preferences_update.custom_layout_config is not None:
+        preferences.custom_layout_config = json.dumps(preferences_update.custom_layout_config)
+    
+    preferences.updated_at = datetime.utcnow()
+    
+    db.commit()
+    db.refresh(preferences)
+    
+    return UserPreferencesResponse(
+        id=str(preferences.id),
+        user_id=str(preferences.user_id),
+        theme_preference=preferences.theme_preference.value,
+        layout_preference=preferences.layout_preference.value,
+        follow_system_theme=preferences.follow_system_theme,
+        remember_preferences=preferences.remember_preferences,
+        custom_theme_config=preferences.to_dict()['custom_theme_config'],
+        custom_layout_config=preferences.to_dict()['custom_layout_config'],
+        created_at=preferences.created_at.isoformat(),
+        updated_at=preferences.updated_at.isoformat()
+    )
