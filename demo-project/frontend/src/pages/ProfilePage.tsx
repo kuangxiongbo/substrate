@@ -22,6 +22,7 @@ import {
   // Tag,
   // Alert,
 } from 'antd';
+import dayjs from 'dayjs';
 import {
   UserOutlined,
   // CameraOutlined,
@@ -109,7 +110,12 @@ const ProfilePage: React.FC = () => {
       };
 
       setProfile(mockProfile);
-      form.setFieldsValue(mockProfile);
+      // 处理日期字段，将字符串转换为dayjs对象
+      const formData = {
+        ...mockProfile,
+        birthday: mockProfile.birthday ? dayjs(mockProfile.birthday) : undefined,
+      };
+      form.setFieldsValue(formData);
     } catch (error) {
       console.error('加载用户资料失败:', error);
       message.error('加载用户资料失败');
@@ -124,7 +130,13 @@ const ProfilePage: React.FC = () => {
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const updatedProfile = { ...profile, ..._values, updated_at: new Date().toISOString() };
+      // 处理日期字段，将dayjs对象转换为字符串
+      const processedValues = {
+        ..._values,
+        birthday: _values.birthday ? _values.birthday.format('YYYY-MM-DD') : undefined,
+      };
+      
+      const updatedProfile = { ...profile, ...processedValues, updated_at: new Date().toISOString() };
       setProfile(updatedProfile);
       message.success('个人资料保存成功');
     } catch (error) {
