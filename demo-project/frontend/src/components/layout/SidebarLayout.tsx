@@ -26,6 +26,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { useTheme } from '../../contexts/ThemeContext'; // Added theme context
 import LanguageSwitcher from '../LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import QuickSettingsPanel from '../QuickSettingsPanel';
 import './SidebarLayout.css';
 import '../../styles/menu-theme.css';
@@ -42,6 +43,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const { user, logout } = useAuthStore();
   const { currentTheme } = useTheme(); // Added theme context
   const { t } = useTranslation();
+  const location = useLocation();
   const [quickSettingsVisible, setQuickSettingsVisible] = React.useState(false);
   const [systemTitle, setSystemTitle] = React.useState('Spec-Kit');
   const [systemLogo, setSystemLogo] = React.useState<string | null>(null);
@@ -226,7 +228,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         <Menu
           theme={currentTheme?.menuVariant || 'light'}
           mode="inline"
-          defaultSelectedKeys={['overview']}
+          selectedKeys={[location.pathname.replace('/', '') || 'overview']}
           items={menuItems}
           className="sidebar-menu menu-theme-unified"
         />

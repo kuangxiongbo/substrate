@@ -21,6 +21,8 @@ import {
 } from '@ant-design/icons';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuthStore } from '../../stores/authStore';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import QuickSettingsPanel from '../QuickSettingsPanel';
 import './TopMenuLayout.css';
 import '../../styles/menu-theme.css';
@@ -35,6 +37,8 @@ interface TopMenuLayoutProps {
 const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
   const { currentTheme } = useTheme();
   const { user, logout } = useAuthStore();
+  const { t } = useTranslation();
+  const location = useLocation();
   const [quickSettingsVisible, setQuickSettingsVisible] = React.useState(false);
   const [systemTitle, setSystemTitle] = React.useState('Spec-Kit');
   const [systemLogo, setSystemLogo] = React.useState<string | null>(null);
@@ -128,14 +132,14 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
       {
         key: 'overview',
         icon: <DashboardOutlined />,
-        label: '概览',
+        label: t('navigation.overview'),
         path: '/overview',
         onClick: () => window.location.href = '/overview',
       },
       {
         key: 'users',
         icon: <TeamOutlined />,
-        label: '用户管理',
+        label: t('navigation.userManagement'),
         path: '/users',
         onClick: () => window.location.href = '/users',
       },
@@ -146,7 +150,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
     {
       key: 'profile',
       icon: <UserOutlined />,
-      label: '个人资料',
+      label: t('navigation.profile'),
       onClick: () => window.location.href = '/profile',
     },
     {
@@ -155,7 +159,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: '退出登录',
+      label: t('navigation.logout'),
       onClick: logout,
     },
   ];
@@ -197,7 +201,7 @@ const TopMenuLayout: React.FC<TopMenuLayoutProps> = ({ children }) => {
             <Menu
               theme={menuTheme}
               mode="horizontal"
-              defaultSelectedKeys={['overview']}
+              selectedKeys={[location.pathname.replace('/', '') || 'overview']}
               items={menuItems}
               className="top-menu menu-theme-unified"
             />
