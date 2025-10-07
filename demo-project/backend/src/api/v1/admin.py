@@ -638,6 +638,198 @@ async def get_system_stats(
         "total_configs": total_configs
     }
 
+# 数据备份管理
+class BackupRecord(BaseModel):
+    id: str
+    name: str
+    size: str
+    type: str
+    status: str
+    created_at: str
+    description: Optional[str] = None
+
+class BackupJob(BaseModel):
+    id: str
+    name: str
+    type: str
+    status: str
+    next_run: str
+    last_run: Optional[str] = None
+    schedule: str
+
+@router.get("/backups", response_model=List[BackupRecord])
+async def get_backups(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """获取备份记录列表"""
+    # 模拟数据，实际应该从数据库查询
+    return [
+        BackupRecord(
+            id="1",
+            name="full_backup_20241007",
+            size="2.5 GB",
+            type="full",
+            status="completed",
+            created_at="2024-10-07T10:00:00Z",
+            description="完整系统备份"
+        ),
+        BackupRecord(
+            id="2",
+            name="incremental_backup_20241007",
+            size="150 MB",
+            type="incremental",
+            status="completed",
+            created_at="2024-10-07T14:00:00Z",
+            description="增量备份"
+        )
+    ]
+
+@router.get("/backup-jobs", response_model=List[BackupJob])
+async def get_backup_jobs(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """获取备份任务列表"""
+    # 模拟数据，实际应该从数据库查询
+    return [
+        BackupJob(
+            id="1",
+            name="每日完整备份",
+            type="full",
+            status="active",
+            next_run="2024-10-08T02:00:00Z",
+            last_run="2024-10-07T02:00:00Z",
+            schedule="0 2 * * *"
+        ),
+        BackupJob(
+            id="2",
+            name="每小时增量备份",
+            type="incremental",
+            status="active",
+            next_run="2024-10-07T15:00:00Z",
+            last_run="2024-10-07T14:00:00Z",
+            schedule="0 * * * *"
+        )
+    ]
+
+# 文件管理
+class FileItem(BaseModel):
+    id: str
+    name: str
+    type: str
+    size: str
+    modified_at: str
+    path: str
+    is_directory: bool
+
+@router.get("/files", response_model=List[FileItem])
+async def get_files(
+    path: str = "/",
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """获取文件列表"""
+    # 模拟数据，实际应该从文件系统查询
+    return [
+        FileItem(
+            id="1",
+            name="documents",
+            type="folder",
+            size="-",
+            modified_at="2024-10-07T10:00:00Z",
+            path="/documents",
+            is_directory=True
+        ),
+        FileItem(
+            id="2",
+            name="report.pdf",
+            type="pdf",
+            size="2.3 MB",
+            modified_at="2024-10-07T09:30:00Z",
+            path="/documents/report.pdf",
+            is_directory=False
+        ),
+        FileItem(
+            id="3",
+            name="images",
+            type="folder",
+            size="-",
+            modified_at="2024-10-07T08:15:00Z",
+            path="/images",
+            is_directory=True
+        )
+    ]
+
+# 通知管理
+class Notification(BaseModel):
+    id: str
+    title: str
+    content: str
+    type: str
+    priority: str
+    is_read: bool
+    created_at: str
+    read_at: Optional[str] = None
+
+class NotificationStats(BaseModel):
+    total: int
+    unread: int
+    today: int
+    urgent: int
+
+@router.get("/notifications", response_model=List[Notification])
+async def get_notifications(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """获取通知列表"""
+    # 模拟数据，实际应该从数据库查询
+    return [
+        Notification(
+            id="1",
+            title="系统更新完成",
+            content="系统已成功更新到最新版本",
+            type="system",
+            priority="normal",
+            is_read=False,
+            created_at="2024-10-07T10:00:00Z"
+        ),
+        Notification(
+            id="2",
+            title="备份任务失败",
+            content="今日的备份任务执行失败，请检查",
+            type="warning",
+            priority="urgent",
+            is_read=False,
+            created_at="2024-10-07T09:30:00Z"
+        ),
+        Notification(
+            id="3",
+            title="新用户注册",
+            content="用户 admin@example.com 已注册",
+            type="user",
+            priority="normal",
+            is_read=True,
+            created_at="2024-10-07T08:15:00Z",
+            read_at="2024-10-07T08:20:00Z"
+        )
+    ]
+
+@router.get("/notifications/stats", response_model=NotificationStats)
+async def get_notification_stats(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """获取通知统计"""
+    # 模拟数据，实际应该从数据库计算
+    return NotificationStats(
+        total=3,
+        unread=2,
+        today=3,
+        urgent=1
+    )
+
 # 用户偏好管理
 class UserPreferencesResponse(BaseModel):
     id: str
