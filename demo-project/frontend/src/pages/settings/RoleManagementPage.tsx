@@ -285,14 +285,41 @@ const RoleManagementPage: React.FC = () => {
     }
   };
 
-  // 将权限按资源分组
+  // 将权限按页面分组
   const groupedPermissions = permissions.reduce((acc, permission) => {
-    if (!acc[permission.resource]) {
-      acc[permission.resource] = [];
+    let groupKey = permission.resource;
+    
+    // 页面权限按页面分组
+    if (permission.name.startsWith('page.')) {
+      const parts = permission.name.split('.');
+      if (parts.length >= 2) {
+        groupKey = parts[1]; // 使用页面名称作为分组
+      }
     }
-    acc[permission.resource].push(permission);
+    
+    if (!acc[groupKey]) {
+      acc[groupKey] = [];
+    }
+    acc[groupKey].push(permission);
     return acc;
   }, {} as Record<string, Permission[]>);
+
+  // 页面权限分组的中文名称映射
+  const pageGroupNames: Record<string, string> = {
+    'overview': '概览页面',
+    'users': '用户管理',
+    'settings': '系统设置',
+    'monitoring': '系统监控',
+    'backup': '数据备份',
+    'logs': '系统日志',
+    'files': '文件管理',
+    'notifications': '通知中心',
+    'profile': '个人资料',
+    'user': '用户权限',
+    'system': '系统权限',
+    'page': '页面权限',
+    'logs': '日志权限'
+  };
 
   return (
     <div className={`settings-page ${currentTheme?.meta.id || 'light'}-theme`}>
@@ -381,17 +408,26 @@ const RoleManagementPage: React.FC = () => {
               name="permissions"
               label={t('roles.rolePermissions')}
             >
-              <Select
-                mode="multiple"
-                placeholder={t('roles.rolePermissionsPlaceholder')}
-                options={permissions.map(p => ({
-                  label: `${p.display_name} (${p.name})`,
-                  value: p.name,
+              <Tree
+                checkable
+                checkStrictly
+                defaultExpandAll
+                treeData={Object.entries(groupedPermissions).map(([groupKey, groupPermissions]) => ({
+                  title: pageGroupNames[groupKey] || groupKey,
+                  key: groupKey,
+                  children: groupPermissions.map(permission => ({
+                    title: permission.display_name,
+                    key: permission.name,
+                    value: permission.name,
+                  }))
                 }))}
-                showSearch
-                filterOption={(input, option) =>
-                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                }
+                onCheck={(checkedKeys) => {
+                  // 处理树形选择的权限
+                  const selectedPermissions = Array.isArray(checkedKeys) 
+                    ? checkedKeys.filter(key => typeof key === 'string' && key.includes('.'))
+                    : [];
+                  form.setFieldsValue({ permissions: selectedPermissions });
+                }}
               />
             </Form.Item>
           </Form>

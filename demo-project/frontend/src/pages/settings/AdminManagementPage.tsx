@@ -91,17 +91,35 @@ const AdminManagementPage: React.FC = () => {
   useEffect(() => {
     loadAdminUsers();
     loadStats();
+    loadRoles();
   }, []);
 
-  useEffect(() => {
-    // 更新角色标签为国际化文本
-    setAvailableRoles([
-      { value: 'super_admin', label: t('admin.superAdmin') },
-      { value: 'admin', label: t('admin.admin') },
-      { value: 'moderator', label: t('admin.moderator') },
-      { value: 'demo', label: t('admin.demoAccount') },
-    ]);
-  }, [t]);
+  const loadRoles = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/admin/roles', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.ok) {
+        const rolesData = await response.json();
+        setAvailableRoles(rolesData.map((role: any) => ({
+          value: role.name,
+          label: role.display_name
+        })));
+      }
+    } catch (error) {
+      console.error('加载角色列表失败:', error);
+      // 使用默认角色作为降级方案
+      setAvailableRoles([
+        { value: 'super_admin', label: t('admin.superAdmin') },
+        { value: 'admin', label: t('admin.admin') },
+        { value: 'moderator', label: t('admin.moderator') },
+        { value: 'demo', label: t('admin.demoAccount') },
+      ]);
+    }
+  };
 
   const loadAdminUsers = async () => {
     setLoading(true);

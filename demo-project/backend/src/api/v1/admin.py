@@ -830,6 +830,84 @@ async def get_notification_stats(
         urgent=1
     )
 
+# 业务用户管理
+class BusinessUser(BaseModel):
+    id: str
+    email: str
+    name: str
+    phone: Optional[str] = None
+    avatar: Optional[str] = None
+    source: str
+    source_id: Optional[str] = None
+    email_verified: bool
+    account_status: str
+    last_login_timestamp: Optional[str] = None
+    created_at: str
+    updated_at: Optional[str] = None
+    profile_data: Optional[dict] = None
+
+class BusinessUserStats(BaseModel):
+    total: int
+    active: int
+    verified: int
+    oauth: int
+
+@router.get("/business-users", response_model=List[BusinessUser])
+async def get_business_users(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """获取业务用户列表"""
+    # 模拟数据，实际应该从数据库查询业务用户
+    return [
+        BusinessUser(
+            id="1",
+            email="user1@example.com",
+            name="张三",
+            phone="13800138001",
+            source="local",
+            email_verified=True,
+            account_status="active",
+            last_login_timestamp="2024-10-07T10:00:00Z",
+            created_at="2024-10-01T10:00:00Z"
+        ),
+        BusinessUser(
+            id="2",
+            email="user2@gmail.com",
+            name="李四",
+            source="oauth_google",
+            source_id="google_123456",
+            email_verified=True,
+            account_status="active",
+            last_login_timestamp="2024-10-07T09:30:00Z",
+            created_at="2024-10-02T10:00:00Z"
+        ),
+        BusinessUser(
+            id="3",
+            email="user3@qq.com",
+            name="王五",
+            source="oauth_qq",
+            source_id="qq_789012",
+            email_verified=False,
+            account_status="inactive",
+            created_at="2024-10-03T10:00:00Z"
+        )
+    ]
+
+@router.get("/business-users/stats", response_model=BusinessUserStats)
+async def get_business_user_stats(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """获取业务用户统计"""
+    # 模拟数据，实际应该从数据库计算
+    return BusinessUserStats(
+        total=3,
+        active=2,
+        verified=2,
+        oauth=2
+    )
+
 # 用户偏好管理
 class UserPreferencesResponse(BaseModel):
     id: str
