@@ -87,9 +87,22 @@ export const useLayoutStore = create<LayoutStore>()(
       },
 
       setLayout: (config: Partial<LayoutConfig>) => {
-        const newLayout = { ...get().layout, ...config };
-        console.log('LayoutStore: setLayout called', { old: get().layout, new: newLayout });
+        const oldLayout = get().layout;
+        const newLayout = { ...oldLayout, ...config };
+        console.log('LayoutStore: setLayout called', { 
+          old: oldLayout, 
+          new: newLayout,
+          config 
+        });
         set({ layout: newLayout, error: null });
+        
+        // 验证是否保存成功
+        setTimeout(() => {
+          const saved = localStorage.getItem(STORAGE_KEYS.LAYOUT_CONFIG);
+          console.log('LayoutStore: Verification after setLayout', { 
+            saved: saved ? JSON.parse(saved) : null 
+          });
+        }, 100);
       },
 
       toggleLayoutType: () => {
@@ -125,23 +138,11 @@ export const useLayoutStore = create<LayoutStore>()(
     }),
     {
       name: STORAGE_KEYS.LAYOUT_CONFIG,
-      storage: {
-        getItem: (name) => {
-          const str = localStorage.getItem(name);
-          console.log('LayoutStore: getItem', { name, value: str });
-          if (!str) return null;
-          return JSON.parse(str);
-        },
-        setItem: (name, value) => {
-          console.log('LayoutStore: setItem', { name, value });
-          localStorage.setItem(name, JSON.stringify(value));
-        },
-        removeItem: (name) => {
-          console.log('LayoutStore: removeItem', { name });
-          localStorage.removeItem(name);
-        },
-      },
+      partialize: (state) => ({
+        layout: state.layout,
+      }),
       onRehydrateStorage: () => (state) => {
+        console.log('LayoutStore: onRehydrateStorage', state);
         if (state) {
           state.setLoading(false);
         }
