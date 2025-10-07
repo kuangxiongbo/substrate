@@ -317,8 +317,7 @@ const RoleManagementPage: React.FC = () => {
     'profile': '个人资料',
     'user': '用户权限',
     'system': '系统权限',
-    'page': '页面权限',
-    'logs': '日志权限'
+    'page': '页面权限'
   };
 
   return (

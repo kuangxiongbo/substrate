@@ -7,6 +7,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined, LinkOutlined,
 import { useTheme } from '../contexts/ThemeContext';
 import ContentPageLayout, { type ToolbarItem } from '../components/layout/ContentPageLayout';
 import { useTranslation } from 'react-i18next';
+import './UserManagementPage.css';
 
 const { Option } = Select;
 
@@ -279,14 +280,14 @@ const UserManagementPage: React.FC = () => {
         helpCenterUrl="/help/user-management"
       >
         {/* 统计卡片 */}
-        <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Row gutter={[16, 16]} className="user-stats-row">
           <Col xs={24} sm={12} md={6}>
             <Card>
               <Statistic
                 title="总用户数"
                 value={stats.total}
                 prefix={<UserOutlined />}
-                valueStyle={{ color: '#1890ff' }}
+                className="statistic-total"
               />
             </Card>
           </Col>
@@ -296,7 +297,7 @@ const UserManagementPage: React.FC = () => {
                 title="活跃用户"
                 value={stats.active}
                 prefix={<UserOutlined />}
-                valueStyle={{ color: '#52c41a' }}
+                className="statistic-active"
               />
             </Card>
           </Col>
@@ -306,7 +307,7 @@ const UserManagementPage: React.FC = () => {
                 title="已验证用户"
                 value={stats.verified}
                 prefix={<UserOutlined />}
-                valueStyle={{ color: '#722ed1' }}
+                className="statistic-verified"
               />
             </Card>
           </Col>
@@ -316,7 +317,7 @@ const UserManagementPage: React.FC = () => {
                 title="第三方用户"
                 value={stats.oauth}
                 prefix={<LinkOutlined />}
-                valueStyle={{ color: '#fa8c16' }}
+                className="statistic-oauth"
               />
             </Card>
           </Col>
