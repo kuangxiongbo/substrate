@@ -285,16 +285,33 @@ const RoleManagementPage: React.FC = () => {
     }
   };
 
-  // 将权限按页面分组
+  // 将权限按UI结构重新分组
   const groupedPermissions = permissions.reduce((acc, permission) => {
-    let groupKey = permission.resource;
+    let groupKey = 'other';
     
-    // 页面权限按页面分组
-    if (permission.name.startsWith('page.')) {
-      const parts = permission.name.split('.');
-      if (parts.length >= 2) {
-        groupKey = parts[1]; // 使用页面名称作为分组
-      }
+    // 系统设置相关权限
+    if (permission.name.startsWith('page.settings.') || 
+        permission.name.includes('settings') ||
+        permission.name.includes('admin') ||
+        permission.name.includes('role')) {
+      groupKey = 'system_settings';
+    }
+    // 菜单权限
+    else if (permission.name.startsWith('page.overview') ||
+             permission.name.startsWith('page.users') ||
+             permission.name.startsWith('page.monitoring') ||
+             permission.name.startsWith('page.backup') ||
+             permission.name.startsWith('page.logs') ||
+             permission.name.startsWith('page.files') ||
+             permission.name.startsWith('page.notifications') ||
+             permission.name.startsWith('page.profile')) {
+      groupKey = 'menu_permissions';
+    }
+    // 快捷操作权限
+    else if (permission.name.includes('user.') ||
+             permission.name.includes('system.') ||
+             permission.name.includes('quick')) {
+      groupKey = 'quick_actions';
     }
     
     if (!acc[groupKey]) {
@@ -304,20 +321,43 @@ const RoleManagementPage: React.FC = () => {
     return acc;
   }, {} as Record<string, Permission[]>);
 
-  // 页面权限分组的中文名称映射
+  // 权限分组的中文名称映射
   const pageGroupNames: Record<string, string> = {
-    'overview': '概览页面',
-    'users': '用户管理',
-    'settings': '系统设置',
-    'monitoring': '系统监控',
-    'backup': '数据备份',
-    'logs': '系统日志',
-    'files': '文件管理',
-    'notifications': '通知中心',
-    'profile': '个人资料',
-    'user': '用户权限',
-    'system': '系统权限',
-    'page': '页面权限'
+    'system_settings': '系统设置',
+    'menu_permissions': '菜单权限',
+    'quick_actions': '快捷操作权限',
+    'other': '其他权限'
+  };
+
+  // 子分组名称映射
+  const getSubGroupName = (subGroupKey: string): string => {
+    const subGroupNames: Record<string, string> = {
+      // 系统设置子分组
+      'admin_management': '管理员管理',
+      'role_management': '角色管理',
+      'basic_settings': '基础设置',
+      'security_settings': '安全设置',
+      'email_settings': '邮件设置',
+      
+      // 菜单权限子分组
+      'overview': '概览页面',
+      'user_management': '用户管理',
+      'system_monitoring': '系统监控',
+      'data_backup': '数据备份',
+      'system_logs': '系统日志',
+      'file_management': '文件管理',
+      'notification_center': '通知中心',
+      'personal_profile': '个人资料',
+      
+      // 快捷操作子分组
+      'user_operations': '用户操作',
+      'system_operations': '系统操作',
+      
+      // 默认
+      'general': '通用权限'
+    };
+    
+    return subGroupNames[subGroupKey] || subGroupKey;
   };
 
   return (
@@ -411,15 +451,53 @@ const RoleManagementPage: React.FC = () => {
                 checkable
                 checkStrictly
                 defaultExpandAll
-                treeData={Object.entries(groupedPermissions).map(([groupKey, groupPermissions]) => ({
-                  title: pageGroupNames[groupKey] || groupKey,
-                  key: groupKey,
-                  children: groupPermissions.map(permission => ({
-                    title: permission.display_name,
-                    key: permission.name,
-                    value: permission.name,
-                  }))
-                }))}
+                treeData={Object.entries(groupedPermissions).map(([groupKey, groupPermissions]) => {
+                  // 为每个分组创建子分类
+                  const subGroups: Record<string, Permission[]> = {};
+                  
+                  groupPermissions.forEach(permission => {
+                    let subGroupKey = 'general';
+                    
+                    if (groupKey === 'system_settings') {
+                      if (permission.name.includes('admin')) subGroupKey = 'admin_management';
+                      else if (permission.name.includes('role')) subGroupKey = 'role_management';
+                      else if (permission.name.includes('basic')) subGroupKey = 'basic_settings';
+                      else if (permission.name.includes('security')) subGroupKey = 'security_settings';
+                      else if (permission.name.includes('email')) subGroupKey = 'email_settings';
+                    } else if (groupKey === 'menu_permissions') {
+                      if (permission.name.includes('overview')) subGroupKey = 'overview';
+                      else if (permission.name.includes('users')) subGroupKey = 'user_management';
+                      else if (permission.name.includes('monitoring')) subGroupKey = 'system_monitoring';
+                      else if (permission.name.includes('backup')) subGroupKey = 'data_backup';
+                      else if (permission.name.includes('logs')) subGroupKey = 'system_logs';
+                      else if (permission.name.includes('files')) subGroupKey = 'file_management';
+                      else if (permission.name.includes('notifications')) subGroupKey = 'notification_center';
+                      else if (permission.name.includes('profile')) subGroupKey = 'personal_profile';
+                    } else if (groupKey === 'quick_actions') {
+                      if (permission.name.includes('user.')) subGroupKey = 'user_operations';
+                      else if (permission.name.includes('system.')) subGroupKey = 'system_operations';
+                    }
+                    
+                    if (!subGroups[subGroupKey]) {
+                      subGroups[subGroupKey] = [];
+                    }
+                    subGroups[subGroupKey].push(permission);
+                  });
+                  
+                  return {
+                    title: pageGroupNames[groupKey] || groupKey,
+                    key: groupKey,
+                    children: Object.entries(subGroups).map(([subGroupKey, subPermissions]) => ({
+                      title: getSubGroupName(subGroupKey),
+                      key: `${groupKey}_${subGroupKey}`,
+                      children: subPermissions.map(permission => ({
+                        title: permission.display_name,
+                        key: permission.name,
+                        value: permission.name,
+                      }))
+                    }))
+                  };
+                })}
                 onCheck={(checkedKeys) => {
                   // 处理树形选择的权限
                   const selectedPermissions = Array.isArray(checkedKeys) 
