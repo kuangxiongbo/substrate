@@ -53,7 +53,7 @@ const OverviewPage: React.FC = () => {
   const loadSystemStats = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/v1/admin/stats', {
+      const response = await fetch('http://localhost:8000/api/v1/admin/stats', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
