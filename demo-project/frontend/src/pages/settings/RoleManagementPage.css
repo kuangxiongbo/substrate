@@ -1,0 +1,59 @@
+/* 角色管理页面样式 */
+.permission-section {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 16px;
+  height: 400px;
+  overflow-y: auto;
+  background-color: #fafafa;
+}
+
+.permission-section-title {
+  margin-bottom: 16px !important;
+  color: #1890ff;
+  border-bottom: 2px solid #1890ff;
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.permission-tree {
+  background-color: white;
+  border-radius: 4px;
+  padding: 8px;
+  min-height: 320px;
+}
+
+.permission-tree .ant-tree-treenode {
+  padding: 2px 0;
+}
+
+.permission-tree .ant-tree-title {
+  font-size: 14px;
+}
+
+.permission-tree .ant-tree-checkbox {
+  margin-right: 8px;
+}
+
+/* 左右分栏样式 */
+.permission-layout {
+  display: flex;
+  gap: 16px;
+}
+
+.permission-left,
+.permission-right {
+  flex: 1;
+  min-height: 400px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .permission-layout {
+    flex-direction: column;
+  }
+  
+  .permission-section {
+    height: 300px;
+  }
+}

@@ -27,6 +27,7 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import '../../styles/settings-pages.css';
+import './RoleManagementPage.css';
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -390,6 +391,17 @@ const RoleManagementPage: React.FC = () => {
     return quickActionPermissions.map(permission => permission.name);
   };
 
+  // 更新权限选择
+  const updatePermissions = () => {
+    // 获取所有树组件的选中状态并合并
+    const allCheckedKeys = new Set<string>();
+    
+    // 这里需要从两个树组件获取选中的权限
+    // 由于我们无法直接访问树组件的状态，我们使用表单的值
+    const currentPermissions = form.getFieldValue('permissions') || [];
+    form.setFieldsValue({ permissions: currentPermissions });
+  };
+
   return (
     <div className={`settings-page ${currentTheme?.meta.id || 'light'}-theme`}>
       <motion.div
@@ -477,49 +489,83 @@ const RoleManagementPage: React.FC = () => {
               name="permissions"
               label={t('roles.rolePermissions')}
             >
-              <Tree
-                checkable
-                checkStrictly
-                defaultExpandAll
-                defaultCheckedKeys={editingRole ? undefined : getDefaultCheckedKeys()}
-                treeData={Object.entries(groupedPermissions).map(([groupKey, groupPermissions]) => {
-                  // 如果是系统设置，需要特殊处理子菜单
-                  if (groupKey === 'system_settings') {
-                    const subGroups = getSystemSettingsSubGroups(groupPermissions);
-                    return {
-                      title: pageGroupNames[groupKey] || groupKey,
-                      key: groupKey,
-                      children: Object.entries(subGroups).map(([subGroupKey, subPermissions]) => ({
-                        title: getSubGroupName(subGroupKey),
-                        key: `${groupKey}_${subGroupKey}`,
-                        children: subPermissions.map(permission => ({
-                          title: permission.display_name,
-                          key: permission.name,
-                          value: permission.name,
-                        }))
-                      }))
-                    };
-                  }
-                  
-                  // 其他分组保持原有结构
-                  return {
-                    title: pageGroupNames[groupKey] || groupKey,
-                    key: groupKey,
-                    children: groupPermissions.map(permission => ({
-                      title: permission.display_name,
-                      key: permission.name,
-                      value: permission.name,
-                    }))
-                  };
-                })}
-                onCheck={(checkedKeys) => {
-                  // 处理树形选择的权限
-                  const selectedPermissions = Array.isArray(checkedKeys) 
-                    ? checkedKeys.filter(key => typeof key === 'string' && key.includes('.'))
-                    : [];
-                  form.setFieldsValue({ permissions: selectedPermissions });
-                }}
-              />
+              <Row gutter={16}>
+                {/* 左侧：菜单权限 */}
+                <Col span={12}>
+                  <div className="permission-section">
+                    <Title level={5} className="permission-section-title">菜单权限</Title>
+                    <Tree
+                      checkable
+                      checkStrictly
+                      defaultExpandAll
+                      className="permission-tree"
+                      treeData={Object.entries(groupedPermissions)
+                        .filter(([groupKey]) => groupKey !== 'quick_actions')
+                        .map(([groupKey, groupPermissions]) => {
+                          // 如果是系统设置，需要特殊处理子菜单
+                          if (groupKey === 'system_settings') {
+                            const subGroups = getSystemSettingsSubGroups(groupPermissions);
+                            return {
+                              title: pageGroupNames[groupKey] || groupKey,
+                              key: groupKey,
+                              children: Object.entries(subGroups).map(([subGroupKey, subPermissions]) => ({
+                                title: getSubGroupName(subGroupKey),
+                                key: `${groupKey}_${subGroupKey}`,
+                                children: subPermissions.map(permission => ({
+                                  title: permission.display_name,
+                                  key: permission.name,
+                                  value: permission.name,
+                                }))
+                              }))
+                            };
+                          }
+                          
+                          // 其他分组保持原有结构
+                          return {
+                            title: pageGroupNames[groupKey] || groupKey,
+                            key: groupKey,
+                            children: groupPermissions.map(permission => ({
+                              title: permission.display_name,
+                              key: permission.name,
+                              value: permission.name,
+                            }))
+                          };
+                        })}
+                      onCheck={(checkedKeys) => {
+                        updatePermissions();
+                      }}
+                    />
+                  </div>
+                </Col>
+
+                {/* 右侧：快捷操作权限 */}
+                <Col span={12}>
+                  <div className="permission-section">
+                    <Title level={5} className="permission-section-title">快捷操作权限</Title>
+                    <Tree
+                      checkable
+                      checkStrictly
+                      defaultExpandAll
+                      defaultCheckedKeys={editingRole ? undefined : getDefaultCheckedKeys()}
+                      className="permission-tree"
+                      treeData={Object.entries(groupedPermissions)
+                        .filter(([groupKey]) => groupKey === 'quick_actions')
+                        .map(([groupKey, groupPermissions]) => ({
+                          title: pageGroupNames[groupKey] || groupKey,
+                          key: groupKey,
+                          children: groupPermissions.map(permission => ({
+                            title: permission.display_name,
+                            key: permission.name,
+                            value: permission.name,
+                          }))
+                        }))}
+                      onCheck={(checkedKeys) => {
+                        updatePermissions();
+                      }}
+                    />
+                  </div>
+                </Col>
+              </Row>
             </Form.Item>
           </Form>
         </Modal>
