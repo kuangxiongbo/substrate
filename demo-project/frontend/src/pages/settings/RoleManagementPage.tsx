@@ -285,7 +285,7 @@ const RoleManagementPage: React.FC = () => {
     }
   };
 
-  // 将权限按简化结构重新分组
+  // 将权限按细化结构重新分组
   const groupedPermissions = permissions.reduce((acc, permission) => {
     let groupKey = 'other';
     
@@ -299,7 +299,7 @@ const RoleManagementPage: React.FC = () => {
              permission.name.includes('admin')) {
       groupKey = 'user_management';
     }
-    // 系统设置权限
+    // 系统设置权限 - 需要细化到子菜单
     else if (permission.name.startsWith('page.settings.') || 
              permission.name.includes('settings') ||
              permission.name.includes('role') ||
@@ -331,6 +331,57 @@ const RoleManagementPage: React.FC = () => {
     'system_settings': '系统设置',
     'quick_actions': '快捷操作',
     'other': '其他权限'
+  };
+
+  // 系统设置子菜单权限分组
+  const getSystemSettingsSubGroups = (permissions: Permission[]) => {
+    const subGroups: Record<string, Permission[]> = {};
+    
+    permissions.forEach(permission => {
+      let subGroupKey = 'general';
+      
+      // 基础设置
+      if (permission.name.includes('basic') || permission.name.includes('config')) {
+        subGroupKey = 'basic_settings';
+      }
+      // 管理员管理
+      else if (permission.name.includes('admin') || permission.name.includes('user')) {
+        subGroupKey = 'admin_management';
+      }
+      // 角色管理
+      else if (permission.name.includes('role')) {
+        subGroupKey = 'role_management';
+      }
+      // 安全设置
+      else if (permission.name.includes('security')) {
+        subGroupKey = 'security_settings';
+      }
+      // 邮件设置
+      else if (permission.name.includes('email')) {
+        subGroupKey = 'email_settings';
+      }
+      
+      if (!subGroups[subGroupKey]) {
+        subGroups[subGroupKey] = [];
+      }
+      subGroups[subGroupKey].push(permission);
+    });
+    
+    return subGroups;
+  };
+
+  // 子分组名称映射
+  const getSubGroupName = (subGroupKey: string): string => {
+    const subGroupNames: Record<string, string> = {
+      'basic_settings': '基础设置',
+      'admin_management': '管理员管理',
+      'role_management': '角色管理',
+      'security_settings': '安全设置',
+      'email_settings': '邮件设置',
+      'general': '通用权限'
+    };
+    
+    return subGroupNames[subGroupKey] || subGroupKey;
   };
 
   // 获取默认勾选的权限（快捷操作默认全部勾选）
@@ -431,15 +482,36 @@ const RoleManagementPage: React.FC = () => {
                 checkStrictly
                 defaultExpandAll
                 defaultCheckedKeys={editingRole ? undefined : getDefaultCheckedKeys()}
-                treeData={Object.entries(groupedPermissions).map(([groupKey, groupPermissions]) => ({
-                  title: pageGroupNames[groupKey] || groupKey,
-                  key: groupKey,
-                  children: groupPermissions.map(permission => ({
-                    title: permission.display_name,
-                    key: permission.name,
-                    value: permission.name,
-                  }))
-                }))}
+                treeData={Object.entries(groupedPermissions).map(([groupKey, groupPermissions]) => {
+                  // 如果是系统设置，需要特殊处理子菜单
+                  if (groupKey === 'system_settings') {
+                    const subGroups = getSystemSettingsSubGroups(groupPermissions);
+                    return {
+                      title: pageGroupNames[groupKey] || groupKey,
+                      key: groupKey,
+                      children: Object.entries(subGroups).map(([subGroupKey, subPermissions]) => ({
+                        title: getSubGroupName(subGroupKey),
+                        key: `${groupKey}_${subGroupKey}`,
+                        children: subPermissions.map(permission => ({
+                          title: permission.display_name,
+                          key: permission.name,
+                          value: permission.name,
+                        }))
+                      }))
+                    };
+                  }
+                  
+                  // 其他分组保持原有结构
+                  return {
+                    title: pageGroupNames[groupKey] || groupKey,
+                    key: groupKey,
+                    children: groupPermissions.map(permission => ({
+                      title: permission.display_name,
+                      key: permission.name,
+                      value: permission.name,
+                    }))
+                  };
+                })}
                 onCheck={(checkedKeys) => {
                   // 处理树形选择的权限
                   const selectedPermissions = Array.isArray(checkedKeys) 
