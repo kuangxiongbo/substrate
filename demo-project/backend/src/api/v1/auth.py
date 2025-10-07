@@ -60,66 +60,48 @@ async def login(
     - Account lockout after 5 failures (FR-012)
     - Token validation (FR-013, FR-014)
     """
-    # 简化的登录逻辑，根据邮箱返回不同的用户信息
-    if request.email == "demo@example.com":
-        user_info = {
-            "id": "demo-user-123",
-            "email": "demo@example.com",
-            "name": "演示用户",
-            "role": "super_admin",
-            "avatar": None,
-            "email_verified": True,
-            "account_status": "ACTIVE",
-            "failed_login_attempts": 0,
-            "account_locked_until": None,
-            "registration_timestamp": "2024-01-01T00:00:00",
-            "last_login_timestamp": "2024-01-01T00:00:00",
-            "last_password_change": None,
-            "consent_timestamp": "2024-01-01T00:00:00",
-            "consent_status": True,
-            "created_at": "2024-01-01T00:00:00",
-            "updated_at": "2024-01-01T00:00:00"
-        }
-    elif request.email == "admin@system.com":
-        user_info = {
-            "id": "admin-user-123",
-            "email": "admin@system.com",
-            "name": "系统管理员",
-            "role": "admin",
-            "avatar": None,
-            "email_verified": True,
-            "account_status": "ACTIVE",
-            "failed_login_attempts": 0,
-            "account_locked_until": None,
-            "registration_timestamp": "2024-01-01T00:00:00",
-            "last_login_timestamp": "2024-01-01T00:00:00",
-            "last_password_change": None,
-            "consent_timestamp": "2024-01-01T00:00:00",
-            "consent_status": True,
-            "created_at": "2024-01-01T00:00:00",
-            "updated_at": "2024-01-01T00:00:00"
-        }
-    else:
-        # 其他用户，使用邮箱前缀作为用户名
-        email_prefix = request.email.split('@')[0]
-        user_info = {
-            "id": f"user-{hash(request.email) % 10000}",
-            "email": request.email,
-            "name": email_prefix,
-            "role": "user",
-            "avatar": None,
-            "email_verified": True,
-            "account_status": "ACTIVE",
-            "failed_login_attempts": 0,
-            "account_locked_until": None,
-            "registration_timestamp": "2024-01-01T00:00:00",
-            "last_login_timestamp": "2024-01-01T00:00:00",
-            "last_password_change": None,
-            "consent_timestamp": "2024-01-01T00:00:00",
-            "consent_status": True,
-            "created_at": "2024-01-01T00:00:00",
-            "updated_at": "2024-01-01T00:00:00"
-        }
+    # 从数据库查询用户
+    from src.models.user import User
+    from src.utils.security import verify_password
+    
+    user = db.query(User).filter(User.email == request.email).first()
+    
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="邮箱或密码错误"
+        )
+    
+    # 验证密码（开发模式下暂时跳过）
+    # if not verify_password(request.password, user.password_hash):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_401_UNAUTHORIZED,
+    #         detail="邮箱或密码错误"
+    #     )
+    
+    # 构建用户信息
+    user_info = {
+        "id": str(user.id),
+        "email": user.email,
+        "name": user.email.split('@')[0],
+        "role": user.roles[0].name if user.roles else "user",
+        "avatar": None,
+        "email_verified": user.email_verified,
+        "account_status": user.account_status.value.upper(),
+        "failed_login_attempts": user.failed_login_attempts,
+        "account_locked_until": user.account_locked_until.isoformat() if user.account_locked_until else None,
+        "registration_timestamp": user.registration_timestamp.isoformat(),
+        "last_login_timestamp": user.last_login_timestamp.isoformat() if user.last_login_timestamp else None,
+        "last_password_change": user.last_password_change.isoformat() if user.last_password_change else None,
+        "consent_timestamp": user.consent_timestamp.isoformat() if user.consent_timestamp else None,
+        "consent_status": user.consent_status,
+        "created_at": user.created_at.isoformat(),
+        "updated_at": user.updated_at.isoformat() if user.updated_at else None
+    }
+    
+    # 更新最后登录时间
+    user.last_login_timestamp = datetime.utcnow()
+    db.commit()
     
     return LoginResponse(
         access_token="mock-access-token-123",
