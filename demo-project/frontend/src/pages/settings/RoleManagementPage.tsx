@@ -415,17 +415,13 @@ const RoleManagementPage: React.FC = () => {
         key: 'overview',
         name: '概览',
         level: 0,
-        children: [
-          { key: 'dashboard', name: '仪表盘', level: 1, children: [] },
-          { key: 'stats', name: '统计信息', level: 1, children: [] }
-        ]
+        children: []
       },
       {
         key: 'users',
         name: '用户管理',
         level: 0,
         children: [
-          { key: 'admin_management', name: '管理员管理', level: 1, children: [] },
           { key: 'business_users', name: '业务用户', level: 1, children: [] }
         ]
       },
@@ -435,20 +431,10 @@ const RoleManagementPage: React.FC = () => {
         level: 0,
         children: [
           { key: 'basic_settings', name: '基础设置', level: 1, children: [] },
+          { key: 'admin_management', name: '管理员管理', level: 1, children: [] },
+          { key: 'role_management', name: '角色管理', level: 1, children: [] },
           { key: 'security_settings', name: '安全设置', level: 1, children: [] },
-          { key: 'email_settings', name: '邮件设置', level: 1, children: [] },
-          { key: 'role_management', name: '角色管理', level: 1, children: [] }
-        ]
-      },
-      {
-        key: 'quick_actions',
-        name: '快捷操作',
-        level: 0,
-        children: [
-          { key: 'language_switch', name: '语言切换', level: 1, children: [] },
-          { key: 'theme_switch', name: '主题切换', level: 1, children: [] },
-          { key: 'operation_logs', name: '操作日志', level: 1, children: [] },
-          { key: 'notifications', name: '通知管理', level: 1, children: [] }
+          { key: 'email_settings', name: '邮件设置', level: 1, children: [] }
         ]
       }
     ];
@@ -466,21 +452,33 @@ const RoleManagementPage: React.FC = () => {
         children: []
       });
       
-      // 添加子菜单
-      page.children.forEach(subMenu => {
-        // 根据菜单键名匹配对应的权限
-        const matchedPermissions = getPermissionsForMenu(subMenu.key);
-        
-        tableData.push({
-          key: `${page.key}_${subMenu.key}`,
-          menu: subMenu.name,
-          type: 'submenu',
-          level: subMenu.level,
-          view: false,
-          manage: false,
-          children: matchedPermissions
+      // 如果有子菜单，添加子菜单；如果没有子菜单，为页面本身分配权限
+      if (page.children.length > 0) {
+        page.children.forEach(subMenu => {
+          // 根据菜单键名匹配对应的权限
+          const matchedPermissions = getPermissionsForMenu(subMenu.key);
+          
+          tableData.push({
+            key: `${page.key}_${subMenu.key}`,
+            menu: subMenu.name,
+            type: 'submenu',
+            level: subMenu.level,
+            view: false,
+            manage: false,
+            children: matchedPermissions
+          });
         });
-      });
+      } else {
+        // 为没有子菜单的页面（如概览）分配权限
+        const matchedPermissions = getPermissionsForMenu(page.key);
+        if (matchedPermissions.length > 0) {
+          // 更新页面的children
+          const pageIndex = tableData.findIndex(item => item.key === page.key);
+          if (pageIndex !== -1) {
+            tableData[pageIndex].children = matchedPermissions;
+          }
+        }
+      }
     });
     
     return tableData;
@@ -491,12 +489,13 @@ const RoleManagementPage: React.FC = () => {
     const allPermissions = permissions;
     
     switch (menuKey) {
-      case 'dashboard':
-      case 'stats':
+      case 'overview':
         return allPermissions.filter(p => 
           p.name.startsWith('page.overview') || 
           p.name.includes('stats') ||
-          p.name.includes('dashboard')
+          p.name.includes('dashboard') ||
+          p.name.includes('profile.read') ||
+          p.name.includes('profile.update')
         );
       
       case 'admin_management':
