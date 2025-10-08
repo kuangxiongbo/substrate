@@ -62,7 +62,6 @@ const RoleManagementPage: React.FC = () => {
   const [editingRole, setEditingRole] = useState<Role | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [tableData, setTableData] = useState<any[]>([]);
   const { currentTheme } = useTheme();
   const { t } = useTranslation();
 
@@ -414,31 +413,6 @@ const RoleManagementPage: React.FC = () => {
         dataIndex: 'menu',
         key: 'menu',
         width: '40%',
-        render: (text: string, record: any) => (
-          <div className="menu-cell">
-            <div className={`menu-tree-item level-${record.level} type-${record.type}`}>
-              {/* 展开收起图标 */}
-              {record.hasChildren && (
-                <span 
-                  className="tree-expand-icon"
-                  onClick={() => handleExpandToggle(record)}
-                >
-                  {record.expanded ? '−' : '+'}
-                </span>
-              )}
-              {/* 层级缩进 */}
-              {record.level > 0 && (
-                <span className="tree-indent">
-                  {'  '.repeat(record.level)}
-                </span>
-              )}
-              {/* 菜单文本 */}
-              <span className="menu-text">
-                {text}
-              </span>
-            </div>
-          </div>
-        ),
       },
       {
         title: '查看',
@@ -471,14 +445,6 @@ const RoleManagementPage: React.FC = () => {
     ];
   };
 
-  // 处理展开收起切换
-  const handleExpandToggle = (record: any) => {
-    // 切换展开状态
-    record.expanded = !record.expanded;
-    
-    // 强制重新渲染表格
-    setTableData([...getFilteredTableData()]);
-  };
 
   // 处理权限变更
   const handlePermissionChange = (record: any, permissionType: 'view' | 'manage', checked: boolean) => {
@@ -488,137 +454,93 @@ const RoleManagementPage: React.FC = () => {
     // 收集选中的权限
     const selectedPermissions: string[] = [];
     
-    // 遍历所有记录，收集选中的权限
-    getPermissionTableData().forEach(item => {
-      if (item.view) {
-        selectedPermissions.push(`${item.key}.read`);
-      }
-      if (item.manage) {
-        selectedPermissions.push(`${item.key}.manage`);
-        selectedPermissions.push(`${item.key}.create`);
-        selectedPermissions.push(`${item.key}.update`);
-        selectedPermissions.push(`${item.key}.delete`);
-      }
-    });
+    // 递归遍历树状结构收集权限
+    const collectPermissions = (items: any[]) => {
+      items.forEach(item => {
+        if (item.view) {
+          selectedPermissions.push(`${item.key}.read`);
+        }
+        if (item.manage) {
+          selectedPermissions.push(`${item.key}.manage`);
+          selectedPermissions.push(`${item.key}.create`);
+          selectedPermissions.push(`${item.key}.update`);
+          selectedPermissions.push(`${item.key}.delete`);
+        }
+        // 递归处理子项
+        if (item.children && item.children.length > 0) {
+          collectPermissions(item.children);
+        }
+      });
+    };
+    
+    collectPermissions(getPermissionTableData());
     
     // 更新表单值
     form.setFieldsValue({ permissions: selectedPermissions });
   };
 
-  // 生成菜单树数据（只显示菜单结构，不包含权限）
-  const getMenuTreeData = () => {
+
+  // 生成权限表格数据（树状结构）
+  const getPermissionTableData = () => {
     return [
       {
         key: 'overview',
-        title: '概览'
-      },
-      {
-        key: 'users',
-        title: '用户管理',
-        children: [
-          { key: 'business_users', title: '业务用户' }
-        ]
-      },
-      {
-        key: 'settings',
-        title: '系统设置',
-        children: [
-          { key: 'basic_settings', title: '基础设置' },
-          { key: 'admin_management', title: '管理员管理' },
-          { key: 'role_management', title: '角色管理' },
-          { key: 'security_settings', title: '安全设置' },
-          { key: 'email_settings', title: '邮件设置' }
-        ]
-      }
-    ];
-  };
-
-  // 生成权限表格数据
-  const getPermissionTableData = () => {
-    const allData: any[] = [];
-    
-    // 定义菜单页面结构
-    const menuStructure = [
-      {
-        key: 'overview',
-        title: '概览',
-        children: []
-      },
-      {
-        key: 'users',
-        title: '用户管理',
-        children: []
-      },
-      {
-        key: 'settings',
-        title: '系统设置',
-        children: [
-          { key: 'basic_settings', title: '基础设置' },
-          { key: 'admin_management', title: '管理员管理' },
-          { key: 'role_management', title: '角色管理' },
-          { key: 'security_settings', title: '安全设置' },
-          { key: 'email_settings', title: '邮件设置' }
-        ]
-      }
-    ];
-    
-    // 遍历菜单结构，为每个菜单项分配权限
-    menuStructure.forEach(page => {
-      // 添加页面级别
-      allData.push({
-        key: page.key,
-        menu: page.title,
-        type: 'page',
-        level: 0,
+        menu: '概览',
         view: false,
         manage: false,
-        hasChildren: page.children.length > 0,
-        expanded: false,
         children: []
-      });
-      
-      // 如果有子菜单，添加子菜单
-      if (page.children.length > 0) {
-        page.children.forEach(subMenu => {
-          allData.push({
-            key: `${page.key}_${subMenu.key}`,
-            menu: subMenu.title,
-            type: 'submenu',
-            level: 1,
+      },
+      {
+        key: 'users',
+        menu: '用户管理',
+        view: false,
+        manage: false,
+        children: []
+      },
+      {
+        key: 'settings',
+        menu: '系统设置',
+        view: false,
+        manage: false,
+        children: [
+          {
+            key: 'basic_settings',
+            menu: '基础设置',
             view: false,
             manage: false,
-            hasChildren: false,
-            expanded: false,
-            children: [],
-            parentKey: page.key
-          });
-        });
+            children: []
+          },
+          {
+            key: 'admin_management',
+            menu: '管理员管理',
+            view: false,
+            manage: false,
+            children: []
+          },
+          {
+            key: 'role_management',
+            menu: '角色管理',
+            view: false,
+            manage: false,
+            children: []
+          },
+          {
+            key: 'security_settings',
+            menu: '安全设置',
+            view: false,
+            manage: false,
+            children: []
+          },
+          {
+            key: 'email_settings',
+            menu: '邮件设置',
+            view: false,
+            manage: false,
+            children: []
+          }
+        ]
       }
-    });
-    
-    return allData;
-  };
-
-  // 获取过滤后的表格数据（根据展开状态）
-  const getFilteredTableData = () => {
-    const allData = getPermissionTableData();
-    const filteredData: any[] = [];
-    
-    allData.forEach(item => {
-      // 如果是页面级别，总是显示
-      if (item.level === 0) {
-        filteredData.push(item);
-      }
-      // 如果是子菜单级别，检查父级是否展开
-      else if (item.level === 1) {
-        const parent = allData.find(p => p.key === item.parentKey);
-        if (parent && parent.expanded) {
-          filteredData.push(item);
-        }
-      }
-    });
-    
-    return filteredData;
+    ];
   };
 
   // 根据菜单键名获取对应的权限
@@ -795,16 +717,18 @@ const RoleManagementPage: React.FC = () => {
             >
               <div className="permission-table-container">
                 <Table
-                  dataSource={getFilteredTableData()}
+                  dataSource={getPermissionTableData()}
                   columns={getPermissionTableColumns()}
                   pagination={false}
                   size="small"
                   className="permission-table"
                   rowKey="key"
-                  rowProps={(record) => ({
-                    'data-level': record.level,
-                    'data-type': record.type,
-                  })}
+                  defaultExpandAllRows={false}
+                  expandable={{
+                    defaultExpandAllRows: false,
+                    defaultExpandedRowKeys: [],
+                    expandRowByClick: false,
+                  }}
                 />
               </div>
             </Form.Item>
