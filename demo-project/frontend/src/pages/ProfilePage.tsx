@@ -84,36 +84,49 @@ const ProfilePage: React.FC = () => {
   const loadUserProfile = async () => {
     setLoading(true);
     try {
-      // 模拟API调用
-      const mockProfile: UserProfile = {
-        id: user?.id || '1',
-        email: user?.email || 'demo@example.com',
-        name: user?.name || 'Demo User',
-        avatar: user?.avatar,
-        phone: '+86 138 0013 8000',
-        location: '北京市',
-        birthday: '1990-01-01',
-        bio: '这是一个示例用户简介',
-        language: 'zh-CN',
-        notifications: {
+      const response = await fetch(`http://localhost:8000/api/v1/admin/users/${user?.id}/profile`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const profileData = await response.json();
+      
+      // 如果API返回的数据不完整，使用用户基本信息填充
+      const userProfile: UserProfile = {
+        id: user?.id || profileData.id,
+        email: user?.email || profileData.email,
+        name: user?.name || profileData.name || '用户',
+        avatar: user?.avatar || profileData.avatar,
+        phone: profileData.phone || '',
+        location: profileData.location || '',
+        birthday: profileData.birthday || '',
+        bio: profileData.bio || '',
+        language: profileData.language || 'zh-CN',
+        notifications: profileData.notifications || {
           email: true,
           push: true,
           sms: false,
         },
-        privacy: {
+        privacy: profileData.privacy || {
           profile_public: true,
           show_email: false,
           show_phone: false,
         },
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: new Date().toISOString(),
+        created_at: profileData.created_at || new Date().toISOString(),
+        updated_at: profileData.updated_at || new Date().toISOString(),
       };
 
-      setProfile(mockProfile);
+      setProfile(userProfile);
       // 处理日期字段，将字符串转换为dayjs对象
       const formData = {
-        ...mockProfile,
-        birthday: mockProfile.birthday ? dayjs(mockProfile.birthday) : undefined,
+        ...userProfile,
+        birthday: userProfile.birthday ? dayjs(userProfile.birthday) : undefined,
       };
       form.setFieldsValue(formData);
     } catch (error) {
@@ -127,16 +140,23 @@ const ProfilePage: React.FC = () => {
   const handleSaveProfile = async (_values: any) => {
     setLoading(true);
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // 处理日期字段，将dayjs对象转换为字符串
-      const processedValues = {
-        ..._values,
-        birthday: _values.birthday ? _values.birthday.format('YYYY-MM-DD') : undefined,
-      };
-      
-      const updatedProfile = { ...profile, ...processedValues, updated_at: new Date().toISOString() };
+      const response = await fetch(`http://localhost:8000/api/v1/admin/users/${user?.id}/profile`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ..._values,
+          birthday: _values.birthday ? _values.birthday.format('YYYY-MM-DD') : undefined,
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedProfile = await response.json();
       setProfile(updatedProfile);
       message.success('个人资料保存成功');
     } catch (error) {
@@ -150,8 +170,22 @@ const ProfilePage: React.FC = () => {
   const handleChangePassword = async (_values: any) => {
     setLoading(true);
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch(`http://localhost:8000/api/v1/admin/users/${user?.id}/password`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          old_password: _values.oldPassword,
+          new_password: _values.newPassword,
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       passwordForm.resetFields();
       message.success('密码修改成功');
     } catch (error) {
