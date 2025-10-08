@@ -428,6 +428,7 @@ const RoleManagementPage: React.FC = () => {
           <div className="checkbox-cell">
             <Checkbox
               checked={text}
+              indeterminate={getRecordIndeterminate(record, 'view')}
               onChange={(e) => handlePermissionChange(record, 'view', e.target.checked)}
             />
           </div>
@@ -451,6 +452,7 @@ const RoleManagementPage: React.FC = () => {
           <div className="checkbox-cell">
             <Checkbox
               checked={text}
+              indeterminate={getRecordIndeterminate(record, 'manage')}
               onChange={(e) => handlePermissionChange(record, 'manage', e.target.checked)}
             />
           </div>
@@ -496,6 +498,19 @@ const RoleManagementPage: React.FC = () => {
     const allItems = getAllMenuItems(tableData);
     const checkedCount = allItems.filter(item => item.manage).length;
     return checkedCount > 0 && checkedCount < allItems.length;
+  };
+
+  // 获取单个记录的半选状态
+  const getRecordIndeterminate = (record: any, permissionType: 'view' | 'manage') => {
+    if (!record.children || record.children.length === 0) {
+      return false;
+    }
+    
+    const allChildren = getAllMenuItems([record]);
+    const childrenItems = allChildren.filter(item => item.key !== record.key);
+    const checkedCount = childrenItems.filter(item => item[permissionType]).length;
+    
+    return checkedCount > 0 && checkedCount < childrenItems.length;
   };
 
   // 处理查看权限全选
@@ -560,11 +575,67 @@ const RoleManagementPage: React.FC = () => {
     // 更新记录状态
     record[permissionType] = checked;
     
+    // 如果是父级菜单，同时更新所有子级菜单
+    if (record.children && record.children.length > 0) {
+      updateChildrenPermissions(record, permissionType, checked);
+    }
+    
+    // 如果是子级菜单，检查是否需要更新父级状态
+    if (record.parentKey) {
+      updateParentPermissions(record, permissionType, checked);
+    }
+    
     // 更新表格数据状态
     setTableData([...tableData]);
     
     // 更新权限
     updatePermissions();
+  };
+
+  // 更新子级菜单权限
+  const updateChildrenPermissions = (parentRecord: any, permissionType: 'view' | 'manage', checked: boolean) => {
+    if (parentRecord.children && parentRecord.children.length > 0) {
+      parentRecord.children.forEach((child: any) => {
+        child[permissionType] = checked;
+        // 递归更新子级的子级
+        if (child.children && child.children.length > 0) {
+          updateChildrenPermissions(child, permissionType, checked);
+        }
+      });
+    }
+  };
+
+  // 更新父级菜单权限状态
+  const updateParentPermissions = (childRecord: any, permissionType: 'view' | 'manage', checked: boolean) => {
+    // 查找父级记录
+    const findParent = (items: any[], parentKey: string): any => {
+      for (const item of items) {
+        if (item.key === parentKey) {
+          return item;
+        }
+        if (item.children && item.children.length > 0) {
+          const found = findParent(item.children, parentKey);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+
+    const parentRecord = findParent(tableData, childRecord.parentKey);
+    if (parentRecord) {
+      // 检查所有子级是否都已选中
+      const allChildren = getAllMenuItems([parentRecord]);
+      const childrenItems = allChildren.filter(item => item.key !== parentRecord.key);
+      const allChecked = childrenItems.every(item => item[permissionType]);
+      const someChecked = childrenItems.some(item => item[permissionType]);
+      
+      if (allChecked) {
+        parentRecord[permissionType] = true;
+      } else if (!someChecked) {
+        parentRecord[permissionType] = false;
+      }
+      // 如果部分选中，保持父级当前状态（半选状态由UI处理）
+    }
   };
 
 
@@ -596,35 +667,40 @@ const RoleManagementPage: React.FC = () => {
             menu: '基础设置',
             view: false,
             manage: false,
-            children: []
+            children: [],
+            parentKey: 'settings'
           },
           {
             key: 'admin_management',
             menu: '管理员管理',
             view: false,
             manage: false,
-            children: []
+            children: [],
+            parentKey: 'settings'
           },
           {
             key: 'role_management',
             menu: '角色管理',
             view: false,
             manage: false,
-            children: []
+            children: [],
+            parentKey: 'settings'
           },
           {
             key: 'security_settings',
             menu: '安全设置',
             view: false,
             manage: false,
-            children: []
+            children: [],
+            parentKey: 'settings'
           },
           {
             key: 'email_settings',
             menu: '邮件设置',
             view: false,
             manage: false,
-            children: []
+            children: [],
+            parentKey: 'settings'
           }
         ]
       }
