@@ -394,16 +394,6 @@ const RoleManagementPage: React.FC = () => {
     return quickActionPermissions.map(permission => permission.name);
   };
 
-  // 更新权限选择
-  const updatePermissions = () => {
-    // 获取所有树组件的选中状态并合并
-    const allCheckedKeys = new Set<string>();
-    
-    // 这里需要从两个树组件获取选中的权限
-    // 由于我们无法直接访问树组件的状态，我们使用表单的值
-    const currentPermissions = form.getFieldValue('permissions') || [];
-    form.setFieldsValue({ permissions: currentPermissions });
-  };
 
   // 获取权限表格列配置
   const getPermissionTableColumns = () => {
@@ -415,7 +405,16 @@ const RoleManagementPage: React.FC = () => {
         width: '40%',
       },
       {
-        title: '查看',
+        title: (
+          <div className="header-checkbox">
+            <Checkbox
+              indeterminate={getViewIndeterminate()}
+              checked={getViewAllChecked()}
+              onChange={(e) => handleViewAllChange(e.target.checked)}
+            />
+            <span className="header-text">查看</span>
+          </div>
+        ),
         dataIndex: 'view',
         key: 'view',
         width: '30%',
@@ -429,7 +428,16 @@ const RoleManagementPage: React.FC = () => {
         ),
       },
       {
-        title: '管理',
+        title: (
+          <div className="header-checkbox">
+            <Checkbox
+              indeterminate={getManageIndeterminate()}
+              checked={getManageAllChecked()}
+              onChange={(e) => handleManageAllChange(e.target.checked)}
+            />
+            <span className="header-text">管理</span>
+          </div>
+        ),
         dataIndex: 'manage',
         key: 'manage',
         width: '30%',
@@ -446,12 +454,68 @@ const RoleManagementPage: React.FC = () => {
   };
 
 
-  // 处理权限变更
-  const handlePermissionChange = (record: any, permissionType: 'view' | 'manage', checked: boolean) => {
-    // 更新记录状态
-    record[permissionType] = checked;
+  // 获取所有菜单项（包括子项）
+  const getAllMenuItems = (items: any[]): any[] => {
+    const allItems: any[] = [];
+    items.forEach(item => {
+      allItems.push(item);
+      if (item.children && item.children.length > 0) {
+        allItems.push(...getAllMenuItems(item.children));
+      }
+    });
+    return allItems;
+  };
+
+  // 获取查看权限的全选状态
+  const getViewAllChecked = () => {
+    const allItems = getAllMenuItems(getPermissionTableData());
+    return allItems.length > 0 && allItems.every(item => item.view);
+  };
+
+  // 获取查看权限的半选状态
+  const getViewIndeterminate = () => {
+    const allItems = getAllMenuItems(getPermissionTableData());
+    const checkedCount = allItems.filter(item => item.view).length;
+    return checkedCount > 0 && checkedCount < allItems.length;
+  };
+
+  // 获取管理权限的全选状态
+  const getManageAllChecked = () => {
+    const allItems = getAllMenuItems(getPermissionTableData());
+    return allItems.length > 0 && allItems.every(item => item.manage);
+  };
+
+  // 获取管理权限的半选状态
+  const getManageIndeterminate = () => {
+    const allItems = getAllMenuItems(getPermissionTableData());
+    const checkedCount = allItems.filter(item => item.manage).length;
+    return checkedCount > 0 && checkedCount < allItems.length;
+  };
+
+  // 处理查看权限全选
+  const handleViewAllChange = (checked: boolean) => {
+    const allItems = getAllMenuItems(getPermissionTableData());
+    allItems.forEach(item => {
+      item.view = checked;
+    });
     
-    // 收集选中的权限
+    // 更新权限
+    updatePermissions();
+  };
+
+  // 处理管理权限全选
+  const handleManageAllChange = (checked: boolean) => {
+    const allItems = getAllMenuItems(getPermissionTableData());
+    allItems.forEach(item => {
+      item.manage = checked;
+    });
+    
+    // 更新权限
+    updatePermissions();
+  };
+
+  // 更新权限到表单
+  const updatePermissions = () => {
     const selectedPermissions: string[] = [];
     
     // 递归遍历树状结构收集权限
@@ -477,6 +541,15 @@ const RoleManagementPage: React.FC = () => {
     
     // 更新表单值
     form.setFieldsValue({ permissions: selectedPermissions });
+  };
+
+  // 处理权限变更
+  const handlePermissionChange = (record: any, permissionType: 'view' | 'manage', checked: boolean) => {
+    // 更新记录状态
+    record[permissionType] = checked;
+    
+    // 更新权限
+    updatePermissions();
   };
 
 

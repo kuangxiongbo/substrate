@@ -161,6 +161,25 @@
   color: #999;
 }
 
+/* 表头复选框样式 */
+.header-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-checkbox .ant-checkbox-wrapper {
+  margin: 0;
+}
+
+.header-checkbox .ant-checkbox {
+  transform: scale(1.1);
+}
+
+.header-checkbox .header-text {
+  margin-left: 8px;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .permission-table-container {
