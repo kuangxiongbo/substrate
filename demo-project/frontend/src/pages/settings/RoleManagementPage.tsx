@@ -405,22 +405,71 @@ const RoleManagementPage: React.FC = () => {
     form.setFieldsValue({ permissions: currentPermissions });
   };
 
-  // 处理权限树选择变更
-  const handleTreeCheck = (checkedKeys: any, info: any) => {
+  // 获取权限表格列配置
+  const getPermissionTableColumns = () => {
+    return [
+      {
+        title: '菜单',
+        dataIndex: 'menu',
+        key: 'menu',
+        width: '40%',
+        render: (text: string, record: any) => (
+          <div className="menu-cell">
+            <span className={`menu-text type-${record.type}`}>
+              {text}
+            </span>
+          </div>
+        ),
+      },
+      {
+        title: '查看',
+        dataIndex: 'view',
+        key: 'view',
+        width: '30%',
+        render: (text: boolean, record: any) => (
+          <div className="checkbox-cell">
+            <Checkbox
+              checked={text}
+              onChange={(e) => handlePermissionChange(record, 'view', e.target.checked)}
+            />
+          </div>
+        ),
+      },
+      {
+        title: '管理',
+        dataIndex: 'manage',
+        key: 'manage',
+        width: '30%',
+        render: (text: boolean, record: any) => (
+          <div className="checkbox-cell">
+            <Checkbox
+              checked={text}
+              onChange={(e) => handlePermissionChange(record, 'manage', e.target.checked)}
+            />
+          </div>
+        ),
+      },
+    ];
+  };
+
+  // 处理权限变更
+  const handlePermissionChange = (record: any, permissionType: 'view' | 'manage', checked: boolean) => {
+    // 更新记录状态
+    record[permissionType] = checked;
+    
     // 收集选中的权限
     const selectedPermissions: string[] = [];
     
-    // 遍历选中的键，生成权限名称
-    checkedKeys.forEach((key: string) => {
-      if (key.includes('_view')) {
-        const menuKey = key.replace('_view', '');
-        selectedPermissions.push(`${menuKey}.read`);
-      } else if (key.includes('_manage')) {
-        const menuKey = key.replace('_manage', '');
-        selectedPermissions.push(`${menuKey}.manage`);
-        selectedPermissions.push(`${menuKey}.create`);
-        selectedPermissions.push(`${menuKey}.update`);
-        selectedPermissions.push(`${menuKey}.delete`);
+    // 遍历所有记录，收集选中的权限
+    getPermissionTableData().forEach(item => {
+      if (item.view) {
+        selectedPermissions.push(`${item.key}.read`);
+      }
+      if (item.manage) {
+        selectedPermissions.push(`${item.key}.manage`);
+        selectedPermissions.push(`${item.key}.create`);
+        selectedPermissions.push(`${item.key}.update`);
+        selectedPermissions.push(`${item.key}.delete`);
       }
     });
     
@@ -428,9 +477,9 @@ const RoleManagementPage: React.FC = () => {
     form.setFieldsValue({ permissions: selectedPermissions });
   };
 
-  // 生成权限树数据 - 按菜单页面结构组织
-  const getPermissionTreeData = () => {
-    const treeData: any[] = [];
+  // 生成权限表格数据 - 按菜单页面结构组织
+  const getPermissionTableData = () => {
+    const tableData: any[] = [];
     
     // 定义菜单页面结构
     const menuStructure = [
@@ -443,81 +492,52 @@ const RoleManagementPage: React.FC = () => {
         key: 'users',
         title: '用户管理',
         children: [
-          { key: 'business_users', title: '业务用户', children: [] }
+          { key: 'business_users', title: '业务用户' }
         ]
       },
       {
         key: 'settings',
         title: '系统设置',
         children: [
-          { key: 'basic_settings', title: '基础设置', children: [] },
-          { key: 'admin_management', title: '管理员管理', children: [] },
-          { key: 'role_management', title: '角色管理', children: [] },
-          { key: 'security_settings', title: '安全设置', children: [] },
-          { key: 'email_settings', title: '邮件设置', children: [] }
+          { key: 'basic_settings', title: '基础设置' },
+          { key: 'admin_management', title: '管理员管理' },
+          { key: 'role_management', title: '角色管理' },
+          { key: 'security_settings', title: '安全设置' },
+          { key: 'email_settings', title: '邮件设置' }
         ]
       }
     ];
     
     // 遍历菜单结构，为每个菜单项分配权限
     menuStructure.forEach(page => {
-      const pageNode: any = {
+      // 添加页面级别
+      tableData.push({
         key: page.key,
-        title: page.title,
+        menu: page.title,
         type: 'page',
+        level: 0,
+        view: false,
+        manage: false,
         children: []
-      };
+      });
       
-      // 如果有子菜单，添加子菜单；如果没有子菜单，为页面本身分配权限
+      // 如果有子菜单，添加子菜单
       if (page.children.length > 0) {
         page.children.forEach(subMenu => {
-          const subMenuNode: any = {
+          tableData.push({
             key: `${page.key}_${subMenu.key}`,
-            title: subMenu.title,
+            menu: subMenu.title,
             type: 'submenu',
+            level: 1,
+            view: false,
+            manage: false,
             children: []
-          };
-          
-          // 为子菜单添加查看和管理权限
-          subMenuNode.children = [
-            {
-              key: `${page.key}_${subMenu.key}_view`,
-              title: '查看',
-              type: 'permission',
-              permission: 'view'
-            },
-            {
-              key: `${page.key}_${subMenu.key}_manage`,
-              title: '管理',
-              type: 'permission',
-              permission: 'manage'
-            }
-          ];
-          
-          pageNode.children.push(subMenuNode);
+          });
         });
-      } else {
-        // 为没有子菜单的页面（如概览）分配权限
-        pageNode.children = [
-          {
-            key: `${page.key}_view`,
-            title: '查看',
-            type: 'permission',
-            permission: 'view'
-          },
-          {
-            key: `${page.key}_manage`,
-            title: '管理',
-            type: 'permission',
-            permission: 'manage'
-          }
-        ];
       }
-      
-      treeData.push(pageNode);
     });
     
-    return treeData;
+    return tableData;
   };
 
   // 根据菜单键名获取对应的权限
@@ -604,86 +624,6 @@ const RoleManagementPage: React.FC = () => {
     }
   };
 
-  // 生成权限表格列配置
-  const getPermissionTableColumns = () => {
-    return [
-      {
-        title: '菜单',
-        dataIndex: 'menu',
-        key: 'menu',
-        width: '40%',
-        render: (text: string, record: any) => (
-          <div className={`menu-cell level-${record.level}`}>
-            <span className={`menu-text type-${record.type}`}>
-              {text}
-            </span>
-          </div>
-        ),
-      },
-      {
-        title: '查看',
-        dataIndex: 'view',
-        key: 'view',
-        width: '30%',
-        render: (text: boolean, record: any) => (
-          <div className="checkbox-cell">
-            {record.children && record.children.length > 0 ? (
-              <Checkbox
-                checked={text}
-                onChange={(e) => handlePermissionChange(record, 'view', e.target.checked)}
-              />
-            ) : (
-              <span className="disabled-text">-</span>
-            )}
-          </div>
-        ),
-      },
-      {
-        title: '管理',
-        dataIndex: 'manage',
-        key: 'manage',
-        width: '30%',
-        render: (text: boolean, record: any) => (
-          <div className="checkbox-cell">
-            {record.children && record.children.length > 0 ? (
-              <Checkbox
-                checked={text}
-                onChange={(e) => handlePermissionChange(record, 'manage', e.target.checked)}
-              />
-            ) : (
-              <span className="disabled-text">-</span>
-            )}
-          </div>
-        ),
-      },
-    ];
-  };
-
-  // 处理权限变更
-  const handlePermissionChange = (record: any, permissionType: 'view' | 'manage', checked: boolean) => {
-    // 更新记录状态
-    record[permissionType] = checked;
-    
-    // 收集选中的权限
-    const selectedPermissions: string[] = [];
-    
-    // 遍历所有记录，收集选中的权限
-    getPermissionTableData().forEach(item => {
-      if (item.children && item.children.length > 0) {
-        item.children.forEach((permission: any) => {
-          if (item.view && permission.name.includes('read')) {
-            selectedPermissions.push(permission.name);
-          }
-          if (item.manage && (permission.name.includes('manage') || permission.name.includes('create') || permission.name.includes('update') || permission.name.includes('delete'))) {
-            selectedPermissions.push(permission.name);
-          }
-        });
-      }
-    });
-    
-    // 更新表单值
-    form.setFieldsValue({ permissions: selectedPermissions });
-  };
 
   return (
     <div className={`settings-page ${currentTheme?.meta.id || 'light'}-theme`}>
@@ -772,15 +712,18 @@ const RoleManagementPage: React.FC = () => {
               name="permissions"
               label={t('roles.rolePermissions')}
             >
-              <div className="permission-tree-container">
-                <Tree
-                  checkable
-                  treeData={getPermissionTreeData()}
-                  onCheck={handleTreeCheck}
-                  defaultExpandAll={false}
-                  showLine={true}
-                  showIcon={false}
-                  className="permission-tree"
+              <div className="permission-table-container">
+                <Table
+                  dataSource={getPermissionTableData()}
+                  columns={getPermissionTableColumns()}
+                  pagination={false}
+                  size="small"
+                  className="permission-table"
+                  rowKey="key"
+                  rowProps={(record) => ({
+                    'data-level': record.level,
+                    'data-type': record.type,
+                  })}
                 />
               </div>
             </Form.Item>
