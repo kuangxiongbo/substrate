@@ -421,11 +421,6 @@ const RoleManagementPage: React.FC = () => {
                   {'  '.repeat(record.level)}
                 </span>
               )}
-              {record.children && record.children.length > 0 && (
-                <span className="tree-expand-icon">
-                  {record.expanded ? '−' : '+'}
-                </span>
-              )}
               <span className="menu-text">
                 {text}
               </span>
@@ -464,22 +459,24 @@ const RoleManagementPage: React.FC = () => {
     ];
   };
 
-  // 处理树状权限选择变更
-  const handleTreeCheck = (checkedKeys: any, info: any) => {
+  // 处理权限变更
+  const handlePermissionChange = (record: any, permissionType: 'view' | 'manage', checked: boolean) => {
+    // 更新记录状态
+    record[permissionType] = checked;
+    
     // 收集选中的权限
     const selectedPermissions: string[] = [];
     
-    // 遍历选中的键，生成权限名称
-    checkedKeys.forEach((key: string) => {
-      if (key.includes('_view')) {
-        const menuKey = key.replace('_view', '');
-        selectedPermissions.push(`${menuKey}.read`);
-      } else if (key.includes('_manage')) {
-        const menuKey = key.replace('_manage', '');
-        selectedPermissions.push(`${menuKey}.manage`);
-        selectedPermissions.push(`${menuKey}.create`);
-        selectedPermissions.push(`${menuKey}.update`);
-        selectedPermissions.push(`${menuKey}.delete`);
+    // 遍历所有记录，收集选中的权限
+    getPermissionTableData().forEach(item => {
+      if (item.view) {
+        selectedPermissions.push(`${item.key}.read`);
+      }
+      if (item.manage) {
+        selectedPermissions.push(`${item.key}.manage`);
+        selectedPermissions.push(`${item.key}.create`);
+        selectedPermissions.push(`${item.key}.update`);
+        selectedPermissions.push(`${item.key}.delete`);
       }
     });
     
@@ -487,9 +484,40 @@ const RoleManagementPage: React.FC = () => {
     form.setFieldsValue({ permissions: selectedPermissions });
   };
 
-  // 生成菜单树数据
+  // 生成菜单树数据（只显示菜单结构，不包含权限）
   const getMenuTreeData = () => {
     return [
+      {
+        key: 'overview',
+        title: '概览'
+      },
+      {
+        key: 'users',
+        title: '用户管理',
+        children: [
+          { key: 'business_users', title: '业务用户' }
+        ]
+      },
+      {
+        key: 'settings',
+        title: '系统设置',
+        children: [
+          { key: 'basic_settings', title: '基础设置' },
+          { key: 'admin_management', title: '管理员管理' },
+          { key: 'role_management', title: '角色管理' },
+          { key: 'security_settings', title: '安全设置' },
+          { key: 'email_settings', title: '邮件设置' }
+        ]
+      }
+    ];
+  };
+
+  // 生成权限表格数据
+  const getPermissionTableData = () => {
+    const tableData: any[] = [];
+    
+    // 定义菜单页面结构
+    const menuStructure = [
       {
         key: 'overview',
         title: '概览',
@@ -514,150 +542,37 @@ const RoleManagementPage: React.FC = () => {
         ]
       }
     ];
-  };
-
-  // 生成权限树数据
-  const getPermissionTreeData = () => {
-    return [
-      {
-        key: 'overview',
-        title: '概览',
-        children: [
-          {
-            key: 'overview_view',
-            title: '查看',
-            type: 'permission',
-            permission: 'view'
-          },
-          {
-            key: 'overview_manage',
-            title: '管理',
-            type: 'permission',
-            permission: 'manage'
-          }
-        ]
-      },
-      {
-        key: 'users',
-        title: '用户管理',
-        children: [
-          {
-            key: 'business_users',
-            title: '业务用户',
-            children: [
-              {
-                key: 'business_users_view',
-                title: '查看',
-                type: 'permission',
-                permission: 'view'
-              },
-              {
-                key: 'business_users_manage',
-                title: '管理',
-                type: 'permission',
-                permission: 'manage'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        key: 'settings',
-        title: '系统设置',
-        children: [
-          {
-            key: 'basic_settings',
-            title: '基础设置',
-            children: [
-              {
-                key: 'basic_settings_view',
-                title: '查看',
-                type: 'permission',
-                permission: 'view'
-              },
-              {
-                key: 'basic_settings_manage',
-                title: '管理',
-                type: 'permission',
-                permission: 'manage'
-              }
-            ]
-          },
-          {
-            key: 'admin_management',
-            title: '管理员管理',
-            children: [
-              {
-                key: 'admin_management_view',
-                title: '查看',
-                type: 'permission',
-                permission: 'view'
-              },
-              {
-                key: 'admin_management_manage',
-                title: '管理',
-                type: 'permission',
-                permission: 'manage'
-              }
-            ]
-          },
-          {
-            key: 'role_management',
-            title: '角色管理',
-            children: [
-              {
-                key: 'role_management_view',
-                title: '查看',
-                type: 'permission',
-                permission: 'view'
-              },
-              {
-                key: 'role_management_manage',
-                title: '管理',
-                type: 'permission',
-                permission: 'manage'
-              }
-            ]
-          },
-          {
-            key: 'security_settings',
-            title: '安全设置',
-            children: [
-              {
-                key: 'security_settings_view',
-                title: '查看',
-                type: 'permission',
-                permission: 'view'
-              },
-              {
-                key: 'security_settings_manage',
-                title: '管理',
-                type: 'permission',
-                permission: 'manage'
-              }
-            ]
-          },
-          {
-            key: 'email_settings',
-            title: '邮件设置',
-            children: [
-              {
-                key: 'email_settings_view',
-                title: '查看',
-                type: 'permission',
-                permission: 'view'
-              },
-              {
-                key: 'email_settings_manage',
-                title: '管理',
-                type: 'permission',
-                permission: 'manage'
-              }
-            ]
-          }
-        ]
+    
+    // 遍历菜单结构，为每个菜单项分配权限
+    menuStructure.forEach(page => {
+      // 添加页面级别
+      tableData.push({
+        key: page.key,
+        menu: page.title,
+        type: 'page',
+        level: 0,
+        view: false,
+        manage: false,
+        children: []
+      });
+      
+      // 如果有子菜单，添加子菜单
+      if (page.children.length > 0) {
+        page.children.forEach(subMenu => {
+          tableData.push({
+            key: `${page.key}_${subMenu.key}`,
+            menu: subMenu.title,
+            type: 'submenu',
+            level: 1,
+            view: false,
+            manage: false,
+            children: []
+          });
+        });
       }
-    ];
+    });
+    
+    return tableData;
   };
 
   // 根据菜单键名获取对应的权限
@@ -832,16 +747,42 @@ const RoleManagementPage: React.FC = () => {
               name="permissions"
               label={t('roles.rolePermissions')}
             >
-              <div className="permission-tree-container">
-                <Tree
-                  checkable
-                  treeData={getPermissionTreeData()}
-                  onCheck={handleTreeCheck}
-                  defaultExpandAll={false}
-                  showLine={true}
-                  showIcon={false}
-                  className="permission-tree"
-                />
+              <div className="permission-config-container">
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <div className="menu-tree-section">
+                      <div className="section-title">菜单结构</div>
+                      <div className="menu-tree-container">
+                        <Tree
+                          treeData={getMenuTreeData()}
+                          defaultExpandAll={false}
+                          showLine={true}
+                          showIcon={false}
+                          className="menu-tree"
+                        />
+                      </div>
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    <div className="permission-table-section">
+                      <div className="section-title">权限配置</div>
+                      <div className="permission-table-container">
+                        <Table
+                          dataSource={getPermissionTableData()}
+                          columns={getPermissionTableColumns()}
+                          pagination={false}
+                          size="small"
+                          className="permission-table"
+                          rowKey="key"
+                          rowProps={(record) => ({
+                            'data-level': record.level,
+                            'data-type': record.type,
+                          })}
+                        />
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
               </div>
             </Form.Item>
           </Form>
