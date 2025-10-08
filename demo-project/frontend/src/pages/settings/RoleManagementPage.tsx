@@ -62,6 +62,7 @@ const RoleManagementPage: React.FC = () => {
   const [editingRole, setEditingRole] = useState<Role | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [tableData, setTableData] = useState<any[]>([]);
   const { currentTheme } = useTheme();
   const { t } = useTranslation();
 
@@ -416,11 +417,22 @@ const RoleManagementPage: React.FC = () => {
         render: (text: string, record: any) => (
           <div className="menu-cell">
             <div className={`menu-tree-item level-${record.level} type-${record.type}`}>
+              {/* 展开收起图标 */}
+              {record.hasChildren && (
+                <span 
+                  className="tree-expand-icon"
+                  onClick={() => handleExpandToggle(record)}
+                >
+                  {record.expanded ? '−' : '+'}
+                </span>
+              )}
+              {/* 层级缩进 */}
               {record.level > 0 && (
                 <span className="tree-indent">
                   {'  '.repeat(record.level)}
                 </span>
               )}
+              {/* 菜单文本 */}
               <span className="menu-text">
                 {text}
               </span>
@@ -457,6 +469,15 @@ const RoleManagementPage: React.FC = () => {
         ),
       },
     ];
+  };
+
+  // 处理展开收起切换
+  const handleExpandToggle = (record: any) => {
+    // 切换展开状态
+    record.expanded = !record.expanded;
+    
+    // 强制重新渲染表格
+    setTableData([...getFilteredTableData()]);
   };
 
   // 处理权限变更
@@ -514,7 +535,7 @@ const RoleManagementPage: React.FC = () => {
 
   // 生成权限表格数据
   const getPermissionTableData = () => {
-    const tableData: any[] = [];
+    const allData: any[] = [];
     
     // 定义菜单页面结构
     const menuStructure = [
@@ -526,9 +547,7 @@ const RoleManagementPage: React.FC = () => {
       {
         key: 'users',
         title: '用户管理',
-        children: [
-          { key: 'business_users', title: '业务用户' }
-        ]
+        children: []
       },
       {
         key: 'settings',
@@ -546,33 +565,60 @@ const RoleManagementPage: React.FC = () => {
     // 遍历菜单结构，为每个菜单项分配权限
     menuStructure.forEach(page => {
       // 添加页面级别
-      tableData.push({
+      allData.push({
         key: page.key,
         menu: page.title,
         type: 'page',
         level: 0,
         view: false,
         manage: false,
+        hasChildren: page.children.length > 0,
+        expanded: false,
         children: []
       });
       
       // 如果有子菜单，添加子菜单
       if (page.children.length > 0) {
         page.children.forEach(subMenu => {
-          tableData.push({
+          allData.push({
             key: `${page.key}_${subMenu.key}`,
             menu: subMenu.title,
             type: 'submenu',
             level: 1,
             view: false,
             manage: false,
-            children: []
+            hasChildren: false,
+            expanded: false,
+            children: [],
+            parentKey: page.key
           });
         });
       }
     });
     
-    return tableData;
+    return allData;
+  };
+
+  // 获取过滤后的表格数据（根据展开状态）
+  const getFilteredTableData = () => {
+    const allData = getPermissionTableData();
+    const filteredData: any[] = [];
+    
+    allData.forEach(item => {
+      // 如果是页面级别，总是显示
+      if (item.level === 0) {
+        filteredData.push(item);
+      }
+      // 如果是子菜单级别，检查父级是否展开
+      else if (item.level === 1) {
+        const parent = allData.find(p => p.key === item.parentKey);
+        if (parent && parent.expanded) {
+          filteredData.push(item);
+        }
+      }
+    });
+    
+    return filteredData;
   };
 
   // 根据菜单键名获取对应的权限
@@ -747,42 +793,19 @@ const RoleManagementPage: React.FC = () => {
               name="permissions"
               label={t('roles.rolePermissions')}
             >
-              <div className="permission-config-container">
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <div className="menu-tree-section">
-                      <div className="section-title">菜单结构</div>
-                      <div className="menu-tree-container">
-                        <Tree
-                          treeData={getMenuTreeData()}
-                          defaultExpandAll={false}
-                          showLine={true}
-                          showIcon={false}
-                          className="menu-tree"
-                        />
-                      </div>
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    <div className="permission-table-section">
-                      <div className="section-title">权限配置</div>
-                      <div className="permission-table-container">
-                        <Table
-                          dataSource={getPermissionTableData()}
-                          columns={getPermissionTableColumns()}
-                          pagination={false}
-                          size="small"
-                          className="permission-table"
-                          rowKey="key"
-                          rowProps={(record) => ({
-                            'data-level': record.level,
-                            'data-type': record.type,
-                          })}
-                        />
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
+              <div className="permission-table-container">
+                <Table
+                  dataSource={getFilteredTableData()}
+                  columns={getPermissionTableColumns()}
+                  pagination={false}
+                  size="small"
+                  className="permission-table"
+                  rowKey="key"
+                  rowProps={(record) => ({
+                    'data-level': record.level,
+                    'data-type': record.type,
+                  })}
+                />
               </div>
             </Form.Item>
           </Form>
