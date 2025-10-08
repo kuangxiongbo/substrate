@@ -84,6 +84,7 @@ const AdminManagementPage: React.FC = () => {
     { value: 'moderator', label: '内容管理员' },
     { value: 'demo', label: '演示账号' },
   ]);
+  const [rolesMap, setRolesMap] = useState<Record<string, {display_name: string, color: string}>>({});
   const { currentTheme } = useTheme();
   const { t } = useTranslation();
   // const [adminStats] = useState<AdminStats | null>(null);
@@ -104,10 +105,30 @@ const AdminManagementPage: React.FC = () => {
       
       if (response.ok) {
         const rolesData = await response.json();
+        
+        // 设置可用角色选项
         setAvailableRoles(rolesData.map((role: any) => ({
           value: role.name,
           label: role.display_name
         })));
+        
+        // 创建角色映射，用于显示
+        const rolesMapping: Record<string, {display_name: string, color: string}> = {};
+        rolesData.forEach((role: any) => {
+          // 根据角色名称设置颜色
+          let color = 'default';
+          if (role.name === 'super_admin') color = 'red';
+          else if (role.name === 'admin') color = 'blue';
+          else if (role.name === 'moderator') color = 'green';
+          else if (role.name === 'user') color = 'orange';
+          else if (role.name === 'demo') color = 'purple';
+          
+          rolesMapping[role.name] = {
+            display_name: role.display_name,
+            color: color
+          };
+        });
+        setRolesMap(rolesMapping);
       }
     } catch (error) {
       console.error('加载角色列表失败:', error);
@@ -118,6 +139,15 @@ const AdminManagementPage: React.FC = () => {
         { value: 'moderator', label: t('admin.moderator') },
         { value: 'demo', label: t('admin.demoAccount') },
       ]);
+      
+      const defaultRolesMapping: Record<string, {display_name: string, color: string}> = {
+        'super_admin': { display_name: t('admin.superAdmin'), color: 'red' },
+        'admin': { display_name: t('admin.admin'), color: 'blue' },
+        'moderator': { display_name: t('admin.moderator'), color: 'green' },
+        'user': { display_name: '普通用户', color: 'orange' },
+        'demo': { display_name: t('admin.demoAccount'), color: 'purple' },
+      };
+      setRolesMap(defaultRolesMapping);
     }
   };
 
@@ -196,14 +226,12 @@ const AdminManagementPage: React.FC = () => {
       render: (roles: string[]) => (
         <Space>
           {roles.map(role => {
-            const roleConfig = {
-              super_admin: { color: 'red', text: t('admin.superAdmin') },
-              admin: { color: 'blue', text: t('admin.admin') },
-              moderator: { color: 'green', text: t('admin.moderator') },
-              demo: { color: 'purple', text: t('admin.demoAccount') },
-            };
-            const config = roleConfig[role as keyof typeof roleConfig] || { color: 'default', text: role };
-            return <Tag key={role} color={config.color}>{config.text}</Tag>;
+            const roleInfo = rolesMap[role];
+            if (roleInfo) {
+              return <Tag key={role} color={roleInfo.color}>{roleInfo.display_name}</Tag>;
+            }
+            // 降级方案：如果角色映射中没有找到，使用角色名称本身
+            return <Tag key={role} color="default">{role}</Tag>;
           })}
         </Space>
       ),
