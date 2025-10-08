@@ -405,54 +405,168 @@ const RoleManagementPage: React.FC = () => {
     form.setFieldsValue({ permissions: currentPermissions });
   };
 
-  // 生成权限表格数据
+  // 生成权限表格数据 - 按菜单页面结构组织
   const getPermissionTableData = () => {
     const tableData: any[] = [];
     
-    // 遍历权限分组
-    Object.entries(groupedPermissions).forEach(([groupKey, groupPermissions]) => {
-      // 如果是系统设置，需要特殊处理子菜单
-      if (groupKey === 'system_settings') {
-        const subGroups = getSystemSettingsSubGroups(groupPermissions);
-        
-        // 添加系统设置主分组
-        tableData.push({
-          key: groupKey,
-          menu: pageGroupNames[groupKey] || groupKey,
-          type: 'group',
-          level: 0,
-          view: false,
-          manage: false,
-          children: []
-        });
-        
-        // 添加子菜单
-        Object.entries(subGroups).forEach(([subGroupKey, subPermissions]) => {
-          tableData.push({
-            key: `${groupKey}_${subGroupKey}`,
-            menu: getSubGroupName(subGroupKey),
-            type: 'subgroup',
-            level: 1,
-            view: false,
-            manage: false,
-            children: subPermissions
-          });
-        });
-      } else {
-        // 其他分组
-        tableData.push({
-          key: groupKey,
-          menu: pageGroupNames[groupKey] || groupKey,
-          type: 'group',
-          level: 0,
-          view: false,
-          manage: false,
-          children: groupPermissions
-        });
+    // 定义菜单页面结构
+    const menuStructure = [
+      {
+        key: 'overview',
+        name: '概览',
+        level: 0,
+        children: [
+          { key: 'dashboard', name: '仪表盘', level: 1, children: [] },
+          { key: 'stats', name: '统计信息', level: 1, children: [] }
+        ]
+      },
+      {
+        key: 'users',
+        name: '用户管理',
+        level: 0,
+        children: [
+          { key: 'admin_management', name: '管理员管理', level: 1, children: [] },
+          { key: 'business_users', name: '业务用户', level: 1, children: [] }
+        ]
+      },
+      {
+        key: 'settings',
+        name: '系统设置',
+        level: 0,
+        children: [
+          { key: 'basic_settings', name: '基础设置', level: 1, children: [] },
+          { key: 'security_settings', name: '安全设置', level: 1, children: [] },
+          { key: 'email_settings', name: '邮件设置', level: 1, children: [] },
+          { key: 'role_management', name: '角色管理', level: 1, children: [] }
+        ]
+      },
+      {
+        key: 'quick_actions',
+        name: '快捷操作',
+        level: 0,
+        children: [
+          { key: 'language_switch', name: '语言切换', level: 1, children: [] },
+          { key: 'theme_switch', name: '主题切换', level: 1, children: [] },
+          { key: 'operation_logs', name: '操作日志', level: 1, children: [] },
+          { key: 'notifications', name: '通知管理', level: 1, children: [] }
+        ]
       }
+    ];
+    
+    // 遍历菜单结构，为每个菜单项分配权限
+    menuStructure.forEach(page => {
+      // 添加页面级别
+      tableData.push({
+        key: page.key,
+        menu: page.name,
+        type: 'page',
+        level: page.level,
+        view: false,
+        manage: false,
+        children: []
+      });
+      
+      // 添加子菜单
+      page.children.forEach(subMenu => {
+        // 根据菜单键名匹配对应的权限
+        const matchedPermissions = getPermissionsForMenu(subMenu.key);
+        
+        tableData.push({
+          key: `${page.key}_${subMenu.key}`,
+          menu: subMenu.name,
+          type: 'submenu',
+          level: subMenu.level,
+          view: false,
+          manage: false,
+          children: matchedPermissions
+        });
+      });
     });
     
     return tableData;
+  };
+
+  // 根据菜单键名获取对应的权限
+  const getPermissionsForMenu = (menuKey: string): Permission[] => {
+    const allPermissions = permissions;
+    
+    switch (menuKey) {
+      case 'dashboard':
+      case 'stats':
+        return allPermissions.filter(p => 
+          p.name.startsWith('page.overview') || 
+          p.name.includes('stats') ||
+          p.name.includes('dashboard')
+        );
+      
+      case 'admin_management':
+        return allPermissions.filter(p => 
+          p.name.includes('admin') || 
+          p.name.includes('user.manage') ||
+          p.name.includes('user.create') ||
+          p.name.includes('user.read') ||
+          p.name.includes('user.update') ||
+          p.name.includes('user.delete')
+        );
+      
+      case 'business_users':
+        return allPermissions.filter(p => 
+          p.name.includes('business') ||
+          p.name.includes('user.read')
+        );
+      
+      case 'basic_settings':
+        return allPermissions.filter(p => 
+          p.name.includes('basic') || 
+          p.name.includes('config') ||
+          p.name.startsWith('system.config')
+        );
+      
+      case 'security_settings':
+        return allPermissions.filter(p => 
+          p.name.includes('security') ||
+          p.name.includes('password') ||
+          p.name.includes('login')
+        );
+      
+      case 'email_settings':
+        return allPermissions.filter(p => 
+          p.name.includes('email')
+        );
+      
+      case 'role_management':
+        return allPermissions.filter(p => 
+          p.name.includes('role') ||
+          p.name.includes('permission')
+        );
+      
+      case 'language_switch':
+        return allPermissions.filter(p => 
+          p.name.includes('language') ||
+          p.name.includes('i18n')
+        );
+      
+      case 'theme_switch':
+        return allPermissions.filter(p => 
+          p.name.includes('theme') ||
+          p.name.includes('ui')
+        );
+      
+      case 'operation_logs':
+        return allPermissions.filter(p => 
+          p.name.includes('log') ||
+          p.name.includes('operation')
+        );
+      
+      case 'notifications':
+        return allPermissions.filter(p => 
+          p.name.includes('notification') ||
+          p.name.includes('message')
+        );
+      
+      default:
+        return [];
+    }
   };
 
   // 生成权限表格列配置
