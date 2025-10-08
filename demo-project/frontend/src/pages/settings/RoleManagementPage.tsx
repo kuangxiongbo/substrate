@@ -131,7 +131,15 @@ const RoleManagementPage: React.FC = () => {
         <Space>
           <SafetyOutlined />
           <div>
-            <div className="role-name">{text}</div>
+            <div className="role-name">
+              {text}
+              {(record.name === 'super_admin' || record.name === 'system_admin' || record.name === 'business_admin') && (
+                <Tag color="blue" className="built-in-role-tag">
+                  {record.name === 'super_admin' ? '超级管理员' : 
+                   record.name === 'system_admin' ? '系统管理员' : '业务管理员'}
+                </Tag>
+              )}
+            </div>
             <Text type="secondary" className="role-code">
               {record.name}
             </Text>
@@ -177,7 +185,7 @@ const RoleManagementPage: React.FC = () => {
             type="link"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
-            disabled={record.is_system_role}
+            disabled={record.is_system_role || record.name === 'super_admin' || record.name === 'system_admin' || record.name === 'business_admin'}
           >
             {t('roles.edit')}
           </Button>
@@ -187,13 +195,13 @@ const RoleManagementPage: React.FC = () => {
             onConfirm={() => handleDelete(record.id)}
             okText={t('common.ok')}
             cancelText={t('common.cancel')}
-            disabled={record.is_system_role}
+            disabled={record.is_system_role || record.name === 'super_admin' || record.name === 'system_admin' || record.name === 'business_admin'}
           >
             <Button
               type="link"
               danger
               icon={<DeleteOutlined />}
-              disabled={record.is_system_role}
+              disabled={record.is_system_role || record.name === 'super_admin' || record.name === 'system_admin' || record.name === 'business_admin'}
             >
               {t('roles.delete')}
             </Button>
@@ -216,6 +224,15 @@ const RoleManagementPage: React.FC = () => {
       permissions: role.permissions,
     });
     setModalVisible(true);
+
+    // 如果是内置角色，设置对应的权限配置
+    if (role.name === 'super_admin' || role.name === 'system_admin' || role.name === 'business_admin') {
+      const rolePermissions = getBuiltInRolePermissions(role.name as 'super_admin' | 'system_admin' | 'business_admin');
+      setTableData(rolePermissions);
+    } else {
+      // 普通角色，使用默认权限配置
+      setTableData(getPermissionTableData());
+    }
   };
 
   const handleDelete = async (roleId: string) => {
@@ -707,6 +724,56 @@ const RoleManagementPage: React.FC = () => {
     ];
   };
 
+  // 获取内置角色的权限配置
+  const getBuiltInRolePermissions = (roleType: 'super_admin' | 'system_admin' | 'business_admin') => {
+    const allData = getPermissionTableData();
+    
+    switch (roleType) {
+      case 'super_admin':
+        // 超级管理员：所有权限
+        return setAllPermissions(allData, true, true);
+      
+      case 'system_admin':
+        // 系统管理员：所有权限
+        return setAllPermissions(allData, true, true);
+      
+      case 'business_admin':
+        // 业务管理员：除系统设置外的所有权限
+        return setBusinessAdminPermissions(allData);
+      
+      default:
+        return allData;
+    }
+  };
+
+  // 设置所有权限
+  const setAllPermissions = (data: any[], view: boolean, manage: boolean) => {
+    return data.map(item => {
+      const newItem = { ...item, view, manage };
+      if (item.children && item.children.length > 0) {
+        newItem.children = setAllPermissions(item.children, view, manage);
+      }
+      return newItem;
+    });
+  };
+
+  // 设置业务管理员权限（除系统设置外）
+  const setBusinessAdminPermissions = (data: any[]) => {
+    return data.map(item => {
+      if (item.key === 'settings') {
+        // 系统设置：无权限
+        return { ...item, view: false, manage: false, children: item.children.map(child => ({ ...child, view: false, manage: false })) };
+      } else {
+        // 其他菜单：所有权限
+        const newItem = { ...item, view: true, manage: true };
+        if (item.children && item.children.length > 0) {
+          newItem.children = setAllPermissions(item.children, true, true);
+        }
+        return newItem;
+      }
+    });
+  };
+
   // 根据菜单键名获取对应的权限
   const getPermissionsForMenu = (menuKey: string): Permission[] => {
     const allPermissions = permissions;
@@ -833,8 +900,22 @@ const RoleManagementPage: React.FC = () => {
           onOk={handleModalOk}
           onCancel={() => setModalVisible(false)}
           confirmLoading={loading}
-          width={700}
+          width={1200}
         >
+          {/* 内置角色权限说明 */}
+          {editingRole && (editingRole.name === 'super_admin' || editingRole.name === 'system_admin' || editingRole.name === 'business_admin') && (
+            <Alert
+              message={
+                editingRole.name === 'super_admin' ? '超级管理员：拥有所有权限' :
+                editingRole.name === 'system_admin' ? '系统管理员：拥有所有权限' :
+                '业务管理员：拥有除系统设置外的所有权限'
+              }
+              type="info"
+              showIcon
+              className="built-in-role-alert"
+            />
+          )}
+          
           <Form
             form={form}
             layout="vertical"

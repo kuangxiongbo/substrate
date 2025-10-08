@@ -180,6 +180,17 @@
   margin-left: 8px;
 }
 
+/* 内置角色标签样式 */
+.built-in-role-tag {
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+/* 内置角色权限说明样式 */
+.built-in-role-alert {
+  margin-bottom: 16px;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .permission-table-container {
