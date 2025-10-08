@@ -1,59 +1,108 @@
 /* 角色管理页面样式 */
-.permission-section {
+.permission-table-container {
   border: 1px solid #f0f0f0;
   border-radius: 8px;
-  padding: 16px;
-  height: 400px;
+  background-color: #fff;
+  max-height: 500px;
   overflow-y: auto;
-  background-color: #fafafa;
 }
 
-.permission-section-title {
-  margin-bottom: 16px !important;
-  color: #1890ff;
+.permission-table {
+  margin: 0;
+}
+
+.permission-table .ant-table-thead > tr > th {
+  background-color: #fafafa;
+  font-weight: 600;
+  text-align: center;
   border-bottom: 2px solid #1890ff;
-  padding-bottom: 8px;
+}
+
+.permission-table .ant-table-tbody > tr > td {
+  text-align: center;
+  padding: 12px 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.permission-table .ant-table-tbody > tr:hover > td {
+  background-color: #f5f5f5;
+}
+
+/* 菜单列样式 */
+.permission-table .ant-table-tbody > tr > td:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+/* 分组行样式 */
+.permission-table .ant-table-tbody > tr[data-level="0"] > td {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.permission-table .ant-table-tbody > tr[data-level="0"] > td:first-child {
+  color: #1890ff;
+}
+
+/* 子分组行样式 */
+.permission-table .ant-table-tbody > tr[data-level="1"] > td:first-child {
+  padding-left: 30px;
+  color: #666;
+}
+
+/* 复选框样式 */
+.permission-table .ant-checkbox-wrapper {
+  margin: 0;
+}
+
+.permission-table .ant-checkbox {
+  transform: scale(1.1);
+}
+
+/* 菜单单元格样式 */
+.menu-cell {
+  padding-left: 0;
+}
+
+.menu-cell.level-0 {
+  padding-left: 0;
+}
+
+.menu-cell.level-1 {
+  padding-left: 20px;
+}
+
+.menu-text {
+  font-weight: normal;
+  color: #333;
+}
+
+.menu-text.type-group {
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.menu-text.type-subgroup {
+  font-weight: normal;
+  color: #666;
+}
+
+/* 复选框单元格样式 */
+.checkbox-cell {
   text-align: center;
 }
 
-.permission-tree {
-  background-color: white;
-  border-radius: 4px;
-  padding: 8px;
-  min-height: 320px;
-}
-
-.permission-tree .ant-tree-treenode {
-  padding: 2px 0;
-}
-
-.permission-tree .ant-tree-title {
-  font-size: 14px;
-}
-
-.permission-tree .ant-tree-checkbox {
-  margin-right: 8px;
-}
-
-/* 左右分栏样式 */
-.permission-layout {
-  display: flex;
-  gap: 16px;
-}
-
-.permission-left,
-.permission-right {
-  flex: 1;
-  min-height: 400px;
+.disabled-text {
+  color: #999;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .permission-layout {
-    flex-direction: column;
+  .permission-table-container {
+    max-height: 400px;
   }
   
-  .permission-section {
-    height: 300px;
+  .permission-table .ant-table-tbody > tr > td {
+    padding: 8px 4px;
   }
 }

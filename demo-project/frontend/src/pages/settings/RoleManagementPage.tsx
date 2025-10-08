@@ -18,6 +18,7 @@ import {
   Tree,
   Row,
   Col,
+  Checkbox,
 } from 'antd';
 import {
   EditOutlined,
@@ -404,6 +405,137 @@ const RoleManagementPage: React.FC = () => {
     form.setFieldsValue({ permissions: currentPermissions });
   };
 
+  // 生成权限表格数据
+  const getPermissionTableData = () => {
+    const tableData: any[] = [];
+    
+    // 遍历权限分组
+    Object.entries(groupedPermissions).forEach(([groupKey, groupPermissions]) => {
+      // 如果是系统设置，需要特殊处理子菜单
+      if (groupKey === 'system_settings') {
+        const subGroups = getSystemSettingsSubGroups(groupPermissions);
+        
+        // 添加系统设置主分组
+        tableData.push({
+          key: groupKey,
+          menu: pageGroupNames[groupKey] || groupKey,
+          type: 'group',
+          level: 0,
+          view: false,
+          manage: false,
+          children: []
+        });
+        
+        // 添加子菜单
+        Object.entries(subGroups).forEach(([subGroupKey, subPermissions]) => {
+          tableData.push({
+            key: `${groupKey}_${subGroupKey}`,
+            menu: getSubGroupName(subGroupKey),
+            type: 'subgroup',
+            level: 1,
+            view: false,
+            manage: false,
+            children: subPermissions
+          });
+        });
+      } else {
+        // 其他分组
+        tableData.push({
+          key: groupKey,
+          menu: pageGroupNames[groupKey] || groupKey,
+          type: 'group',
+          level: 0,
+          view: false,
+          manage: false,
+          children: groupPermissions
+        });
+      }
+    });
+    
+    return tableData;
+  };
+
+  // 生成权限表格列配置
+  const getPermissionTableColumns = () => {
+    return [
+      {
+        title: '菜单',
+        dataIndex: 'menu',
+        key: 'menu',
+        width: '40%',
+        render: (text: string, record: any) => (
+          <div className={`menu-cell level-${record.level}`}>
+            <span className={`menu-text type-${record.type}`}>
+              {text}
+            </span>
+          </div>
+        ),
+      },
+      {
+        title: '查看',
+        dataIndex: 'view',
+        key: 'view',
+        width: '30%',
+        render: (text: boolean, record: any) => (
+          <div className="checkbox-cell">
+            {record.children && record.children.length > 0 ? (
+              <Checkbox
+                checked={text}
+                onChange={(e) => handlePermissionChange(record, 'view', e.target.checked)}
+              />
+            ) : (
+              <span className="disabled-text">-</span>
+            )}
+          </div>
+        ),
+      },
+      {
+        title: '管理',
+        dataIndex: 'manage',
+        key: 'manage',
+        width: '30%',
+        render: (text: boolean, record: any) => (
+          <div className="checkbox-cell">
+            {record.children && record.children.length > 0 ? (
+              <Checkbox
+                checked={text}
+                onChange={(e) => handlePermissionChange(record, 'manage', e.target.checked)}
+              />
+            ) : (
+              <span className="disabled-text">-</span>
+            )}
+          </div>
+        ),
+      },
+    ];
+  };
+
+  // 处理权限变更
+  const handlePermissionChange = (record: any, permissionType: 'view' | 'manage', checked: boolean) => {
+    // 更新记录状态
+    record[permissionType] = checked;
+    
+    // 收集选中的权限
+    const selectedPermissions: string[] = [];
+    
+    // 遍历所有记录，收集选中的权限
+    getPermissionTableData().forEach(item => {
+      if (item.children && item.children.length > 0) {
+        item.children.forEach((permission: any) => {
+          if (item.view && permission.name.includes('read')) {
+            selectedPermissions.push(permission.name);
+          }
+          if (item.manage && (permission.name.includes('manage') || permission.name.includes('create') || permission.name.includes('update') || permission.name.includes('delete'))) {
+            selectedPermissions.push(permission.name);
+          }
+        });
+      }
+    });
+    
+    // 更新表单值
+    form.setFieldsValue({ permissions: selectedPermissions });
+  };
+
   return (
     <div className={`settings-page ${currentTheme?.meta.id || 'light'}-theme`}>
       <motion.div
@@ -491,83 +623,20 @@ const RoleManagementPage: React.FC = () => {
               name="permissions"
               label={t('roles.rolePermissions')}
             >
-              <Row gutter={16}>
-                {/* 左侧：菜单权限 */}
-                <Col span={12}>
-                  <div className="permission-section">
-                    <Title level={5} className="permission-section-title">菜单权限</Title>
-                    <Tree
-                      checkable
-                      checkStrictly
-                      defaultExpandAll
-                      className="permission-tree"
-                      treeData={Object.entries(groupedPermissions)
-                        .filter(([groupKey]) => groupKey !== 'quick_actions')
-                        .map(([groupKey, groupPermissions]) => {
-                          // 如果是系统设置，需要特殊处理子菜单
-                          if (groupKey === 'system_settings') {
-                            const subGroups = getSystemSettingsSubGroups(groupPermissions);
-                            return {
-                              title: pageGroupNames[groupKey] || groupKey,
-                              key: groupKey,
-                              children: Object.entries(subGroups).map(([subGroupKey, subPermissions]) => ({
-                                title: getSubGroupName(subGroupKey),
-                                key: `${groupKey}_${subGroupKey}`,
-                                children: subPermissions.map(permission => ({
-                                  title: permission.display_name,
-                                  key: permission.name,
-                                  value: permission.name,
-                                }))
-                              }))
-                            };
-                          }
-                          
-                          // 其他分组保持原有结构
-                          return {
-                            title: pageGroupNames[groupKey] || groupKey,
-                            key: groupKey,
-                            children: groupPermissions.map(permission => ({
-                              title: permission.display_name,
-                              key: permission.name,
-                              value: permission.name,
-                            }))
-                          };
-                        })}
-                      onCheck={(checkedKeys) => {
-                        updatePermissions();
-                      }}
-                    />
-                  </div>
-                </Col>
-
-                {/* 右侧：快捷操作权限 */}
-                <Col span={12}>
-                  <div className="permission-section">
-                    <Title level={5} className="permission-section-title">快捷操作权限</Title>
-                    <Tree
-                      checkable
-                      checkStrictly
-                      defaultExpandAll
-                      defaultCheckedKeys={editingRole ? undefined : getDefaultCheckedKeys()}
-                      className="permission-tree"
-                      treeData={Object.entries(groupedPermissions)
-                        .filter(([groupKey]) => groupKey === 'quick_actions')
-                        .map(([groupKey, groupPermissions]) => ({
-                          title: pageGroupNames[groupKey] || groupKey,
-                          key: groupKey,
-                          children: groupPermissions.map(permission => ({
-                            title: permission.display_name,
-                            key: permission.name,
-                            value: permission.name,
-                          }))
-                        }))}
-                      onCheck={(checkedKeys) => {
-                        updatePermissions();
-                      }}
-                    />
-                  </div>
-                </Col>
-              </Row>
+              <div className="permission-table-container">
+                <Table
+                  dataSource={getPermissionTableData()}
+                  columns={getPermissionTableColumns()}
+                  pagination={false}
+                  size="small"
+                  className="permission-table"
+                  rowKey="key"
+                  rowProps={(record) => ({
+                    'data-level': record.level,
+                    'data-type': record.type,
+                  })}
+                />
+              </div>
             </Form.Item>
           </Form>
         </Modal>
