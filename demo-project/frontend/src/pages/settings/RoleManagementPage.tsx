@@ -415,9 +415,21 @@ const RoleManagementPage: React.FC = () => {
         width: '40%',
         render: (text: string, record: any) => (
           <div className="menu-cell">
-            <span className={`menu-text type-${record.type}`}>
-              {text}
-            </span>
+            <div className={`menu-tree-item level-${record.level} type-${record.type}`}>
+              {record.level > 0 && (
+                <span className="tree-indent">
+                  {'  '.repeat(record.level)}
+                </span>
+              )}
+              {record.children && record.children.length > 0 && (
+                <span className="tree-expand-icon">
+                  {record.expanded ? '−' : '+'}
+                </span>
+              )}
+              <span className="menu-text">
+                {text}
+              </span>
+            </div>
           </div>
         ),
       },
@@ -741,42 +753,19 @@ const RoleManagementPage: React.FC = () => {
               name="permissions"
               label={t('roles.rolePermissions')}
             >
-              <div className="permission-config-container">
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <div className="menu-tree-section">
-                      <div className="section-title">菜单结构</div>
-                      <div className="menu-tree-container">
-                        <Tree
-                          treeData={getMenuTreeData()}
-                          defaultExpandAll={false}
-                          showLine={true}
-                          showIcon={false}
-                          className="menu-tree"
-                        />
-                      </div>
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    <div className="permission-table-section">
-                      <div className="section-title">权限配置</div>
-                      <div className="permission-table-container">
-                        <Table
-                          dataSource={getPermissionTableData()}
-                          columns={getPermissionTableColumns()}
-                          pagination={false}
-                          size="small"
-                          className="permission-table"
-                          rowKey="key"
-                          rowProps={(record) => ({
-                            'data-level': record.level,
-                            'data-type': record.type,
-                          })}
-                        />
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
+              <div className="permission-table-container">
+                <Table
+                  dataSource={getPermissionTableData()}
+                  columns={getPermissionTableColumns()}
+                  pagination={false}
+                  size="small"
+                  className="permission-table"
+                  rowKey="key"
+                  rowProps={(record) => ({
+                    'data-level': record.level,
+                    'data-type': record.type,
+                  })}
+                />
               </div>
             </Form.Item>
           </Form>
