@@ -31,7 +31,7 @@ import { useTranslation } from 'react-i18next';
 import '../../styles/settings-pages.css';
 import './RoleManagementPage.css';
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 const { TextArea } = Input;
 
 interface Role {
