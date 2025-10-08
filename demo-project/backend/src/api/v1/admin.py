@@ -78,6 +78,7 @@ class RoleResponse(BaseModel):
     name: str
     display_name: str
     description: Optional[str]
+    color: Optional[str]
     is_system: bool
     is_active: bool
     permissions: List[str]
@@ -603,6 +604,7 @@ async def get_roles(
             name=role.name,
             display_name=role.display_name,
             description=role.description,
+            color=role.color,
             is_system=role.is_system,
             is_active=role.is_active,
             permissions=[perm.name for perm in role.permissions],
@@ -611,6 +613,190 @@ async def get_roles(
         )
         for role in roles
     ]
+
+@router.post("/roles", response_model=RoleResponse)
+async def create_role(
+    role_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """创建角色"""
+    if not current_user or not hasattr(current_user, 'has_permission') or not current_user.has_permission("role.write"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="需要角色管理权限"
+        )
+    
+    from datetime import datetime
+    import uuid
+    
+    # 检查角色名称是否已存在
+    existing_role = db.query(Role).filter(Role.name == role_data.get('name')).first()
+    if existing_role:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="角色名称已存在"
+        )
+    
+    # 创建新角色
+    new_role = Role(
+        id=uuid.uuid4(),
+        name=role_data.get('name'),
+        display_name=role_data.get('display_name'),
+        description=role_data.get('description'),
+        color=role_data.get('color'),
+        is_system=role_data.get('is_system_role', False),
+        is_active=True,
+        created_at=datetime.utcnow()
+    )
+    
+    db.add(new_role)
+    db.commit()
+    db.refresh(new_role)
+    
+    # 分配权限
+    if role_data.get('permissions'):
+        for perm_name in role_data.get('permissions', []):
+            permission = db.query(Permission).filter(Permission.name == perm_name).first()
+            if permission:
+                new_role.permissions.append(permission)
+        
+        db.commit()
+        db.refresh(new_role)
+    
+    return RoleResponse(
+        id=str(new_role.id),
+        name=new_role.name,
+        display_name=new_role.display_name,
+        description=new_role.description,
+        color=new_role.color,
+        is_system=new_role.is_system,
+        is_active=new_role.is_active,
+        permissions=[perm.name for perm in new_role.permissions],
+        created_at=new_role.created_at.isoformat(),
+        updated_at=new_role.updated_at.isoformat() if new_role.updated_at else None
+    )
+
+@router.put("/roles/{role_id}", response_model=RoleResponse)
+async def update_role(
+    role_id: str,
+    role_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """更新角色"""
+    if not current_user or not hasattr(current_user, 'has_permission') or not current_user.has_permission("role.write"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="需要角色管理权限"
+        )
+    
+    from datetime import datetime
+    
+    # 查找角色
+    role = db.query(Role).filter(Role.id == role_id).first()
+    if not role:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="角色不存在"
+        )
+    
+    # 检查是否是系统角色
+    if role.is_system:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="系统角色不能修改"
+        )
+    
+    # 更新角色信息
+    if 'name' in role_data and role_data['name'] != role.name:
+        # 检查新名称是否已存在
+        existing_role = db.query(Role).filter(Role.name == role_data['name']).first()
+        if existing_role:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="角色名称已存在"
+            )
+        role.name = role_data['name']
+    
+    if 'display_name' in role_data:
+        role.display_name = role_data['display_name']
+    
+    if 'description' in role_data:
+        role.description = role_data['description']
+    
+    if 'color' in role_data:
+        role.color = role_data['color']
+    
+    role.updated_at = datetime.utcnow()
+    
+    # 更新权限
+    if 'permissions' in role_data:
+        # 清除现有权限
+        role.permissions.clear()
+        
+        # 添加新权限
+        for perm_name in role_data.get('permissions', []):
+            permission = db.query(Permission).filter(Permission.name == perm_name).first()
+            if permission:
+                role.permissions.append(permission)
+    
+    db.commit()
+    db.refresh(role)
+    
+    return RoleResponse(
+        id=str(role.id),
+        name=role.name,
+        display_name=role.display_name,
+        description=role.description,
+        color=role.color,
+        is_system=role.is_system,
+        is_active=role.is_active,
+        permissions=[perm.name for perm in role.permissions],
+        created_at=role.created_at.isoformat(),
+        updated_at=role.updated_at.isoformat() if role.updated_at else None
+    )
+
+@router.delete("/roles/{role_id}")
+async def delete_role(
+    role_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """删除角色"""
+    if not current_user or not hasattr(current_user, 'has_permission') or not current_user.has_permission("role.write"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="需要角色管理权限"
+        )
+    
+    # 查找角色
+    role = db.query(Role).filter(Role.id == role_id).first()
+    if not role:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="角色不存在"
+        )
+    
+    # 检查是否是系统角色
+    if role.is_system:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="系统角色不能删除"
+        )
+    
+    # 检查是否有用户使用该角色
+    if role.users:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="该角色正在被使用，无法删除"
+        )
+    
+    # 删除角色
+    db.delete(role)
+    db.commit()
+    
+    return {"message": "角色删除成功"}
 
 # 权限管理
 @router.get("/permissions", response_model=List[PermissionResponse])

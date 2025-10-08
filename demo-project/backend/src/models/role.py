@@ -35,6 +35,7 @@ class Role(Base):
     name = Column(String(50), unique=True, nullable=False, index=True)
     display_name = Column(String(100), nullable=False)
     description = Column(Text)
+    color = Column(String(20))  # 角色颜色标识
     is_system = Column(Boolean, default=False)  # 是否为系统角色
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
