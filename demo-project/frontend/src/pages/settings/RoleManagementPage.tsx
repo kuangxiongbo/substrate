@@ -62,12 +62,18 @@ const RoleManagementPage: React.FC = () => {
   const [editingRole, setEditingRole] = useState<Role | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [tableData, setTableData] = useState<any[]>([]);
   const { currentTheme } = useTheme();
   const { t } = useTranslation();
 
   useEffect(() => {
     loadRoles();
     loadPermissions();
+  }, []);
+
+  useEffect(() => {
+    // 初始化表格数据
+    setTableData(getPermissionTableData());
   }, []);
 
   const loadRoles = async () => {
@@ -468,36 +474,39 @@ const RoleManagementPage: React.FC = () => {
 
   // 获取查看权限的全选状态
   const getViewAllChecked = () => {
-    const allItems = getAllMenuItems(getPermissionTableData());
+    const allItems = getAllMenuItems(tableData);
     return allItems.length > 0 && allItems.every(item => item.view);
   };
 
   // 获取查看权限的半选状态
   const getViewIndeterminate = () => {
-    const allItems = getAllMenuItems(getPermissionTableData());
+    const allItems = getAllMenuItems(tableData);
     const checkedCount = allItems.filter(item => item.view).length;
     return checkedCount > 0 && checkedCount < allItems.length;
   };
 
   // 获取管理权限的全选状态
   const getManageAllChecked = () => {
-    const allItems = getAllMenuItems(getPermissionTableData());
+    const allItems = getAllMenuItems(tableData);
     return allItems.length > 0 && allItems.every(item => item.manage);
   };
 
   // 获取管理权限的半选状态
   const getManageIndeterminate = () => {
-    const allItems = getAllMenuItems(getPermissionTableData());
+    const allItems = getAllMenuItems(tableData);
     const checkedCount = allItems.filter(item => item.manage).length;
     return checkedCount > 0 && checkedCount < allItems.length;
   };
 
   // 处理查看权限全选
   const handleViewAllChange = (checked: boolean) => {
-    const allItems = getAllMenuItems(getPermissionTableData());
+    const allItems = getAllMenuItems(tableData);
     allItems.forEach(item => {
       item.view = checked;
     });
+    
+    // 更新表格数据状态
+    setTableData([...tableData]);
     
     // 更新权限
     updatePermissions();
@@ -505,10 +514,13 @@ const RoleManagementPage: React.FC = () => {
 
   // 处理管理权限全选
   const handleManageAllChange = (checked: boolean) => {
-    const allItems = getAllMenuItems(getPermissionTableData());
+    const allItems = getAllMenuItems(tableData);
     allItems.forEach(item => {
       item.manage = checked;
     });
+    
+    // 更新表格数据状态
+    setTableData([...tableData]);
     
     // 更新权限
     updatePermissions();
@@ -537,7 +549,7 @@ const RoleManagementPage: React.FC = () => {
       });
     };
     
-    collectPermissions(getPermissionTableData());
+    collectPermissions(tableData);
     
     // 更新表单值
     form.setFieldsValue({ permissions: selectedPermissions });
@@ -547,6 +559,9 @@ const RoleManagementPage: React.FC = () => {
   const handlePermissionChange = (record: any, permissionType: 'view' | 'manage', checked: boolean) => {
     // 更新记录状态
     record[permissionType] = checked;
+    
+    // 更新表格数据状态
+    setTableData([...tableData]);
     
     // 更新权限
     updatePermissions();
@@ -790,7 +805,7 @@ const RoleManagementPage: React.FC = () => {
             >
               <div className="permission-table-container">
                 <Table
-                  dataSource={getPermissionTableData()}
+                  dataSource={tableData}
                   columns={getPermissionTableColumns()}
                   pagination={false}
                   size="small"
