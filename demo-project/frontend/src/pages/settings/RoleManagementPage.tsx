@@ -18,6 +18,7 @@ import {
   Row,
   Col,
   Checkbox,
+  Tree,
 } from 'antd';
 import {
   EditOutlined,
@@ -476,7 +477,36 @@ const RoleManagementPage: React.FC = () => {
     form.setFieldsValue({ permissions: selectedPermissions });
   };
 
-  // 生成权限表格数据 - 按菜单页面结构组织
+  // 生成菜单树数据
+  const getMenuTreeData = () => {
+    return [
+      {
+        key: 'overview',
+        title: '概览',
+        children: []
+      },
+      {
+        key: 'users',
+        title: '用户管理',
+        children: [
+          { key: 'business_users', title: '业务用户' }
+        ]
+      },
+      {
+        key: 'settings',
+        title: '系统设置',
+        children: [
+          { key: 'basic_settings', title: '基础设置' },
+          { key: 'admin_management', title: '管理员管理' },
+          { key: 'role_management', title: '角色管理' },
+          { key: 'security_settings', title: '安全设置' },
+          { key: 'email_settings', title: '邮件设置' }
+        ]
+      }
+    ];
+  };
+
+  // 生成权限表格数据
   const getPermissionTableData = () => {
     const tableData: any[] = [];
     
@@ -711,19 +741,42 @@ const RoleManagementPage: React.FC = () => {
               name="permissions"
               label={t('roles.rolePermissions')}
             >
-              <div className="permission-table-container">
-                <Table
-                  dataSource={getPermissionTableData()}
-                  columns={getPermissionTableColumns()}
-                  pagination={false}
-                  size="small"
-                  className="permission-table"
-                  rowKey="key"
-                  rowProps={(record) => ({
-                    'data-level': record.level,
-                    'data-type': record.type,
-                  })}
-                />
+              <div className="permission-config-container">
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <div className="menu-tree-section">
+                      <div className="section-title">菜单结构</div>
+                      <div className="menu-tree-container">
+                        <Tree
+                          treeData={getMenuTreeData()}
+                          defaultExpandAll={false}
+                          showLine={true}
+                          showIcon={false}
+                          className="menu-tree"
+                        />
+                      </div>
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    <div className="permission-table-section">
+                      <div className="section-title">权限配置</div>
+                      <div className="permission-table-container">
+                        <Table
+                          dataSource={getPermissionTableData()}
+                          columns={getPermissionTableColumns()}
+                          pagination={false}
+                          size="small"
+                          className="permission-table"
+                          rowKey="key"
+                          rowProps={(record) => ({
+                            'data-level': record.level,
+                            'data-type': record.type,
+                          })}
+                        />
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
               </div>
             </Form.Item>
           </Form>
